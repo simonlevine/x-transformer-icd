@@ -1,0 +1,7 @@
+md5: a6c5f005b86fa3ee842c2c61c2947f1d
+outs:
+- md5: 83413729fa45a4d594e9a530bfbad911
+  path: D_ITEMS.csv.gz
+  cache: true
+  metric: false
+  persist: false

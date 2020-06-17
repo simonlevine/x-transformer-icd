@@ -1,0 +1,7 @@
+md5: 0224e9fba8a7e83fbd2e02ca3f252cf2
+outs:
+- md5: b600550677d8dd8d13184f40c5162093
+  path: MICROBIOLOGYEVENTS.csv.gz
+  cache: true
+  metric: false
+  persist: false

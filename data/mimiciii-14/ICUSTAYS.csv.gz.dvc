@@ -1,0 +1,7 @@
+md5: e24d49ab6feb6ae03c55c744e4c5eb17
+outs:
+- md5: 79f2b70cb07a6598642e04aaa364c27c
+  path: ICUSTAYS.csv.gz
+  cache: true
+  metric: false
+  persist: false
