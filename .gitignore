@@ -191,7 +191,3 @@ dmypy.json
 *.xhtml
 
 # End of https://www.toptal.com/developers/gitignore/api/python,web,jupyternotebooks,macos./data
-
-## secrets
-autoicd-gcp-credentials.json
-## secrets
