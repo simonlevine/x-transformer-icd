@@ -16,8 +16,8 @@ from sklearn.compose import ColumnTransformer
 from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import StringTensorType
 
-NOTES2DIAGNOSIS_ICD_TRAIN_FP = "./intermediary-data/notes2diagnosis-icd-train.json"
-NOTES2DIAGNOSIS_ICD_TEST_FP = "./intermediary-data/notes2diagnosis-icd-test.json"
+NOTES2DIAGNOSIS_ICD_TRAIN_FP = "./intermediary-data/notes2diagnosis-icd-train.json.gz"
+NOTES2DIAGNOSIS_ICD_TEST_FP = "./intermediary-data/notes2diagnosis-icd-test.json.gz"
 MODEL_WEIGHTS_OUT_FP = "./app/kiss_model.onnx"
 
 def dataframe2tensor(df: pd.DataFrame,
