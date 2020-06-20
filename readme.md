@@ -8,7 +8,7 @@
 
 To get access to the MIMIC data, please authenticate first:
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS="autoicd-gcp-credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="$(PWD)/autoicd-gcp-credentials.json"
 ```
 
 To run app locally, install [poetry](https://python-poetry.org/docs/#installation) and [DVC](https://dvc.org). Then:
