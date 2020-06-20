@@ -8,6 +8,7 @@ IcdCode = str
 
 import collections
 import json
+import pickle
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -22,7 +23,7 @@ from skl2onnx.common.data_types import StringTensorType
 
 
 NOTES2DIAGNOSIS_ICD_TRAIN_FP = "./intermediary-data/notes2diagnosis-icd-train.json.gz"
-MODEL_WEIGHTS_OUT_FP = "./app/assets/kiss_model.onnx"
+MODEL_WEIGHTS_OUT_FP = "./app/assets/kiss_model.pkl"
 MODEL_METADATA_FP = MODEL_WEIGHTS_OUT_FP + ".metadata.json"
 
 
@@ -33,10 +34,9 @@ def main(subsample=True):
     X_train, y_train, icd9_codes_relevant = dataframe2tensor(df_train, num_most_common=10)
     model = get_model()
     model.fit(X_train, y_train)
-    model_onnx = convert_model2onnx(model, X_train)
     with open(MODEL_WEIGHTS_OUT_FP, "wb") as f_out , \
          open(MODEL_METADATA_FP, "w") as f_metadata_out:
-        f_out.write(model_onnx.SerializeToString())
+        f_out.write(pickle.dumps(model))
         json.dump({
             "model_fname": Path(MODEL_WEIGHTS_OUT_FP).name,
             "icd9_codes_relevant": icd9_codes_relevant
@@ -77,7 +77,6 @@ def get_model():
     ])
 
 
-
 def convert_model2onnx(model, training_data):
     return skl2onnx.to_onnx(
         model,
@@ -98,6 +97,7 @@ def convert_model2onnx(model, training_data):
             }
         }
     )
+
 
 
 if __name__ == "__main__":
