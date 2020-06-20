@@ -7,7 +7,7 @@ ST=streamlit
 .PHONY:
 	@echo ""
 
-all: format_data train
+default: app
 
 format_data:
 	## inputs:
@@ -25,4 +25,5 @@ train:
 	$(PY) pipeline/train_model_kiss.py
 	
 app: .PHONY
-	$(ST) run app/streamlit/AutoICD.py
+	export PYTHONPATH="$(PWD)/src/app:$$PYTHONPATH" \
+	&& $(ST) run app/streamlit/AutoICD.py
