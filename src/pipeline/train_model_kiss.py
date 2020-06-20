@@ -4,7 +4,7 @@ Build an ONNX version of the simplest possible model that still
 and identifying pain points"""
 
 import typing as t
-IcdCode = int
+IcdCode = str
 
 import collections
 import json
