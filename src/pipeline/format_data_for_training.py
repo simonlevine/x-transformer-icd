@@ -6,7 +6,8 @@ from loguru import logger
 
 DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 NOTE_EVENTS_CSV_FP = "../data/mimiciii-14/NOTEEVENTS.csv.gz"
-
+ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
 def main():
     df_train, df_test = construct_datasets()
@@ -17,17 +18,37 @@ def main():
         df_.to_json(fp_out, orient="split")
 
 
-def construct_datasets():
+def construct_datasets(icd_version='10'):
     logger.info("Ingesting MIMIC data...")
-    diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=["HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=["HADM_ID", "TEXT", "CATEGORY"])
-    note_events_df = note_events_df[note_events_df.CATEGORY == "Discharge summary"]
+    diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
+                               "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+    icd9_long_description_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+    icd_eqivalence_mapping_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(
+        columns={0: 'ICD9_CODE', 1: 'ICD10_CODE', 2: 'LONG_TITLE'})
+    icd_eqivalence_mapping_df['ICD9_CODE'] = icd_eqivalence_mapping_df['ICD9_CODE'].str.replace('.', '')
+    diagnosis_df = diagnosis_df.merge(
+        icd9_long_description_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
+
+    if icd_version == '10':
+        logger.info("Converting ICD9 to ICD10...")
+        diagnosis_df = diagnosis_df.merge(
+            icd_eqivalence_mapping_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
+        diagnosis_df = diagnosis_df.drop(columns=['ICD9_CODE', 'LONG_TITLE_x']).rename(
+            columns={'LONG_TITLE_y': 'LONG_TITLE'})
+
+    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=[
+                                 "HADM_ID", "TEXT", "CATEGORY"])
+    note_events_df = note_events_df[note_events_df.CATEGORY ==
+                                    "Discharge summary"]
     df_raw = note_events_df.merge(diagnosis_df).dropna()
+
     logger.info("Pivoting to group related entries and ICD codes...")
     df = df_raw.groupby(["HADM_ID", "TEXT"]).agg({
-        "ICD9_CODE": set, "SEQ_NUM": set,
+        ("ICD10_CODE" if icd_version == '10' else "ICD9_CODE"): set,
+        "SEQ_NUM": set,
+        "LONG_TITLE": set,
     }).reset_index()
-
+    
     logger.info("Splitting into test/train...")
     df_train = df.sample(frac=0.66, random_state=42)
     df_test = df.drop(df_train.index)
