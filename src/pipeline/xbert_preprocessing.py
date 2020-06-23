@@ -84,7 +84,7 @@ def xbert_create_label_map(icd_version='10'):
     """creates a dataframe of all ICD10 labels and corresponding
     descriptions in 2018 ICD code set.
     Note that this is inclusive of, but not limited to,
-    the set of codes appearing in cases of MIMIC-iii. """
+    the set of codes appearing in cases of MIMIC-iii."""
 
     assert icd_version == '10', 'Only ICD10 is currently supported.'
 
@@ -99,7 +99,19 @@ def xbert_create_label_map(icd_version='10'):
 
 def xbert_prepare_Y_maps(df, df_subset, icd_labels):
     """Creates a binary mapping of
-    labels to appearance"""
+    icd labels to appearance in a patient account
+    (icd to hadm_id)
+    
+    Args:
+        df (DataFrame): training or testing dataframe.
+        df_subset (str): "train", "test", or "validation"
+        icd_labels: Series of all possible icd labels
+    
+    Returns:
+        Y_: a binary DataFrame of size N by K, where
+            N is the number of samples (HADM_IDs) in the
+            train or test dataframe, and K is the number
+            of potential ICD labels."""
 
     df = df.set_index('HADM_ID')
     Y_ = pd.DataFrame(np.zeros((df.shape[0], icd_labels.shape[0])))
