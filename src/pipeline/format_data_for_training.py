@@ -18,16 +18,21 @@ def main():
         df_.to_json(fp_out, orient="split")
 
 
-def construct_datasets(icd_version='10'):
+def construct_datasets(icd_version='10', seq_num = '1.0'):
     logger.info("Ingesting MIMIC data...")
     diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
                                "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+                                
+    if seq_num == '1.0':
+        diagnosis_df = diagnosis_df[diagnosis_df.SEQ_NUM == 1.0]
+
     icd9_long_description_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
     icd_eqivalence_mapping_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(
         columns={0: 'ICD9_CODE', 1: 'ICD10_CODE', 2: 'LONG_TITLE'})
     icd_eqivalence_mapping_df['ICD9_CODE'] = icd_eqivalence_mapping_df['ICD9_CODE'].str.replace('.', '')
     diagnosis_df = diagnosis_df.merge(
         icd9_long_description_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
+
 
     if icd_version == '10':
         logger.info("Converting ICD9 to ICD10...")
@@ -44,10 +49,12 @@ def construct_datasets(icd_version='10'):
 
     logger.info("Pivoting to group related entries and ICD codes...")
     df = df_raw.groupby(["HADM_ID", "TEXT"]).agg({
-        ("ICD10_CODE" if icd_version == '10' else "ICD9_CODE"): set,
-        "SEQ_NUM": set,
-        "LONG_TITLE": set,
+        ("ICD10_CODE" if icd_version == '10' else "ICD9_CODE"): list,
+        "SEQ_NUM": list,
+        "LONG_TITLE": list,
     }).reset_index()
+
+    df = df.drop_duplicates('HADM_ID')
     
     logger.info("Splitting into test/train...")
     df_train = df.sample(frac=0.66, random_state=42)
