@@ -1,3 +1,40 @@
+"""
+XBERT PREPROCESSING (mimic_iii_1-4)
+
+This module preprocesses train/test dataframes generated using
+format_data_for_training.py (assuming MIMICiii, with ICD10s converted,
+and only SEQ_NUM = 1.0) in preparation for the XBERT pipeline.
+
+Running this script produces:
+X.trn.npz: the instance TF-IDF feature matrix for the train set.
+    The data type is scipy.sparse.csr_matrix of size (N_trn, D_tfidf),
+    where N_trn is the number of train instances and D_tfidf is the number of features.
+
+X.tst.npz: the instance TF-IDF feature matrix for the test set.
+    The data type is scipy.sparse.csr_matrix of size (N_tst, D_tfidf),
+    where N_tst is the number of test instances
+    and D_tfidf is the number of features.
+
+Y.trn.npz: the instance-to-label matrix for the train set.
+    The data type is scipy.sparse.csr_matrix of size (N_trn, L),
+    where n_trn is the number of train instances and L is the number of labels.
+
+Y.tst.npz: the instance-to-label matrix for the test set.
+    The data type is scipy.sparse.csr_matrix of size (N_tst, L),
+    where n_tst is the number of test instances and L is the number of labels.
+
+train_raw_texts.txt: The raw text of the train set.
+
+test_raw_texts.txt: The raw text of the test set.
+
+label_map.txt: the label's text description.
+
+-----
+Next, these files should be places in the proper {DATASET} folder for xbert.
+Given the input files, the XBERT pipeline (Indexer, Matcher, and Ranker) can then be run downstream.
+"""
+
+
 import numpy as np
 import pandas as pd
 import scipy
