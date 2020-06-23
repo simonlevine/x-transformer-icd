@@ -9,8 +9,8 @@ NOTE_EVENTS_CSV_FP = "../data/mimiciii-14/NOTEEVENTS.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
-def main():
-    df_train, df_test = construct_datasets()
+def load_and_serialize_dataset():
+    df_train, df_test = construct_dataset()
     (basedir_outpath := Path("./intermediary-data")).mkdir(exist_ok=True)
     for df_, type_ in [(df_train, "train"), (df_test, "test")]:
         fp_out = basedir_outpath/f"notes2diagnosis-icd-{type_}.json.gz"
@@ -18,50 +18,50 @@ def main():
         df_.to_json(fp_out, orient="split")
 
 
-def construct_datasets(icd_version='10', seq_num = '1.0'):
-    logger.info("Ingesting MIMIC data...")
-    diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
-                               "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-                                
-    if seq_num == '1.0':
-        diagnosis_df = diagnosis_df[diagnosis_df.SEQ_NUM == 1.0]
-
-    icd9_long_description_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
-    icd_eqivalence_mapping_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(
-        columns={0: 'ICD9_CODE', 1: 'ICD10_CODE', 2: 'LONG_TITLE'})
-    icd_eqivalence_mapping_df['ICD9_CODE'] = icd_eqivalence_mapping_df['ICD9_CODE'].str.replace('.', '')
-    diagnosis_df = diagnosis_df.merge(
-        icd9_long_description_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
+def construct_dataset():
+    dataset, _ = load_mimic_dataset()
+    dataset, _ = convert_icd9_to_icd10(dataset)
+    dataset_related_grouped = group_related_entries(dataset)
+    df_train, df_test = test_train_validation_split(dataset_related_grouped)
+    return df_train, df_test
 
 
-    if icd_version == '10':
-        logger.info("Converting ICD9 to ICD10...")
-        diagnosis_df = diagnosis_df.merge(
-            icd_eqivalence_mapping_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
-        diagnosis_df = diagnosis_df.drop(columns=['ICD9_CODE', 'LONG_TITLE_x']).rename(
-            columns={'LONG_TITLE_y': 'LONG_TITLE'})
+def load_mimic_dataset():
+    diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=["HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+    icd9_long_description_df = pd.read_csv(ICD9_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
+    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=["HADM_ID", "TEXT", "CATEGORY", "ISERROR"])
+    note_events_df = note_events_df[note_events_df.CATEGORY == "Discharge summary"]
+    note_events_df = note_events_df.drop_duplicates(["HADM_ID", "TEXT"])
+    full_df = note_events_df.merge(diagnosis_df.merge(icd9_long_description_df))
+    full_df = full_df[["HADM_ID", "TEXT", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
+    return full_df, (diagnosis_df, icd9_long_description_df, note_events_df)
 
-    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=[
-                                 "HADM_ID", "TEXT", "CATEGORY"])
-    note_events_df = note_events_df[note_events_df.CATEGORY ==
-                                    "Discharge summary"]
-    df_raw = note_events_df.merge(diagnosis_df).dropna()
 
-    logger.info("Pivoting to group related entries and ICD codes...")
-    df = df_raw.groupby(["HADM_ID", "TEXT"]).agg({
-        ("ICD10_CODE" if icd_version == '10' else "ICD9_CODE"): list,
-        "SEQ_NUM": list,
-        "LONG_TITLE": list,
+def convert_icd9_to_icd10(dataset):
+    icd_general_eqivalence_mapping_df = \
+        pd.read_csv(ICD_GEM_FP, sep='|', header=None, names=["ICD9_CODE", "ICD10_CODE", "LONG_TITLE_ICD10"])
+    icd_general_eqivalence_mapping_df["ICD9_CODE"] = \
+        icd_general_eqivalence_mapping_df["ICD9_CODE"].str.replace('.', '')
+    dataset = (dataset
+               .merge(icd_general_eqivalence_mapping_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
+               .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"}))
+    return dataset, icd_general_eqivalence_mapping_df
+
+
+def group_related_entries(dataset):
+    return dataset.groupby(["HADM_ID", "TEXT"]).agg({
+        "ICD9_CODE": set,
+        "ICD10_CODE": set,
+        "SEQ_NUM": set,
+        "LONG_TITLE": set,
     }).reset_index()
 
-    df = df.drop_duplicates('HADM_ID')
-    
-    logger.info("Splitting into test/train...")
-    df_train = df.sample(frac=0.66, random_state=42)
-    df_test = df.drop(df_train.index)
 
+def test_train_validation_split(dataset):
+    df_train = dataset.sample(frac=0.66, random_state=42)
+    df_test = dataset.drop(df_train.index)
     return df_train, df_test
 
 
 if __name__ == "__main__":
-    main()
+    load_and_serialize_dataset()
