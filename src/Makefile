@@ -39,6 +39,7 @@ prepare_for_xbert: ## xbertpreprocessing step.
 	# XBERT_Y_TRN_FP = '../data/xbert_inputs/Y.trn.npz'
 	# XBERT_Y_TST_FP = '../data/xbert_inputs/Y.tst.npz'
 
+	$(PY) pipeline/xbert_preprocessing.py
 
 train:  ## model training
 	# inputs:
