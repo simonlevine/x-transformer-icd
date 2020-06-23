@@ -45,10 +45,12 @@ import scipy
 import format_data_for_training
 
 
+#Input filepaths.
 DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
+#output filepaths
 XBERT_LABEL_MAP_FP = '../data/xbert_inputs/label_map.txt'
 
 XBERT_TRAIN_RAW_LABELS_FP = '../data/xbert_inputs/train_raw_labels.txt'

@@ -18,6 +18,28 @@ format_data:  ## data preprocessing step
 	#     "notes2diagnosis-icd-{train,test}.json.gz"
 	$(PY) pipeline/format_data_for_training.py
 
+prepare_for_xbert: ## xbertpreprocessing step.
+	# inputs:
+	# DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+	# ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+	# ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
+
+	# "../src/pipeline/format_data_for_training.py"
+
+	#outputs
+		
+	# XBERT_LABEL_MAP_FP = '../data/xbert_inputs/label_map.txt'
+
+	# XBERT_TRAIN_RAW_LABELS_FP = '../data/xbert_inputs/train_raw_labels.txt'
+	# XBERT_TEST_RAW_LABELS_FP = '../data/xbert_inputs/test_raw_labels.txt'
+
+	# XBERT_X_TRN_FP = '../data/xbert_inputs/X.trn.npz'
+	# XBERT_X_TST_FP = '../data/xbert_inputs/X.tst.npz'
+
+	# XBERT_Y_TRN_FP = '../data/xbert_inputs/Y.trn.npz'
+	# XBERT_Y_TST_FP = '../data/xbert_inputs/Y.tst.npz'
+
+
 train:  ## model training
 	# inputs:
 	#     "notes2diagnosis-icd-train.json.gz"
