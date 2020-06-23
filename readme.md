@@ -6,6 +6,8 @@
 
 <hr/>
 
+![autoICD](autoICD.jpeg)
+
 To get access to the MIMIC data, please authenticate first:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="$(PWD)/autoicd-gcp-credentials.json"
