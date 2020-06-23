@@ -2,6 +2,7 @@
 # pipeline and serving the user interface
 
 PY=python
+PYTEST=pytest
 ST=streamlit
 .PHONY:
 	@echo ""
@@ -49,5 +50,7 @@ train:  ## model training
 	$(PY) pipeline/train_model_kiss.py
 	
 app: .PHONY  ## run streamlit app locally
-	export PYTHONPATH="$(PWD)/src/app:$$PYTHONPATH" \
-	&& $(ST) run app/streamlit/AutoICD.py
+	$(ST) run app/streamlit/AutoICD.py
+
+test:
+	$(PYTEST) tests/test_*
