@@ -150,9 +150,9 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     corpus_tst = list(X_trn.values)
 
     logger.info('TF-IDF Vectorizing training text samples...')
-    X_trn_tfidf = vectorizer.fit_transform(trn_corpus)
+    X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
     logger.info('TF-IDF Vectorizing testing text samples...')
-    X_tst_tfidf = vectorizer.transform(tst_corpus)
+    X_tst_tfidf = vectorizer.transform(corpus_tst)
     return X_trn_tfidf, X_tst_tfidf
 
 
