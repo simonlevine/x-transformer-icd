@@ -86,7 +86,7 @@ def main():
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
 
 
- def xbert_clean_label(label):
+def xbert_clean_label(label):
       return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 def xbert_create_label_map(icd_version='10'):
