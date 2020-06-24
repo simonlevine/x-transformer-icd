@@ -76,7 +76,7 @@ def main():
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
 
 
-    desc_labels = desc_labels.apply(clean_label)
+    desc_labels = desc_labels.apply(xbert_clean_label)
 
 
     Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
@@ -86,8 +86,8 @@ def main():
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
 
 
- def xbert_clean_label(label):
-      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label)
+def xbert_clean_label(label):
+      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 def xbert_create_label_map(icd_version='10'):
     """creates a dataframe of all ICD10 labels and corresponding
@@ -101,12 +101,12 @@ def xbert_create_label_map(icd_version='10'):
     icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
         (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True)
 
-    desc_labels = icd_equivalence_df['LONG_TITLE']
-    icd_labels = icd_equivalence_df['ICD10_CODE']
+    desc_labels = icd_equivalence_df['LONG_TITLE'].dropna()
+    icd_labels = icd_equivalence_df['ICD10_CODE'].dropna()
     return icd_labels, desc_labels
 
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels):
+def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -129,9 +129,17 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels):
     logger.info(
         f'Constructing label mapping ({df_subset} portion) ICD10 codes to HADM_ID...')
 
+
     for hadm_id in Y_.index:  # running through rows.
-        curr_primary_icd = df.loc[hadm_id, 'ICD10_CODE'][0]
-        Y_.loc[hadm_id, curr_primary_icd] += 1
+        icds_per_hadm_id = df.loc[hadm_id, 'ICD10_CODE']
+        seqnum_per_hadm_id = df.loc[hadm_id, 'SEQ_NUM']
+
+        curr_primary_icd = icds_per_hadm_id[seqnum_per_hadm_id.index(1.0)]
+        if seq_num == '1.0':
+            Y_.loc[hadm_id, curr_primary_icd] += 1
+        else:  # all icds assigned.
+            Y_.loc[hadm_id, icds_per_hadm_id] += 1
+            
     return Y_
 
 
@@ -153,8 +161,8 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
 
     logger.info('Fitting vectorizers to corpora...')
 
-    corpus_trn = list(X_trn.values)
-    corpus_tst = list(X_trn.values)
+    corpus_trn = list(X_trn.values.flatten())
+    corpus_tst = list(X_trn.values.flatten())
 
     logger.info('TF-IDF Vectorizing training text samples...')
     X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
