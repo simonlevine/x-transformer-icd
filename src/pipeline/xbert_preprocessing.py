@@ -76,7 +76,7 @@ def main():
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
 
 
-    desc_labels = desc_labels.apply(clean_label)
+    desc_labels = desc_labels.apply(xbert_clean_label)
 
 
     Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
@@ -153,8 +153,8 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
 
     logger.info('Fitting vectorizers to corpora...')
 
-    corpus_trn = list(X_trn.values)
-    corpus_tst = list(X_trn.values)
+    corpus_trn = list(X_trn.values.flatten())
+    corpus_tst = list(X_trn.values.flatten())
 
     logger.info('TF-IDF Vectorizing training text samples...')
     X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
