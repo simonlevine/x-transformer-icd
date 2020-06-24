@@ -169,9 +169,9 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
 
     #writing raw text features to txts
     logger.info('Writing data raw features to txt.')
-    X_trn.to_csv(path_or_buf=XBERT_TRAIN_RAW_LABELS_FP,
+    X_trn.to_csv(path_or_buf=XBERT_TRAIN_RAW_TEXTS_FP,
                  header=None, index=None, sep='\t', mode='a')
-    X_tst.to_csv(path_or_buf=XBERT_TEST_RAW_LABELS_FP,
+    X_tst.to_csv(path_or_buf=XBERT_TEST_RAW_TEXTS_FP,
                  header=None, index=None, sep='\t', mode='a')
 
     #writing X.trn.npz, X.tst.npz files.
