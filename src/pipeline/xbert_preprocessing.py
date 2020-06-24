@@ -87,7 +87,7 @@ def main():
 
 
  def xbert_clean_label(label):
-      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label)
+      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 def xbert_create_label_map(icd_version='10'):
     """creates a dataframe of all ICD10 labels and corresponding
@@ -101,8 +101,8 @@ def xbert_create_label_map(icd_version='10'):
     icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
         (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True)
 
-    desc_labels = icd_equivalence_df['LONG_TITLE']
-    icd_labels = icd_equivalence_df['ICD10_CODE']
+    desc_labels = icd_equivalence_df['LONG_TITLE'].dropna()
+    icd_labels = icd_equivalence_df['ICD10_CODE'].dropna()
     return icd_labels, desc_labels
 
 
