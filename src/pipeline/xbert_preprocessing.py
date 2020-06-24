@@ -142,6 +142,10 @@ def xbert_prepare_txt_inputs(df, df_subset):
 
 
 def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
+    """
+    Creates tf-idf vectors of instances in preparation for xbert training.
+    """
+
     logger.info('Creating TF_IDF inputs...')
     vectorizer = TfidfVectorizer(
         ngram_range=(1, n_gram_range_upper),
