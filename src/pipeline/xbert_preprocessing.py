@@ -73,11 +73,17 @@ def main():
         df_train, 'training'), xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
+
+    def clean_label(label):
+        return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label)
+        desc_labels = desc_labels.apply(clean_label)
+
+
     Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
         df_train, 'training', icd_labels), xbert_prepare_Y_maps(df_test, 'testing', icd_labels)
 
     xbert_write_preproc_data_to_file(
-        icd_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
+        desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
 
 
 def xbert_create_label_map(icd_version='10'):
@@ -132,7 +138,7 @@ def xbert_prepare_txt_inputs(df, df_subset):
     return df[['TEXT']]
 
 
-def get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
+def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     logger.info('Creating TF_IDF inputs...')
     vectorizer = TfidfVectorizer(
         ngram_range=(1, n_gram_range_upper),
@@ -150,7 +156,7 @@ def get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     return X_trn_tfidf, X_tst_tfidf
 
 
-def xbert_write_preproc_data_to_file(icd_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
+def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
     """Creates X_trn/X_tst TF-IDF vectors, (csr/npz files),
     Y_trn/Y_tst (binary array; csr/npz files), as well as
     .txt files for free text labels (label_map.txt) and train/test inputs (train/test_raw_texts)
@@ -158,7 +164,7 @@ def xbert_write_preproc_data_to_file(icd_labels, X_trn, X_tst, X_trn_tfidf, X_ts
 
     #writing label map (icd descriptions) to txt
     logger.info('Writing icd LONG_TITLE (label map) to txt.')
-    icd_labels.to_csv(path_or_buf=XBERT_LABEL_MAP_FP,
+    desc_labels.to_csv(path_or_buf=XBERT_LABEL_MAP_FP,
                       header=None, index=None, sep='\t', mode='a')
 
     #writing raw text features to txts
