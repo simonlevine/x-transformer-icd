@@ -41,6 +41,7 @@ import scipy
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 import scipy
+import re
 
 import format_data_for_training
 
@@ -74,9 +75,8 @@ def main():
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
 
-    def clean_label(label):
-        return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label)
-        desc_labels = desc_labels.apply(clean_label)
+
+    desc_labels = desc_labels.apply(clean_label)
 
 
     Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
@@ -85,6 +85,9 @@ def main():
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
 
+
+ def xbert_clean_label(label):
+      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label)
 
 def xbert_create_label_map(icd_version='10'):
     """creates a dataframe of all ICD10 labels and corresponding
