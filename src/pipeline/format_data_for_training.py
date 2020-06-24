@@ -20,41 +20,41 @@ def load_and_serialize_dataset():
 
 def construct_dataset():
     dataset, _ = load_mimic_dataset()
-    dataset, _ = convert_icd9_to_icd10(dataset)
-    dataset_related_grouped = group_related_entries(dataset)
-    df_train, df_test = test_train_validation_split(dataset_related_grouped)
+    dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
+    df_train, df_test = test_train_validation_split(dataset)
     return df_train, df_test
 
 
 def load_mimic_dataset():
     diagnosis_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=["HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+    diagnosis_df = diagnosis_df[diagnosis_df.SEQ_NUM==1]
     icd9_long_description_df = pd.read_csv(ICD9_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
-    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=["HADM_ID", "TEXT", "CATEGORY", "ISERROR"])
+    note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
+    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY == "Discharge summary"]
-    note_events_df = note_events_df.drop_duplicates(["HADM_ID", "TEXT"])
-    full_df = note_events_df.merge(diagnosis_df.merge(icd9_long_description_df))
+    note_events_df = note_events_df.drop_duplicates(["TEXT"])
+    full_df = note_events_df.merge(diagnosis_df.merge(icd9_long_description_df)).drop_duplicates(["HADM_ID"])
     full_df = full_df[["HADM_ID", "TEXT", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
     return full_df, (diagnosis_df, icd9_long_description_df, note_events_df)
 
 
-def convert_icd9_to_icd10(dataset):
-    icd_general_eqivalence_mapping_df = \
-        pd.read_csv(ICD_GEM_FP, sep='|', header=None, names=["ICD9_CODE", "ICD10_CODE", "LONG_TITLE_ICD10"])
-    icd_general_eqivalence_mapping_df["ICD9_CODE"] = \
-        icd_general_eqivalence_mapping_df["ICD9_CODE"].str.replace('.', '')
-    dataset = (dataset
-               .merge(icd_general_eqivalence_mapping_df, left_on=['ICD9_CODE'], right_on=['ICD9_CODE'])
-               .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"}))
-    return dataset, icd_general_eqivalence_mapping_df
+def load_icd_general_equivalence_mapping():
+    icd_equiv_map_df = pd.read_csv(
+        ICD_GEM_FP,
+        sep="|",
+        header=None,
+        names=["ICD9_CODE", "ICD10_CODE", "LONG_TITLE_ICD10"]
+    )
+    icd_equiv_map_df = icd_equiv_map_df.dropna() # there is a single blank line
+    icd_equiv_map_df["ICD9_CODE"] = \
+        icd_equiv_map_df["ICD9_CODE"].str.replace('.', '')
+    return icd_equiv_map_df.groupby("ICD9_CODE").agg(set)
 
 
-def group_related_entries(dataset):
-    return dataset.groupby(["HADM_ID", "TEXT"]).agg({
-        "ICD9_CODE": set,
-        "ICD10_CODE": set,
-        "SEQ_NUM": set,
-        "LONG_TITLE": set,
-    }).reset_index()
+def convert_icd9_to_icd10(dataset: pd.DataFrame, equivalence_mapping: pd.DataFrame):
+    return dataset \
+        .merge(equivalence_mapping, left_on=["ICD9_CODE"], right_index=True) \
+        .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"})
 
 
 def test_train_validation_split(dataset):

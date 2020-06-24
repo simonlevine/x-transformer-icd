@@ -53,4 +53,5 @@ app: .PHONY  ## run streamlit app locally
 	$(ST) run app/streamlit/AutoICD.py
 
 test:
-	$(PYTEST) tests/test_*
+	export  PYTHONPATH="$$PYTHONPATH:$(PWD)" && \
+	$(PYTEST) -vv tests/test_*
