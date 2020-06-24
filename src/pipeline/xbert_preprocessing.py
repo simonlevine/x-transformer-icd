@@ -53,8 +53,8 @@ ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 #output filepaths
 XBERT_LABEL_MAP_FP = '../data/xbert_inputs/label_map.txt'
 
-XBERT_TRAIN_RAW_LABELS_FP = '../data/xbert_inputs/train_raw_labels.txt'
-XBERT_TEST_RAW_LABELS_FP = '../data/xbert_inputs/test_raw_labels.txt'
+XBERT_TRAIN_RAW_TEXTS_FP = '../data/xbert_inputs/train_raw_labels.txt'
+XBERT_TEST_RAW_TEXTS_FP = '../data/xbert_inputs/test_raw_labels.txt'
 
 XBERT_X_TRN_FP = '../data/xbert_inputs/X.trn.npz'
 XBERT_X_TST_FP = '../data/xbert_inputs/X.tst.npz'
@@ -132,18 +132,21 @@ def xbert_prepare_txt_inputs(df, df_subset):
     return df[['TEXT']]
 
 
-
-def xbert_get_tfidf_inputs(X_trn, X_tst):
+def get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     logger.info('Creating TF_IDF inputs...')
-    vect = TfidfVectorizer()
-    corpus = list(X_trn.values.flatten())
-    logger.info('Fitting a vectorizer to the training data corpus...')
-    fitted_vect = vect.fit(corpus)  # TRAINING DATA ONLY for corpus
-    logger.info('TF-IDF Vectorizing training text samples...')
-    X_trn_tfidf = fitted_vect.transform(X_trn.values.flatten())
-    logger.info('TF-IDF Vectorizing testing text samples...')
-    X_tst_tfidf = fitted_vect.transform(X_tst.values.flatten())
+    vectorizer = TfidfVectorizer(
+        ngram_range=(1, n_gram_range_upper),
+        min_df=min_doc_freq)
 
+    logger.info('Fitting vectorizers to corpora...')
+
+    corpus_trn = list(X_trn.values)
+    corpus_tst = list(X_trn.values)
+
+    logger.info('TF-IDF Vectorizing training text samples...')
+    X_trn_tfidf = vectorizer.fit_transform(trn_corpus)
+    logger.info('TF-IDF Vectorizing testing text samples...')
+    X_tst_tfidf = vectorizer.transform(tst_corpus)
     return X_trn_tfidf, X_tst_tfidf
 
 
