@@ -106,7 +106,7 @@ def xbert_create_label_map(icd_version='10'):
     return icd_labels, desc_labels
 
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels):
+def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -129,9 +129,17 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels):
     logger.info(
         f'Constructing label mapping ({df_subset} portion) ICD10 codes to HADM_ID...')
 
+
     for hadm_id in Y_.index:  # running through rows.
-        curr_primary_icd = df.loc[hadm_id, 'ICD10_CODE'][0]
-        Y_.loc[hadm_id, curr_primary_icd] += 1
+        icds_per_hadm_id = df.loc[hadm_id, 'ICD10_CODE']
+        seqnum_per_hadm_id = df.loc[hadm_id, 'SEQ_NUM']
+
+        curr_primary_icd = icds_per_hadm_id[seqnum_per_hadm_id.index(1.0)]
+        if seq_num == '1.0':
+            Y_.loc[hadm_id, curr_primary_icd] += 1
+        else:  # all icds assigned.
+            Y_.loc[hadm_id, icds_per_hadm_id] += 1
+            
     return Y_
 
 
