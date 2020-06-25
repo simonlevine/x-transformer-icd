@@ -34,17 +34,20 @@ Next, these files should be places in the proper {DATASET} folder for xbert.
 Given the input files, the XBERT pipeline (Indexer, Matcher, and Ranker) can then be run downstream.
 """
 
-
+import typing as t
+import re
 import numpy as np
 import pandas as pd
 import scipy
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
-import scipy
-import re
+from tqdm import tqdm
 
-from . import format_data_for_training
-
+try:
+    import format_data_for_training
+except ImportError:
+    # when running in a pytest context
+    from . import format_data_for_training
 
 #Input filepaths.
 DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
@@ -202,7 +205,6 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     scipy.sparse.save_npz(XBERT_Y_TST_FP, Y_tst_csr)
 
     logger.info('Done.')
-
 
 
 if __name__ == "__main__":
