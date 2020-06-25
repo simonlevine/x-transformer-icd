@@ -74,13 +74,10 @@ def main():
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
-
-
     desc_labels = desc_labels.apply(xbert_clean_label)
 
-
-    Y_trn_map = xbert_prepare_Y_maps(df_train, 'training', icd_labels)
-    Y_tst_map = xbert_prepare_Y_maps(df_test, 'testing', icd_labels)
+    Y_trn_map = xbert_prepare_Y_maps(df_train, 'training', icd_labels.tolist())
+    Y_tst_map = xbert_prepare_Y_maps(df_test, 'testing', icd_labels.tolist())
 
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
@@ -89,24 +86,26 @@ def main():
 def xbert_clean_label(label):
       return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
-def xbert_create_label_map(icd_version='10'):
+
+def xbert_create_label_map(icd_version='10') -> t.Tuple[t.List[str], t.List[str]]:
     """creates a dataframe of all ICD10 labels and corresponding
     descriptions in 2018 ICD code set.
     Note that this is inclusive of, but not limited to,
     the set of codes appearing in cases of MIMIC-iii."""
-
-    assert icd_version == '10', 'Only ICD10 is currently supported.'
-
+    if icd_version != "10":
+        raise ValueError('Only ICD10 is currently supported.')
     logger.info('Creating ICD and long title lists for xbert...')
+    ##TODO: this block should be imported from format data
     icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
-        (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True)
-
-    desc_labels = icd_equivalence_df['LONG_TITLE'].dropna()
-    icd_labels = icd_equivalence_df['ICD10_CODE'].dropna()
+        (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True).dropna()
+    desc_labels = icd_equivalence_df['LONG_TITLE']
+    assert desc_labels.shape == desc_labels.dropna().shape
+    icd_labels = icd_equivalence_df['ICD10_CODE']
+    assert icd_labels.shape == icd_labels.dropna().shape
     return icd_labels, desc_labels
 
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
+def xbert_prepare_Y_maps(df, df_subset, icd_labels):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -114,34 +113,18 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
     Args:
         df (DataFrame): training or testing dataframe.
         df_subset (str): "train", "test", or "validation"
-        icd_labels: Series of all possible icd labels
+        icd_labels (List[str]): Series of all possible icd labels
     
     Returns:
         Y_: a binary DataFrame of size N by K, where
             N is the number of samples (HADM_IDs) in the
             train or test dataframe, and K is the number
             of potential ICD labels."""
-
-    df = df.set_index('HADM_ID')
-    Y_ = pd.DataFrame(np.zeros((df.shape[0], icd_labels.shape[0])))
-    Y_.columns = icd_labels
-    Y_.index = df.index
-    logger.info(
-        f'Constructing label mapping ({df_subset} portion) ICD10 codes to HADM_ID...')
-
-
-    for hadm_id in Y_.index:  # running through rows.
-        icds_per_hadm_id = df.loc[hadm_id, 'ICD10_CODE']
-        seqnum_per_hadm_id = df.loc[hadm_id, 'SEQ_NUM']
-
-        curr_primary_icd = icds_per_hadm_id #[seqnum_per_hadm_id.index(1.0)] # BUG: more than one icd per HADMID pulled for some instances. Also, 
-        #                                                                       should make sure we can get more than seqnum1.0.
-        if seq_num == '1.0':
-            Y_.loc[hadm_id, curr_primary_icd] += 1
-        else:  # all icds assigned.
-            Y_.loc[hadm_id, icds_per_hadm_id] += 1
-            
-    return Y_
+    hadm_ids = df.HADM_ID.unique().tolist()
+    Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
+    for idx, row in tqdm(df.iterrows(), unit="HADM id"):
+        Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+    return Y_.fillna(0)
 
 
 def xbert_prepare_txt_inputs(df, df_subset):
