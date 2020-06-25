@@ -11,7 +11,7 @@ ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
 
 def load_and_serialize_dataset():
-    df_train, df_test = construct_dataset()
+    df_train, df_test = construct_datasets()
     (basedir_outpath := Path("./intermediary-data")).mkdir(exist_ok=True)
     for df_, type_ in [(df_train, "train"), (df_test, "test")]:
         fp_out = basedir_outpath/f"notes2diagnosis-icd-{type_}.json.gz"
@@ -19,7 +19,7 @@ def load_and_serialize_dataset():
         df_.to_json(fp_out, orient="split")
 
 
-def construct_dataset():
+def construct_datasets():
     dataset, _ = load_mimic_dataset()
     dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
     df_train, df_test = test_train_validation_split(dataset)
