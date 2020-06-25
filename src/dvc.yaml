@@ -1,0 +1,16 @@
+stages:
+  prepare_for_xbert:
+    cmd: python pipeline/xbert_preprocessing.py
+    deps:
+    - ../data/ICD_general_equivalence_mapping.csv
+    - ../data/mimiciii-14/DIAGNOSES_ICD.csv.gz
+    - ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
+    - pipeline/xbert_preprocessing.py
+    outs:
+    - ./intermediary-data/xbert_inputs/X.trn.npz
+    - ./intermediary-data/xbert_inputs/X.tst.npz
+    - ./intermediary-data/xbert_inputs/Y.trn.npz
+    - ./intermediary-data/xbert_inputs/Y.tst.npz
+    - ./intermediary-data/xbert_inputs/label_map.txt
+    - ./intermediary-data/xbert_inputs/test_raw_labels.txt
+    - ./intermediary-data/xbert_inputs/train_raw_labels.txt

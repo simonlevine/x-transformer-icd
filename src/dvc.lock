@@ -1,0 +1,26 @@
+prepare_for_xbert:
+  cmd: python pipeline/xbert_preprocessing.py
+  deps:
+  - path: ../data/ICD_general_equivalence_mapping.csv
+    md5: d053c2a2933f5665aff5aa64c9b941cb
+  - path: ../data/mimiciii-14/DIAGNOSES_ICD.csv.gz
+    md5: 1d8007cc3115fd87a95321df33e1de86
+  - path: ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
+    md5: 9c5b6a1e0c6ebe7a96b99441ca9c0499
+  - path: pipeline/xbert_preprocessing.py
+    md5: d22edd218b29caa501449d82c3e99a12
+  outs:
+  - path: ./intermediary-data/xbert_inputs/X.trn.npz
+    md5: dd3c163c79b2d3c4c35a9bdfeb2d130e
+  - path: ./intermediary-data/xbert_inputs/X.tst.npz
+    md5: 6f89e6398ae32ca672b3ad40a5984d52
+  - path: ./intermediary-data/xbert_inputs/Y.trn.npz
+    md5: 115a518c6ad75db276befabd3c8d438a
+  - path: ./intermediary-data/xbert_inputs/Y.tst.npz
+    md5: 57eaa6bd3b17368ad1b31930c705eabd
+  - path: ./intermediary-data/xbert_inputs/label_map.txt
+    md5: e5a845c0f1c9e9579f1aac411bbb8161
+  - path: ./intermediary-data/xbert_inputs/test_raw_labels.txt
+    md5: 57bb404dde35ade77db098c195b55438
+  - path: ./intermediary-data/xbert_inputs/train_raw_labels.txt
+    md5: ce993fda00034d224e49442b67c882f0
