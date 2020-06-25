@@ -4,6 +4,8 @@
 PY=python
 PYTEST=pytest
 ST=streamlit
+OPTS=""
+
 .PHONY:
 	@echo ""
 default: app
@@ -53,5 +55,8 @@ app: .PHONY  ## run streamlit app locally
 	$(ST) run app/streamlit/AutoICD.py
 
 test:
-	export  PYTHONPATH="$$PYTHONPATH:$(PWD)" && \
-	$(PYTEST) -vv tests/test_*
+	export PYTHONPATH="$$PYTHONPATH:$(PWD)" && \
+	$(PYTEST) -vv $(OPTS) tests/test_*
+
+unit:
+	$(MAKE) test OPTS="-m unit"

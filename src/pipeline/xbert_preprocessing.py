@@ -43,7 +43,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import scipy
 import re
 
-import format_data_for_training
+from . import format_data_for_training
 
 
 #Input filepaths.
@@ -70,8 +70,8 @@ def main():
     df_test.drop_duplicates('HADM_ID')
     df_train.drop_duplicates('HADM_ID')
 
-    X_trn, X_tst = xbert_prepare_txt_inputs(
-        df_train, 'training'), xbert_prepare_txt_inputs(df_test, 'testing')
+    X_trn = xbert_prepare_txt_inputs(df_train, 'training')
+    X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
 
@@ -79,8 +79,8 @@ def main():
     desc_labels = desc_labels.apply(xbert_clean_label)
 
 
-    Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
-        df_train, 'training', icd_labels), xbert_prepare_Y_maps(df_test, 'testing', icd_labels)
+    Y_trn_map = xbert_prepare_Y_maps(df_train, 'training', icd_labels)
+    Y_tst_map = xbert_prepare_Y_maps(df_test, 'testing', icd_labels)
 
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
