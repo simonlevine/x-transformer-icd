@@ -65,10 +65,7 @@ XBERT_Y_TST_FP = '../data/xbert_inputs/Y.tst.npz'
 
 
 def main():
-    df_train, df_test = format_data_for_training.construct_dataset()
-
-    df_test.drop_duplicates('HADM_ID')
-    df_train.drop_duplicates('HADM_ID')
+    df_train, df_test = format_data_for_training.construct_datasets()
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
