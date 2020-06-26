@@ -16,7 +16,7 @@ label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 # elif [ ${LABEL_EMB} == 'text-emb' ]; then
     # label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 # fi
-#TEST
+
 
 
 # construct label embedding
