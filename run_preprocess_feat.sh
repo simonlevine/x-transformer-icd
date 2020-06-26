@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 DATASET=$1
 MODEL_TYPE=$2
 MAX_XSEQ_LEN=$3
