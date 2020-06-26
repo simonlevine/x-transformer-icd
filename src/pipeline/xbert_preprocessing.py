@@ -162,7 +162,7 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     logger.info('Fitting vectorizers to corpora...')
 
     corpus_trn = list(X_trn.values.flatten())
-    corpus_tst = list(X_trn.values.flatten())
+    corpus_tst = list(X_tst.values.flatten())
 
     logger.info('TF-IDF Vectorizing training text samples...')
     X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
