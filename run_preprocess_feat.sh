@@ -1,8 +1,6 @@
 #!/bin/bash
 
-
-# A TEST ALTERATION
-
+# A small change
 
 DATASET=$1
 MODEL_TYPE=$2
