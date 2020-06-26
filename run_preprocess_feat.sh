@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# A small change
 
 DATASET=$1
 MODEL_TYPE=$2
