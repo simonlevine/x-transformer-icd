@@ -1,10 +1,14 @@
 #!/bin/bash
 
+
+# A TEST ALTERATION
+
+
 DATASET=$1
 MODEL_TYPE=$2
 MAX_XSEQ_LEN=$3
 
-# HuggingFace pretrained model preprocess #CHANGE TEST
+# HuggingFace pretrained model preprocess
 if [ $MODEL_TYPE == "bert" ]; then
     MODEL_NAME="bert-large-cased-whole-word-masking"
 elif [ $MODEL_TYPE == "roberta" ]; then
