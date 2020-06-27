@@ -402,7 +402,7 @@ class TransformerMatcher(object):
                 # get pooled_output, which is the [CLS] embedding for the document
                 # assume self.model hasattr module because torch.nn.DataParallel
                 if get_hidden:
-                    if args.model_type == "bert":
+                    if args.model_type == "bert": #type is BERT but model pulled in should be bioclinicalBERT
                         pooled_output = self.model.module.bert.pooler(hidden_states[-1])
                         pooled_output = self.model.module.dropout(pooled_output)
                         # logits = self.model.classifier(pooled_output)
