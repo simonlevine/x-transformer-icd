@@ -53,29 +53,34 @@ from tqdm import tqdm, trange
 
 import xbert.rf_linear as rf_linear
 import xbert.rf_util as rf_util
-from xbert.modeling import BertForXMLC, RobertaForXMLC, XLNetForXMLC #SHOULD WORK ON THIS...
 
-from transformers import ( #NEED TO UPDATE
+from xbert.modeling import BertForXMLC #truncated to just have bert model.
+
+
+from transformers import AutoTokenizer, AutoModel, AutoConfig
+# ---- substitute with local copy eventually...
+bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
+    "emilyalsentzer/Bio_ClinicalBERT")
+bioclinical_bert_Config = AutoConfig.from_pretrained(
+    "emilyalsentzer/Bio_ClinicalBERT")
+
+
+from transformers import (
     WEIGHTS_NAME,
-    BertConfig,
-    BertTokenizer,
-    RobertaConfig,
-    RobertaTokenizer,
-    XLNetConfig,
-    XLNetTokenizer,
 )
 
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-
 # global variable within the module
 
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, RobertaConfig, XLNetConfig)), (),)
+ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config)), (),)
 
-MODEL_CLASSES = {  # NEED TO UPDATE
-    "bert": (BertConfig, BertForXMLC, BertTokenizer),
-    "roberta": (RobertaConfig, RobertaForXMLC, RobertaTokenizer),
-    "xlnet": (XLNetConfig, XLNetForXMLC, XLNetTokenizer),
+
+MODEL_CLASSES = {
+    "bioclinical_bert": (
+                        bioclinical_bert_Config,
+                        BertForXMLC,
+                        bioclinical_bert_Tokenizer),
 }
 
 logger = None

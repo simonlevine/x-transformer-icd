@@ -49,7 +49,7 @@ python -u -m xbert.preprocess \
 #these carry through to training the transformer.
 MAX_XSEQ_LEN= $'128'
 #$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
-MODEL_TYPE=$'bert'
+MODEL_TYPE=$'bert' #keep 'bert' since this is the same model type and code relies on it.
 MODEL_NAME= $'Bio_ClinicalBERT'
 
 OUTPUT_DIR=save_models/${DATASET}
