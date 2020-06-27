@@ -179,4 +179,152 @@ python -u -m xbert.evaluator \
 
 ### END###
 
-# ignoring eval_transformer.sh and eval_linear.sh for now...
+
+##### OPTIONAL PORTIONS ####
+
+#!/bin/bash
+
+DATASET=$'mimiciii-14'
+VERSION=$'v0'
+#VERSION:
+# v0=sparse TF-IDF features.
+# v1=sparse TF-IDF features concatenate with dense fine-tuned XLNet embedding
+
+
+LABEL_EMB=pifa-tfidf
+DATA_DIR=./datasets/${DATASET}
+
+PRED_NPZ_PATHS=""
+SEED_LIST=( 0 1 2 )
+for SEED in "${SEED_LIST[@]}"; do
+    # indexer (for reproducibility, use clusters from pretrained_dir)
+    OUTPUT_DIR=pretrained_models/${DATASET}/${LABEL_EMB}-s${SEED}
+    INDEXER_DIR=${OUTPUT_DIR}/indexer
+    RANKER_DIR=${OUTPUT_DIR}/ranker/linear-${VERSION}
+    mkdir -p ${RANKER_DIR}
+
+    # ranker train and predict
+    PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
+
+    # x_emb=TF-IDF, model=Parabel
+    if [ ${VERSION} == 'v0' ]; then
+        python -m xbert.ranker train \
+            -x ${DATA_DIR}/X.trn.npz \
+            -y ${DATA_DIR}/Y.trn.npz \
+            -c ${INDEXER_DIR}/code.npz \
+            -o ${RANKER_DIR} -t 0.01
+
+        python -m xbert.ranker predict \
+            -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
+            -x ${DATA_DIR}/X.tst.npz \
+            -y ${DATA_DIR}/Y.tst.npz
+
+    # x_emb=xlnet_finetuned+TF-IDF, model=Parabel
+    elif [ ${VERSION} == 'v1' ]; then
+        python -m xbert.ranker train \
+            -x ${DATA_DIR}/X.trn.npz \
+            -x2 ${DATA_DIR}/X.trn.finetune.xlnet.npy \
+            -y ${DATA_DIR}/Y.trn.npz \
+            -c ${INDEXER_DIR}/code.npz \
+            -o ${RANKER_DIR} -t 0.01 -f 0
+
+        python -m xbert.ranker predict \
+            -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
+            -x ${DATA_DIR}/X.tst.npz \
+            -x2 ${DATA_DIR}/X.tst.finetune.xlnet.npy \
+            -y ${DATA_DIR}/Y.tst.npz -f 0
+
+    else
+        echo 'unknown linear version'
+        exit
+    fi
+
+    # append all prediction path
+    PRED_NPZ_PATHS="${PRED_NPZ_PATHS} ${PRED_NPZ_PATH}"
+done
+
+# final eval
+EVAL_DIR=results_linear
+mkdir -p ${EVAL_DIR}
+python -u -m xbert.evaluator \
+    -y datasets/${DATASET}/Y.tst.npz \
+    -e -p ${PRED_NPZ_PATHS} \
+    |& tee ${EVAL_DIR}/${DATASET}.${VERSION}.txt
+
+
+
+### END###
+
+
+#!/bin/bash
+
+DATASET = $'mimiciii-14'
+DATA_DIR=./datasets/${DATASET}
+
+# LABEL_NAME_ARR=( pifa-tfidf-s0 pifa-neural-s0 text-emb-s0 )
+MODEL_NAME_ARR=( bert-large-cased-whole-word-masking roberta-large xlnet-large-cased )
+EXP_NAME=${DATASET}.final
+
+LABEL_NAME = $'pifa-tfidf-s0'
+MODEL_NAME= $'Bio_ClinicalBERT'
+
+PRED_NPZ_PATHS=""
+
+OUTPUT_DIR=pretrained_models/${DATASET}/${LABEL_NAME}
+INDEXER_DIR=${OUTPUT_DIR}/indexer
+MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_NAME}
+RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_NAME}
+mkdir -p ${RANKER_DIR}
+
+# train linear ranker
+python -m xbert.ranker train \
+    -x1 ${DATA_DIR}/X.trn.npz \
+    -x2 ${MATCHER_DIR}/trn_embeddings.npy \
+    -y datasets/${DATASET}/Y.trn.npz \
+    -z ${MATCHER_DIR}/C_trn_pred.npz \
+    -c ${OUTPUT_DIR}/indexer/code.npz \
+    -o ${RANKER_DIR} -t 0.01 \
+    -f 0 -ns 0 --mode ranker \
+
+# predict final label ranking, using transformer's predicted cluster scores
+PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
+python -m xbert.ranker predict \
+    -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
+    -x1 datasets/${DATASET}/X.tst.npz \
+    -x2 ${MATCHER_DIR}/tst_embeddings.npy \
+    -y datasets/${DATASET}/Y.tst.npz \
+    -z ${MATCHER_DIR}/C_tst_pred.npz \
+    -f 0 -t noop
+
+# append all prediction path
+PRED_NPZ_PATHS="${PRED_NPZ_PATHS} ${PRED_NPZ_PATH}"
+# done
+
+# final eval
+EVAL_DIR=results_transformer
+mkdir -p ${EVAL_DIR}
+python -u -m xbert.evaluator \
+    -y datasets/${DATASET}/Y.tst.npz \
+    -e -p ${PRED_NPZ_PATHS} |& tee ${EVAL_DIR}/${EXP_NAME}.txt
+
+
+
+
+# Evaluate Linear Models
+# Given the provided indexing codes (label-to-cluster assignments), train/predict linear models, and evaluate with Precision/Recall@k:
+
+
+
+
+
+# ```bash
+# bash eval_linear.sh ${DATASET} ${VERSION}
+# ```
+
+
+### END
+
+# eval_transformer:
+# Given the provided indexing codes (label-to-cluster assignments)
+# and the fine-tuned Transformer models, train/predict ranker of 
+# the X-Transformer framework, and evaluate with Precision/Recall@k:
