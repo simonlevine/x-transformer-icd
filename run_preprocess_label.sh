@@ -2,21 +2,14 @@
 
 # DATASET=$1
 DATASET = $'mimiciii-14'
-# LABEL_EMB=$2    # pifa-tfidf | pifa-neural | text-emb
+
 LABEL_EMB=$'pifa-tfidf'
 
 
 # setup label embedding feature path
 # overwrite it if necessary
 DATA_DIR=datasets
-# if [ ${LABEL_EMB} == 'pifa-tfidf' ]; then
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
-# elif [ ${LABEL_EMB} == 'pifa-neural' ]; then
-    # label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.finetune.xlnet.npy
-# elif [ ${LABEL_EMB} == 'text-emb' ]; then
-    # label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
-# fi
-
 
 
 # construct label embedding

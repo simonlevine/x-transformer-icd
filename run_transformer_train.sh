@@ -10,18 +10,6 @@ INDEXER_NAME=$4 # pifa-tfidf-s0 ||| pifa-neural-s0 ||| text-emb-s0
 MODEL_NAME='Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
-# if [ ${MODEL_TYPE} == "bert" ]; then
-#     MODEL_NAME=bert-large-cased-whole-word-masking
-# elif [ ${MODEL_TYPE} == "roberta" ]; then
-#     MODEL_NAME=roberta-large
-# elif [ ${MODEL_TYPE} == "xlnet" ]; then
-#     MODEL_NAME=xlnet-large-cased
-# else
-#     echo "unknown MODEL_TYPE! [ bert | robeta | xlnet ]"
-#     exit
-# fi
-
-
 OUTPUT_DIR=save_models/${DATASET}
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 MAX_XSEQ_LEN=128
@@ -46,33 +34,6 @@ WARMUP_STEPS=100
 LOGGING_STEPS=50
 LEARNING_RATE=5e-5
 
-
-# set hyper-params by dataset
-
-# if [ ${DATASET} == "Eurlex-4K" ]; then
-#     MAX_STEPS=1000
-#     WARMUP_STEPS=100
-#     LOGGING_STEPS=50
-#     LEARNING_RATE=5e-5
-# elif [ ${DATASET} == "Wiki10-31K" ]; then
-#     MAX_STEPS=1400
-#     WARMUP_STEPS=100
-#     LOGGING_STEPS=50
-#     LEARNING_RATE=5e-5
-# elif [ ${DATASET} == "AmazonCat-13K" ]; then
-#     MAX_STEPS=20000
-#     WARMUP_STEPS=2000
-#     LOGGING_STEPS=100
-#     LEARNING_RATE=8e-5
-# elif [ ${DATASET} == "Wiki-500K" ]; then
-#     MAX_STEPS=80000
-#     WARMUP_STEPS=1000
-#     LOGGING_STEPS=100
-#     LEARNING_RATE=6e-5
-# else
-#     echo "dataset not support [ Eurlex-4K | Wiki10-31K | AmazonCat-13K | Wiki-500K ]"
-#     exit
-# fi
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_NAME}
 mkdir -p ${MODEL_DIR}

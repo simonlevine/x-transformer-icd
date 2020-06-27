@@ -5,23 +5,10 @@
 DATASET = $'mimiciii-14'
 # MODEL_TYPE=$2
 MAX_XSEQ_LEN= $'128'
-#$3 #NEED TO SPECIFY THIS? number tokens, =128 by default.
+#$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 
 MODEL_TYPE=$'bert'
 MODEL_NAME='Bio_ClinicalBERT'
-
-# HuggingFace pretrained model preprocess
-# if [ $MODEL_TYPE == "bert" ]; then
-    # MODEL_NAME="bert-large-cased-whole-word-masking"
-# elif [ $MODEL_TYPE == "roberta" ]; then
-#     MODEL_NAME="roberta-large"
-# elif [ $MODEL_TYPE == 'xlnet' ]; then
-#     MODEL_NAME="xlnet-large-cased"
-# else
-#     echo "Unknown MODEL_NAME!"
-#     exit
-# fi
-
 
 OUTPUT_DIR=save_models/${DATASET}
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
