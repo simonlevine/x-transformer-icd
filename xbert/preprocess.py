@@ -16,41 +16,55 @@ import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 
+import torch
+from transformers import AutoTokenizer, AutoModel
+
+
+bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
+bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
+bioclinical_bert_config = torch.hub.load('huggingface/pytorch-transformers',
+                        'config', "emilyalsentzer/Bio_ClinicalBERT")
+
+
+# need to create bioclinicalBERT for sequence classification.
+
 
 from transformers import (
     WEIGHTS_NAME,
-    BertConfig,
+    # BertConfig,
     BertForSequenceClassification,
-    BertTokenizer,
-    RobertaConfig,
-    RobertaForSequenceClassification,
-    RobertaTokenizer,
-    XLMConfig,
-    XLMForSequenceClassification,
-    XLMTokenizer,
-    XLNetConfig,
-    XLNetForSequenceClassification,
-    XLNetTokenizer,
-    DistilBertConfig,
-    DistilBertForSequenceClassification,
-    DistilBertTokenizer,
-    AlbertConfig,
-    AlbertForSequenceClassification,
-    AlbertTokenizer,
+    # BertTokenizer,
+    # RobertaConfig,
+    # RobertaForSequenceClassification,
+    # RobertaTokenizer,
+    # XLMConfig,
+    # XLMForSequenceClassification,
+    # XLMTokenizer,
+    # XLNetConfig,
+    # XLNetForSequenceClassification,
+    # XLNetTokenizer,
+    # DistilBertConfig,
+    # DistilBertForSequenceClassification,
+    # DistilBertTokenizer,
+    # AlbertConfig,
+    # AlbertForSequenceClassification,
+    # AlbertTokenizer,
 )
 
 ALL_MODELS = sum(
-    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, XLNetConfig, XLMConfig, RobertaConfig, DistilBertConfig,)),
+    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_config,))
+    #  BertConfig, XLNetConfig, XLMConfig, RobertaConfig, DistilBertConfig,)),
     (),
 )
 
 MODEL_CLASSES = {
-    "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
-    "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
-    "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
-    "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
-    "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer,),
-    "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
+    "bioclinical_bert": (bioclinical_bert_config, BertForSequenceClassification, bioclinical_bert_Tokenizer),
+    # "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
+    # "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
+    # "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
+    # "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
+    # "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer,),
+    # "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
 }
 
 
@@ -284,7 +298,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./datasets/Eurlex-4K",
+        default="./datasets/mimiciii-14",
         help="path to the dataset directory containing train_texts.txt and test_texts.txt",
     )
     parser.add_argument(
@@ -356,7 +370,7 @@ if __name__ == "__main__":
         "--input-code-path",
         type=str,
         metavar="PATH",
-        default="./save_models/Eurlex-4K/pifa-tfidf-a5-s0/indexer/code.npz",
+        default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )
     parser.add_argument(

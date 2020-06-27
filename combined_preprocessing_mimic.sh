@@ -50,7 +50,7 @@ python -u -m xbert.preprocess \
 MAX_XSEQ_LEN= $'128'
 #$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 MODEL_TYPE=$'bert'
-MODEL_NAME='Bio_ClinicalBERT'
+MODEL_NAME= $'Bio_ClinicalBERT'
 
 OUTPUT_DIR=save_models/${DATASET}
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
@@ -137,7 +137,6 @@ DATASET=$'mimiciii-14'
 DATA_DIR=./datasets/${DATASET}
 
 LABEL_NAME = pifa-tfidf-s0
-MODEL_NAME = Bio_ClinicalBERT
 EXP_NAME=${DATASET}.final
 
 PRED_NPZ_PATHS=""
