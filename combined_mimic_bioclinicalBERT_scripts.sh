@@ -256,13 +256,17 @@ python -u -m xbert.evaluator \
 ### END###
 
 
+# eval_transformer:
+# Given the provided indexing codes (label-to-cluster assignments)
+# and the fine-tuned Transformer models, train/predict ranker of 
+# the X-Transformer framework, and evaluate with Precision/Recall@k:
+
+
 #!/bin/bash
 
 DATASET = $'mimiciii-14'
 DATA_DIR=./datasets/${DATASET}
 
-# LABEL_NAME_ARR=( pifa-tfidf-s0 pifa-neural-s0 text-emb-s0 )
-MODEL_NAME_ARR=( bert-large-cased-whole-word-masking roberta-large xlnet-large-cased )
 EXP_NAME=${DATASET}.final
 
 LABEL_NAME = $'pifa-tfidf-s0'
@@ -314,17 +318,4 @@ python -u -m xbert.evaluator \
 # Given the provided indexing codes (label-to-cluster assignments), train/predict linear models, and evaluate with Precision/Recall@k:
 
 
-
-
-
-# ```bash
-# bash eval_linear.sh ${DATASET} ${VERSION}
-# ```
-
-
 ### END
-
-# eval_transformer:
-# Given the provided indexing codes (label-to-cluster assignments)
-# and the fine-tuned Transformer models, train/predict ranker of 
-# the X-Transformer framework, and evaluate with Precision/Recall@k:
