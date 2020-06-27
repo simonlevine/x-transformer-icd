@@ -1,3 +1,6 @@
 [submodule "X-Transformer"]
 	path = X-Transformer
 	url = https://github.com/slevineg/X-Transformer
+[submodule "auto-icd-transformers"]
+	path = auto-icd-transformers
+	url = https://github.com/simonlevine/auto-icd-transformers
