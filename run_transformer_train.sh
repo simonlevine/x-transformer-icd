@@ -1,21 +1,17 @@
 #!/bin/bash
 
 GPID=$1 #CUDA visible devices. 0 for just one 2070 GPU.
-# DATASET=$2
 DATASET=$'mimiciii-14'
-# MODEL_TYPE=$3
-INDEXER_NAME=$4 # pifa-tfidf-s0 ||| pifa-neural-s0 ||| text-emb-s0
-
+INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
 MODEL_NAME='Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
-OUTPUT_DIR=save_models/${DATASET}
-PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
+OUTPUT_DIR=save_models/${DATASET} 
+PROC_DATA_DIR=${OUTPUT_DIR}/proc_data 
 MAX_XSEQ_LEN=128
 
-#SHOULD ADD SOMETHING HERE FOR A 2070:
-
+#SHOULD ADD SOMETHING HERE FOR A 2070?
 
 # # Nvidia 2080Ti (11Gb), fp32
 # PER_DEVICE_TRN_BSZ=8
@@ -27,8 +23,7 @@ MAX_XSEQ_LEN=128
 # PER_DEVICE_VAL_BSZ=32
 # GRAD_ACCU_STEPS=2
 
-
-#HYPERPARAMETERS for MIMIC:
+#HYPERPARAMETERS for MIMIC: can change
 MAX_STEPS=1000
 WARMUP_STEPS=100
 LOGGING_STEPS=50

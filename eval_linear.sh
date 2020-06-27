@@ -1,7 +1,12 @@
 #!/bin/bash
 
-DATASET=$1
-VERSION=$2
+DATASET=$'mimiciii-14'
+VERSION=$'v0'
+#VERSION:
+# v0=sparse TF-IDF features.
+# v1=sparse TF-IDF features concatenate with dense fine-tuned XLNet embedding
+
+
 LABEL_EMB=pifa-tfidf
 DATA_DIR=./datasets/${DATASET}
 

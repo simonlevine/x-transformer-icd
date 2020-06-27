@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATASET=$1
+DATASET = $'mimiciii-14'
 DATA_DIR=./datasets/${DATASET}
 
 LABEL_NAME_ARR=( pifa-tfidf-s0 pifa-neural-s0 text-emb-s0 )
