@@ -16,55 +16,31 @@ import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 
-import torch
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
 
 bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
-bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
-bioclinical_bert_config = torch.hub.load('huggingface/pytorch-transformers',
-                        'config', "emilyalsentzer/Bio_ClinicalBERT")
-
-
-# need to create bioclinicalBERT for sequence classification.
+bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
+bioclinical_bert_Config = AutoConfig.from_pretrained(
+    "emilyalsentzer/Bio_ClinicalBERT")
+# bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
+bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
+    "emilyalsentzer/Bio_ClinicalBERT")
+# Or, model was saved using `save_pretrained('./test/saved_model/')
 
 
 from transformers import (
-    WEIGHTS_NAME,
-    # BertConfig,
-    BertForSequenceClassification,
-    # BertTokenizer,
-    # RobertaConfig,
-    # RobertaForSequenceClassification,
-    # RobertaTokenizer,
-    # XLMConfig,
-    # XLMForSequenceClassification,
-    # XLMTokenizer,
-    # XLNetConfig,
-    # XLNetForSequenceClassification,
-    # XLNetTokenizer,
-    # DistilBertConfig,
-    # DistilBertForSequenceClassification,
-    # DistilBertTokenizer,
-    # AlbertConfig,
-    # AlbertForSequenceClassification,
-    # AlbertTokenizer,
+    WEIGHTS_NAME, #not sure why we need this...
 )
 
 ALL_MODELS = sum(
-    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_config,))
-    #  BertConfig, XLNetConfig, XLMConfig, RobertaConfig, DistilBertConfig,)),
+    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config,))
     (),
 )
 
 MODEL_CLASSES = {
-    "bioclinical_bert": (bioclinical_bert_config, BertForSequenceClassification, bioclinical_bert_Tokenizer),
-    # "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
-    # "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
-    # "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
-    # "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
-    # "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer,),
-    # "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
+    # OK that it's
+    "bioclinical_bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
 }
 
 
@@ -95,31 +71,7 @@ def run_label_embedding(args):
         Y_avg = normalize(Y, axis=1, norm="l2")
         label_embedding = smat.csr_matrix(Y_avg.T.dot(X))
         label_embedding = normalize(label_embedding, axis=1, norm="l2")
-
-    elif args.label_emb_name == "text-emb":
-        # xlnet-large-cased tokenizer
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        tokenizer = RobertaTokenizer.from_pretrained("roberta-large")
-        model = RobertaModel.from_pretrained("roberta-large")
-        model = model.to(device)
-        model.eval()
-
-        # get label embedding
-        label_embedding = []
-        for idx in tqdm(range(n_label)):
-            inputs = torch.tensor([tokenizer.encode(id2label[idx])])
-            inputs = inputs.to(device)
-            with torch.no_grad():
-                last_hidden_states = model(inputs)[0]  # [1, seq_len, hidden_dim]
-                seq_embedding = last_hidden_states.mean(dim=1)
-            label_embedding.append(seq_embedding)
-        label_embedding = torch.cat(label_embedding, dim=0)
-        label_embedding = label_embedding.cpu().numpy()
-        label_embedding = smat.csr_matrix(label_embedding)
-        label_embedding = normalize(label_embedding, axis=1, norm="l2")
-
-    else:
-        raise NotImplementedError("unknown embed_type {}".format(args.embed_type))
+    #cut out alternative embedding process...
 
     # save label embedding
     logger.info("label_embedding {} {}".format(type(label_embedding), label_embedding.shape))
@@ -307,7 +259,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./save_models/Eurlex-4K/proc_data",
+        default="./save_models/mimiciii-14/proc_data",
         help="directory for storing X.[trn|tst].[model-type].[xseq-len].pkl and C.[trn|tst].npz",
     )
     parser.add_argument(
