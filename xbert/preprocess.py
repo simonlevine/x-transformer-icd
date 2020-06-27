@@ -38,7 +38,6 @@ ALL_MODELS = sum(
 )
 
 MODEL_CLASSES = {
-    # OK that it's
     "bioclinical_bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
 }
 
