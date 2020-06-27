@@ -53,9 +53,9 @@ from tqdm import tqdm, trange
 
 import xbert.rf_linear as rf_linear
 import xbert.rf_util as rf_util
-from xbert.modeling import BertForXMLC, RobertaForXMLC, XLNetForXMLC
+from xbert.modeling import BertForXMLC, RobertaForXMLC, XLNetForXMLC #SHOULD WORK ON THIS...
 
-from transformers import (
+from transformers import ( #NEED TO UPDATE
     WEIGHTS_NAME,
     BertConfig,
     BertTokenizer,
@@ -72,7 +72,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 
 ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, RobertaConfig, XLNetConfig)), (),)
 
-MODEL_CLASSES = {
+MODEL_CLASSES = {  # NEED TO UPDATE
     "bert": (BertConfig, BertForXMLC, BertTokenizer),
     "roberta": (RobertaConfig, RobertaForXMLC, RobertaTokenizer),
     "xlnet": (XLNetConfig, XLNetForXMLC, XLNetTokenizer),

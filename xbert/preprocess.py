@@ -17,8 +17,7 @@ import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
-
-
+# ---- substitute with local copy eventually...
 bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
 bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
 bioclinical_bert_Config = AutoConfig.from_pretrained(
@@ -27,7 +26,7 @@ bioclinical_bert_Config = AutoConfig.from_pretrained(
 bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
 # Or, model was saved using `save_pretrained('./test/saved_model/')
-
+# -----
 
 from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
@@ -279,7 +278,7 @@ if __name__ == "__main__":
         "-n",
         "--model_name_or_path",
         type=str,
-        default="bert-large-cased-whole-word-masking",
+        default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
         help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
     )
     parser.add_argument(
@@ -296,7 +295,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        default=128,
+        default=128,  # NEED TO UPDATE, possibly
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"
@@ -321,7 +320,7 @@ if __name__ == "__main__":
         "-c",
         "--input-code-path",
         type=str,
-        metavar="PATH",
+        metavar="PATH", #UPDATED default
         default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )

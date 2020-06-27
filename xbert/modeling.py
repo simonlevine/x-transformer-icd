@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from transformers.file_utils import add_start_docstrings
+
+#NEED TO UPDATE #NEED TO UPDATE #NEED TO UPDATE
 from transformers.configuration_bert import BertConfig
 from transformers.configuration_roberta import RobertaConfig
 from transformers.configuration_xlnet import XLNetConfig
@@ -27,7 +29,7 @@ from transformers.modeling_xlnet import (
     XLNET_INPUTS_DOCSTRING,
     XLNET_PRETRAINED_MODEL_ARCHIVE_MAP,
 )
-from transformers.modeling_xlnet import XLNetPreTrainedModel, XLNetModel
+from transformers.modeling_xlnet import XLNetPreTrainedModel, XLNetModel  # NEED TO UPDATE
 
 
 def repack_output(output_ids, output_mask, num_labels):
@@ -47,7 +49,7 @@ def repack_output(output_ids, output_mask, num_labels):
     BERT_START_DOCSTRING,
     BERT_INPUTS_DOCSTRING,
 )
-class BertForXMLC(BertPreTrainedModel):
+class BertForXMLC(BertPreTrainedModel):  # NEED TO UPDATE
     r"""
         **labels**: (`optional`) ``torch.LongTensor`` of shape ``(batch_size,)``:
             Labels for computing the sequence classification/regression loss.
