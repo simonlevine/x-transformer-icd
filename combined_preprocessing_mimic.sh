@@ -1,3 +1,5 @@
+###1) BEGIN LABEL PREPROCESSING.
+
 #!/bin/bash
 DATASET = $'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
@@ -42,7 +44,7 @@ python -u -m xbert.preprocess \
 
 #### end ####
 
-### BEGIN FEATURE PREPROCESSING ###
+### 2) BEGIN FEATURE PREPROCESSING ###
 
 #these carry through to training the transformer.
 MAX_XSEQ_LEN= $'128'
@@ -66,7 +68,7 @@ python -u -m xbert.preprocess \
 
 ###### end#####
 
-###BEGIN TRAINING TRANSFORMER
+### 3) BEGIN TRAINING TRANSFORMER
 
 GPID = $'0' #CUDA visible devices. 0 for just one (2070?) GPU.
     #see readme for example on >1 GPU
@@ -123,7 +125,11 @@ CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
 
 #### end ####
 
-### BEGIN TRANSFORMER PREDICT STEPS####
+### 3) BEGIN TRANSFORMER PREDICT STEPS####
+
+# - (1) train linear rankers to map instances 
+#       and predicted cluster scores to label scores
+# - (2) output top-k predicted labels
 
 #!/bin/bash
 
