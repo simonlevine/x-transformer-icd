@@ -69,6 +69,7 @@ def main():
         '/Users/simon/autoicd_local/sampled_dataframes/df_test')
     df_train = pd.read_pickle(
     '/Users/simon/autoicd_local/sampled_dataframes/df_train')  # DUPLICATES PULL IN!
+
     df_test.drop_duplicates('HADM_ID')
     df_train.drop_duplicates('HADM_ID')
 
@@ -77,9 +78,7 @@ def main():
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
 
-
     desc_labels = desc_labels.apply(xbert_clean_label)
-
 
     Y_trn_map, Y_tst_map = xbert_prepare_Y_maps(
         df_train, 'training', icd_labels), xbert_prepare_Y_maps(df_test, 'testing', icd_labels)
@@ -89,7 +88,8 @@ def main():
 
 
 def xbert_clean_label(label):
-      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
+    return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
+
 
 def xbert_create_label_map(icd_version='10'):
     """creates a dataframe of all ICD10 labels and corresponding
@@ -108,7 +108,7 @@ def xbert_create_label_map(icd_version='10'):
     return icd_labels, desc_labels
 
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
+def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num='1.0'):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -131,17 +131,16 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
     logger.info(
         f'Constructing label mapping ({df_subset} portion) ICD10 codes to HADM_ID...')
 
-
     for hadm_id in Y_.index:  # running through rows.
         icds_per_hadm_id = df.loc[hadm_id, 'ICD10_CODE']
         seqnum_per_hadm_id = df.loc[hadm_id, 'SEQ_NUM']
-
-        curr_primary_icd = icds_per_hadm_id[seqnum_per_hadm_id.index(1.0)]
+        # print(icds_per_hadm_id)
+        curr_primary_icd = icds_per_hadm_id #[seqnum_per_hadm_id].index(1.0)]
         if seq_num == '1.0':
             Y_.loc[hadm_id, curr_primary_icd] += 1
         else:  # all icds assigned.
             Y_.loc[hadm_id, icds_per_hadm_id] += 1
-            
+
     return Y_
 
 
@@ -151,7 +150,7 @@ def xbert_prepare_txt_inputs(df, df_subset):
     return df[['TEXT']]
 
 
-def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
+def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq=1):
     """
     Creates tf-idf vectors of instances in preparation for xbert training.
     """
@@ -164,7 +163,7 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     logger.info('Fitting vectorizers to corpora...')
 
     corpus_trn = list(X_trn.values.flatten())
-    corpus_tst = list(X_trn.values.flatten())
+    corpus_tst = list(X_tst.values.flatten())
 
     logger.info('TF-IDF Vectorizing training text samples...')
     X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
@@ -182,7 +181,7 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     #writing label map (icd descriptions) to txt
     logger.info('Writing icd LONG_TITLE (label map) to txt.')
     desc_labels.to_csv(path_or_buf=XBERT_LABEL_MAP_FP,
-                      header=None, index=None, sep='\t', mode='a')
+                       header=None, index=None, sep='\t', mode='a')
 
     #writing raw text features to txts
     logger.info('Writing data raw features to txt.')
@@ -206,7 +205,6 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     scipy.sparse.save_npz(XBERT_Y_TST_FP, Y_tst_csr)
 
     logger.info('Done.')
-
 
 
 if __name__ == "__main__":

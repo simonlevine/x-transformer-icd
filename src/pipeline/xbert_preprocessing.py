@@ -134,7 +134,8 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, seq_num = '1.0'):
         icds_per_hadm_id = df.loc[hadm_id, 'ICD10_CODE']
         seqnum_per_hadm_id = df.loc[hadm_id, 'SEQ_NUM']
 
-        curr_primary_icd = icds_per_hadm_id[seqnum_per_hadm_id.index(1.0)]
+        curr_primary_icd = icds_per_hadm_id #[seqnum_per_hadm_id.index(1.0)] # BUG: more than one icd per HADMID pulled for some instances. Also, 
+        #                                                                       should make sure we can get more than seqnum1.0.
         if seq_num == '1.0':
             Y_.loc[hadm_id, curr_primary_icd] += 1
         else:  # all icds assigned.
