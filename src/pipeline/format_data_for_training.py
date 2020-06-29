@@ -9,6 +9,7 @@ NOTE_EVENTS_CSV_FP = "../data/mimiciii-14/NOTEEVENTS.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
+
 def load_and_serialize_dataset():
     df_train, df_test = construct_dataset()
     (basedir_outpath := Path("./intermediary-data")).mkdir(exist_ok=True)
