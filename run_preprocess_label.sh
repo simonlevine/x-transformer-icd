@@ -12,15 +12,15 @@ label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 OUTPUT_DIR=$'/Users/simon/autoicd_local/xbert_savedmodels' #/${DATASET}
 PROC_DATA_DIR=$'/Users/simon/autoicd_local/xbert_out/proc_data' #${OUTPUT_DIR}/proc_data
 
-# mkdir -p ${PROC_DATA_DIR}
-#  #UNSURE WHY THIS WAS COLON-QUOTED:####\
-# #  :'
-# python -m xbert.preprocess \
-# 	--do_label_embedding \
-# 	-i ${DATA_DIR}/${DATASET} \
-#     -o ${PROC_DATA_DIR} \
-#     -l ${LABEL_EMB} \
-#     -x ${label_emb_inst_path}
+mkdir -p ${PROC_DATA_DIR}
+ #UNSURE WHY THIS WAS COLON-QUOTED:####\
+#  :'
+python -m xbert.preprocess \
+	--do_label_embedding \
+	-i ${DATA_DIR}/${DATASET} \
+    -o ${PROC_DATA_DIR} \
+    -l ${LABEL_EMB} \
+    -x ${label_emb_inst_path}
 
 
 # semantic label indexing
@@ -35,16 +35,16 @@ done
 # # '
 # #### WAS COLON-QUOTED OUT UNTIL HERE
 
-# # construct C.[trn|tst].[label-emb].npz for training matcher
-# SEED=0
-# LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
-# INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
-# python -u -m xbert.preprocess \
-#     --do_proc_label \
-#     -i ${DATA_DIR}/${DATASET} \
-#     -o ${PROC_DATA_DIR} \
-#     -l ${LABEL_EMB_NAME} \
-#     -c ${INDEXER_DIR}/code.npz
+# construct C.[trn|tst].[label-emb].npz for training matcher
+SEED=0
+LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
+INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
+python -u -m xbert.preprocess \
+    --do_proc_label \
+    -i ${DATA_DIR}/${DATASET} \
+    -o ${PROC_DATA_DIR} \
+    -l ${LABEL_EMB_NAME} \
+    -c ${INDEXER_DIR}/code.npz
 
-# #### end ####
+#### end ####
 
