@@ -43,30 +43,32 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import scipy
 import re
 
-import format_data_for_training
+# import format_data_for_training
 
 
 #Input filepaths.
-DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
-ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
+DIAGNOSIS_CSV_FP = "/Users/simon/autoicd_local/data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+ICD9_KEY_FP = "/Users/simon/autoicd_local/data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD_GEM_FP = "/Users/simon/autoicd_local/data/ICD_general_equivalence_mapping.csv"
 
 #output filepaths
-XBERT_LABEL_MAP_FP = '../data/xbert_inputs/label_map.txt'
+XBERT_LABEL_MAP_FP = '/Users/simon/autoicd_local/data/xbert_inputs/label_map.txt'
 
-XBERT_TRAIN_RAW_TEXTS_FP = '../data/xbert_inputs/train_raw_labels.txt'
-XBERT_TEST_RAW_TEXTS_FP = '../data/xbert_inputs/test_raw_labels.txt'
+XBERT_TRAIN_RAW_TEXTS_FP = '/Users/simon/autoicd_local/data/xbert_inputs/train_raw_labels.txt'
+XBERT_TEST_RAW_TEXTS_FP = '/Users/simon/autoicd_local/data/xbert_inputs/test_raw_labels.txt'
 
-XBERT_X_TRN_FP = '../data/xbert_inputs/X.trn.npz'
-XBERT_X_TST_FP = '../data/xbert_inputs/X.tst.npz'
+XBERT_X_TRN_FP = '/Users/simon/autoicd_local/data/xbert_inputs/X.trn.npz'
+XBERT_X_TST_FP = '/Users/simon/autoicd_local/data/xbert_inputs/X.tst.npz'
 
-XBERT_Y_TRN_FP = '../data/xbert_inputs/Y.trn.npz'
-XBERT_Y_TST_FP = '../data/xbert_inputs/Y.tst.npz'
+XBERT_Y_TRN_FP = '/Users/simon/autoicd_local/data/xbert_inputs/Y.trn.npz'
+XBERT_Y_TST_FP = '/Users/simon/autoicd_local/data/xbert_inputs/Y.tst.npz'
 
 
 def main():
-    df_train, df_test = format_data_for_training.construct_datasets()
-    #DUPLICATES PULL IN!
+    df_test = pd.read_pickle(
+        '/Users/simon/autoicd_local/sampled_dataframes/df_test')
+    df_train = pd.read_pickle(
+    '/Users/simon/autoicd_local/sampled_dataframes/df_train')  # DUPLICATES PULL IN!
     df_test.drop_duplicates('HADM_ID')
     df_train.drop_duplicates('HADM_ID')
 
