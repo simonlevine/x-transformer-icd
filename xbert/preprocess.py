@@ -15,16 +15,38 @@ from tqdm import tqdm
 import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
+from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 # ---- substitute with local copy eventually...
-bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
-bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
+logger.info('Loading pre-trained BioClinicalBERT tokenizer (1/4)...')
+bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")  # or local path.
+logger.info('Loading pre-trained BioClinicalBERT model (2/4)...')
+bioclinical_bert_Model = AutoModel.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")  # base model.
+logger.info('Loading pre-trained BioClinicalBERT config (3/4)...')
 bioclinical_bert_Config = AutoConfig.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")
+logger.info(
+    'Loading pre-trained BioClinicalBERT model-for-sequence-classification (4/4)...')
 # bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
 bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")
+
+
+# HUGGINGFACE:
+# logger.info('Loading pre-trained BioClinicalBERT tokenizer (1/4)...')
+# bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
+# logger.info('Loading pre-trained BioClinicalBERT model (2/4)...')
+# bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
+# logger.info('Loading pre-trained BioClinicalBERT config (3/4)...')
+# bioclinical_bert_Config = AutoConfig.from_pretrained(
+#     "emilyalsentzer/Bio_ClinicalBERT")
+# logger.info('Loading pre-trained BioClinicalBERT model-for-sequence-classification (4/4)...')
+# # bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
+# bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
+#     "emilyalsentzer/Bio_ClinicalBERT")
 # Or, model was saved using `save_pretrained('./test/saved_model/')
 # -----
 
@@ -32,10 +54,13 @@ from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
 )
 
-ALL_MODELS = sum(
-    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config,))
-    (),
-)
+
+ALL_MODELS = 'Bio_ClinicalBERT'
+#  sum(
+#     (tuple(conf.pretrained_config_archive_map.keys()) for conf in (
+#         bioclinical_bert_Config,)),
+#     (),
+# )
 
 MODEL_CLASSES = {
     "bioclinical_bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
