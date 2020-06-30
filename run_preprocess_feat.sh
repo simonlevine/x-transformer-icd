@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # DATASET=$1
 DATASET = $'mimiciii-14'
 # MODEL_TYPE=$2
