@@ -13,6 +13,7 @@ OUTPUT_DIR=$'/Users/simon/autoicd_local/xbert_savedmodels' #/${DATASET}
 PROC_DATA_DIR=$'/Users/simon/autoicd_local/xbert_out/proc_data' #${OUTPUT_DIR}/proc_data
 
 mkdir -p ${PROC_DATA_DIR}
+
  #UNSURE WHY THIS WAS COLON-QUOTED:####\
 #  :'
 python -m xbert.preprocess \
@@ -32,6 +33,7 @@ for SEED in "${SEED_LIST[@]}"; do
 		-i ${PROC_DATA_DIR}/L.${LABEL_EMB}.npz \
 		-o ${INDEXER_DIR} --seed ${SEED}
 done
+
 # # '
 # #### WAS COLON-QUOTED OUT UNTIL HERE
 
