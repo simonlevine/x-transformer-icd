@@ -1,3 +1,3 @@
-[submodule "auto-icd-transformers"]
-	path = auto-icd-transformers
-	url = https://github.com/simonlevine/auto-icd-transformers
+[submodule "src/auto-icd-transformers"]
+	path = src/auto-icd-transformers
+	url = https://github.com/simonlevine/auto-icd-transformers.git
