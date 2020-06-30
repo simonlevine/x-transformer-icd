@@ -15,42 +15,55 @@ from tqdm import tqdm
 import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
+from loguru import logger
 
+from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
+# ---- substitute with local copy eventually...
+logger.info('Loading pre-trained BioClinicalBERT tokenizer (1/4)...')
+bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")  # or local path.
+logger.info('Loading pre-trained BioClinicalBERT model (2/4)...')
+bioclinical_bert_Model = AutoModel.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")  # base model.
+logger.info('Loading pre-trained BioClinicalBERT config (3/4)...')
+bioclinical_bert_Config = AutoConfig.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")
+logger.info(
+    'Loading pre-trained BioClinicalBERT model-for-sequence-classification (4/4)...')
+# bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
+bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
+    "/Users/simon/autoicd_local/pretrained_bert_tf/biobert_pretrain_output_all_notes_150000")
+
+
+# HUGGINGFACE:
+# logger.info('Loading pre-trained BioClinicalBERT tokenizer (1/4)...')
+# bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
+# logger.info('Loading pre-trained BioClinicalBERT model (2/4)...')
+# bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
+# logger.info('Loading pre-trained BioClinicalBERT config (3/4)...')
+# bioclinical_bert_Config = AutoConfig.from_pretrained(
+#     "emilyalsentzer/Bio_ClinicalBERT")
+# logger.info('Loading pre-trained BioClinicalBERT model-for-sequence-classification (4/4)...')
+# # bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
+# bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
+#     "emilyalsentzer/Bio_ClinicalBERT")
+# Or, model was saved using `save_pretrained('./test/saved_model/')
+# -----
 
 from transformers import (
-    WEIGHTS_NAME,
-    BertConfig,
-    BertForSequenceClassification,
-    BertTokenizer,
-    RobertaConfig,
-    RobertaForSequenceClassification,
-    RobertaTokenizer,
-    XLMConfig,
-    XLMForSequenceClassification,
-    XLMTokenizer,
-    XLNetConfig,
-    XLNetForSequenceClassification,
-    XLNetTokenizer,
-    DistilBertConfig,
-    DistilBertForSequenceClassification,
-    DistilBertTokenizer,
-    AlbertConfig,
-    AlbertForSequenceClassification,
-    AlbertTokenizer,
+    WEIGHTS_NAME, #not sure why we need this...
 )
 
-ALL_MODELS = sum(
-    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, XLNetConfig, XLMConfig, RobertaConfig, DistilBertConfig,)),
-    (),
-)
+
+ALL_MODELS = 'Bio_ClinicalBERT'
+#  sum(
+#     (tuple(conf.pretrained_config_archive_map.keys()) for conf in (
+#         bioclinical_bert_Config,)),
+#     (),
+# )
 
 MODEL_CLASSES = {
-    "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
-    "xlnet": (XLNetConfig, XLNetForSequenceClassification, XLNetTokenizer),
-    "xlm": (XLMConfig, XLMForSequenceClassification, XLMTokenizer),
-    "roberta": (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
-    "distilbert": (DistilBertConfig, DistilBertForSequenceClassification, DistilBertTokenizer,),
-    "albert": (AlbertConfig, AlbertForSequenceClassification, AlbertTokenizer),
+    "bioclinical_bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
 }
 
 
@@ -81,31 +94,7 @@ def run_label_embedding(args):
         Y_avg = normalize(Y, axis=1, norm="l2")
         label_embedding = smat.csr_matrix(Y_avg.T.dot(X))
         label_embedding = normalize(label_embedding, axis=1, norm="l2")
-
-    elif args.label_emb_name == "text-emb":
-        # xlnet-large-cased tokenizer
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        tokenizer = RobertaTokenizer.from_pretrained("roberta-large")
-        model = RobertaModel.from_pretrained("roberta-large")
-        model = model.to(device)
-        model.eval()
-
-        # get label embedding
-        label_embedding = []
-        for idx in tqdm(range(n_label)):
-            inputs = torch.tensor([tokenizer.encode(id2label[idx])])
-            inputs = inputs.to(device)
-            with torch.no_grad():
-                last_hidden_states = model(inputs)[0]  # [1, seq_len, hidden_dim]
-                seq_embedding = last_hidden_states.mean(dim=1)
-            label_embedding.append(seq_embedding)
-        label_embedding = torch.cat(label_embedding, dim=0)
-        label_embedding = label_embedding.cpu().numpy()
-        label_embedding = smat.csr_matrix(label_embedding)
-        label_embedding = normalize(label_embedding, axis=1, norm="l2")
-
-    else:
-        raise NotImplementedError("unknown embed_type {}".format(args.embed_type))
+    #cut out alternative embedding process...
 
     # save label embedding
     logger.info("label_embedding {} {}".format(type(label_embedding), label_embedding.shape))
@@ -284,7 +273,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./datasets/Eurlex-4K",
+        default="./datasets/mimiciii-14",
         help="path to the dataset directory containing train_texts.txt and test_texts.txt",
     )
     parser.add_argument(
@@ -293,7 +282,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./save_models/Eurlex-4K/proc_data",
+        default="./save_models/mimiciii-14/proc_data",
         help="directory for storing X.[trn|tst].[model-type].[xseq-len].pkl and C.[trn|tst].npz",
     )
     parser.add_argument(
@@ -313,7 +302,7 @@ if __name__ == "__main__":
         "-n",
         "--model_name_or_path",
         type=str,
-        default="bert-large-cased-whole-word-masking",
+        default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
         help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
     )
     parser.add_argument(
@@ -330,7 +319,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        default=128,
+        default=128,  # NEED TO UPDATE, possibly
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"
@@ -355,8 +344,8 @@ if __name__ == "__main__":
         "-c",
         "--input-code-path",
         type=str,
-        metavar="PATH",
-        default="./save_models/Eurlex-4K/pifa-tfidf-a5-s0/indexer/code.npz",
+        metavar="PATH", #UPDATED default
+        default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )
     parser.add_argument(

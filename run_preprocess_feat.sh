@@ -1,22 +1,13 @@
 #!/bin/bash
 
+# DATASET=$1
+DATASET = $'mimiciii-14'
+# MODEL_TYPE=$2
+MAX_XSEQ_LEN= $'128'
+#$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 
-DATASET=$1
-MODEL_TYPE=$2
-MAX_XSEQ_LEN=$3
-
-# HuggingFace pretrained model preprocess
-if [ $MODEL_TYPE == "bert" ]; then
-    MODEL_NAME="bert-large-cased-whole-word-masking"
-elif [ $MODEL_TYPE == "roberta" ]; then
-    MODEL_NAME="roberta-large"
-elif [ $MODEL_TYPE == 'xlnet' ]; then
-    MODEL_NAME="xlnet-large-cased"
-else
-    echo "Unknown MODEL_NAME!"
-    exit
-fi
-
+MODEL_TYPE=$'bert'
+MODEL_NAME='Bio_ClinicalBERT'
 
 OUTPUT_DIR=save_models/${DATASET}
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
