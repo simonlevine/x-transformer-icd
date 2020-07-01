@@ -7,7 +7,7 @@ MAX_XSEQ_LEN=$'128'
 #$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 
 MODEL_TYPE=$'bert'
-MODEL_NAME=$'Bio_ClinicalBERT'
+MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
 OUTPUT_DIR=save_models/${DATASET}
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
