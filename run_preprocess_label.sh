@@ -5,17 +5,15 @@ LABEL_EMB=$'pifa-tfidf'
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-DATA_DIR=$'/Users/simon/autoicd_local/xbert_inputs'
+DATA_DIR=$'/content/auto-icd/data/xbert_inputs' 
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 
 # construct label embedding
-OUTPUT_DIR=$'/Users/simon/autoicd_local/xbert_savedmodels' #/${DATASET}
-PROC_DATA_DIR=$'/Users/simon/autoicd_local/xbert_out/proc_data' #${OUTPUT_DIR}/proc_data
+OUTPUT_DIR=$'xbert_output/saved_models' #/${DATASET}
+PROC_DATA_DIR=$'xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
 
 mkdir -p ${PROC_DATA_DIR}
 
- #UNSURE WHY THIS WAS COLON-QUOTED:####\
-#  :'
 python -m xbert.preprocess \
 	--do_label_embedding \
 	-i ${DATA_DIR}/${DATASET} \
@@ -33,9 +31,6 @@ for SEED in "${SEED_LIST[@]}"; do
 		-i ${PROC_DATA_DIR}/L.${LABEL_EMB}.npz \
 		-o ${INDEXER_DIR} --seed ${SEED}
 done
-
-# # '
-# #### WAS COLON-QUOTED OUT UNTIL HERE
 
 # construct C.[trn|tst].[label-emb].npz for training matcher
 SEED=0
