@@ -5,7 +5,7 @@ LABEL_EMB=$'pifa-tfidf'
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-DATA_DIR=$'/content/auto-icd/src/intermediary-data/small_xbert_inputs' 
+DATA_DIR=$'/content/auto-icd/data/intermediary-data/xbert_inputs' 
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 
 # construct label embedding
