@@ -9,8 +9,8 @@ DATA_DIR=$'../auto-icd/data/xbert_inputs'
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 
 # construct label embedding
-OUTPUT_DIR=$'/Users/simon/autoicd_local/xbert_savedmodels' #/${DATASET}
-PROC_DATA_DIR=$'/Users/simon/autoicd_local/xbert_out/proc_data' #${OUTPUT_DIR}/proc_data
+OUTPUT_DIR=$'saved_models' #/${DATASET}
+PROC_DATA_DIR=$'processed_data' #${OUTPUT_DIR}/proc_data
 
 mkdir -p ${PROC_DATA_DIR}
 
