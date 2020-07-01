@@ -7,10 +7,10 @@ stages:
     - ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
     - pipeline/xbert_preprocessing.py
     outs:
-    - ./intermediary-data/xbert_inputs/X.trn.npz
-    - ./intermediary-data/xbert_inputs/X.tst.npz
-    - ./intermediary-data/xbert_inputs/Y.trn.npz
-    - ./intermediary-data/xbert_inputs/Y.tst.npz
-    - ./intermediary-data/xbert_inputs/label_map.txt
-    - ./intermediary-data/xbert_inputs/test_raw_labels.txt
-    - ./intermediary-data/xbert_inputs/train_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
