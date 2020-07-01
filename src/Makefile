@@ -1,5 +1,5 @@
-PY=python
 PYTEST=pytest
+PY=./.venv/bin/python
 ST=streamlit
 DVC=dvc
 OPTS=""
