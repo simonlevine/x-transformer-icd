@@ -10,7 +10,7 @@ dependencies:
   - certifi
   - cffi
   - cudatoolkit
-  - decorato
+  - decorator
   - freetype
   - intel-openmp
   - ipython
