@@ -5,12 +5,13 @@ LABEL_EMB=$'pifa-tfidf'
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-DATA_DIR=$'/content/auto-icd/data/xbert_inputs' 
+DATA_DIR=$'/content/auto-icd/src/intermediary-data/small_xbert_inputs' 
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 
 # construct label embedding
-OUTPUT_DIR=$'xbert_output/saved_models' #/${DATASET}
-PROC_DATA_DIR=$'xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
+OUTPUT_DIR=$'/content/auto-icd-transformers/xbert_output/saved_models' #/${DATASET}
+PROC_DATA_DIR=$'/content/auto-icd-transformers/xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
+
 
 mkdir -p ${PROC_DATA_DIR}
 
