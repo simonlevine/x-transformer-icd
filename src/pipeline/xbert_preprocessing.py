@@ -55,13 +55,13 @@ ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
 #output filepaths
-XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/label_map.txt'
-XBERT_TRAIN_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/train_raw_labels.txt'
-XBERT_TEST_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/test_raw_labels.txt'
-XBERT_X_TRN_FP = '../data/intermediary-data/xbert_inputs/X.trn.npz'
-XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/X.tst.npz'
-XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/Y.trn.npz'
-XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/Y.tst.npz'
+XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'
+XBERT_TRAIN_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_labels.txt'
+XBERT_TEST_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_labels.txt'
+XBERT_X_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz'
+XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
+XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
+XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
 
 
 def main():
