@@ -61,29 +61,28 @@ dependencies:
   - zstd
   - pytorch
   - torchvision
-  - pip:
-    - appdirs
-    - attrs
-    - black
-    - boto3
-    - botocore
-    - chardet
-    - click
-    - docutils
-    - idna
-    - jmespath
-    - pathspec
-    - python-dateutil
-    - regex
-    - requests
-    - s3transfer
-    - sacremoses
-    - sentencepiece
-    - toml
-    - torch
-    - tqdm
-    - transformers
-    - typed-ast
-    - urllib3
+  - appdirs
+  - attrs
+  - black
+  - boto3
+  - botocore
+  - chardet
+  - click
+  - docutils
+  - idna
+  - jmespath
+  - pathspec
+  - python-dateutil
+  - regex
+  - requests
+  - s3transfer
+  - sacremoses
+  - sentencepiece
+  - toml
+  - torch
+  - tqdm
+  - transformers
+  - typed-ast
+- urllib3
 prefix: /home/ubuntu/anaconda3/envs/pt1.2_xmlc_transformer
 
