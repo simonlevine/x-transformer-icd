@@ -3,12 +3,12 @@
 DATASET=$'mimiciii-14'
 DATA_DIR=./datasets/${DATASET}
 
-LABEL_NAME = pifa-tfidf-s0
-MODEL_NAME = Bio_ClinicalBERT
+LABEL_NAME = $'pifa-tfidf-s0'
+MODEL_NAME = $'Bio_ClinicalBERT'
 EXP_NAME=${DATASET}.final
 
 PRED_NPZ_PATHS=""
-OUTPUT_DIR=save_models/${DATASET}/${LABEL_NAME}
+OUTPUT_DIR=saved_models/${DATASET}/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
 MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_NAME}
 RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_NAME}
