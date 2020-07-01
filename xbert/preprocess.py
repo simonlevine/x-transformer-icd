@@ -50,7 +50,7 @@ ALL_MODELS = 'Bio_ClinicalBERT'
 # )
 
 MODEL_CLASSES = {
-    "bioclinical_bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
+    "bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
 }
 
 
@@ -174,7 +174,7 @@ def main(args):
     elif args.do_proc_feat:
         # load pretrained model tokenizers
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+        config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
         tokenizer = tokenizer_class.from_pretrained(
             args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
             do_lower_case=args.do_lower_case,
