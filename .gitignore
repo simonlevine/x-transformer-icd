@@ -143,3 +143,6 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos
+Miniconda3-latest-Linux-x86_64.sh
+save_models/mimiciii-14/proc_data/log.bert.128.txt
+testing.ipynb
