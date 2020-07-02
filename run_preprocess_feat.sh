@@ -7,14 +7,14 @@ MAX_XSEQ_LEN=$'128'
 #$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 
 MODEL_TYPE=$'bert'
-MODEL_NAME=$'Bio_ClinicalBERT'
+MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
-OUTPUT_DIR=save_models/${DATASET}
-PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
+OUTPUT_DIR=saved_models/${DATASET}
+PROC_DATA_DIR=${OUTPUT_DIR}/processed_data
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
     --do_proc_feat \
-    -i ./datasets/${DATASET} \
+    -i /content/auto-icd/data/intermediary-data/xbert_inputs/ \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \

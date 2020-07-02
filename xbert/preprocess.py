@@ -91,11 +91,12 @@ def run_label_embedding(args):
 
 def load_feat_data(text_path):
     xseq_list = []
+    print('loading feature data...)
     with open(text_path, "r") as fin:
         for idx, line in enumerate(tqdm(fin)):
             xseq = line.strip()
             if len(xseq) == 0:
-                logger.info("WARNING: line {} has empty text".format(idx))
+                # logger.info("WARNING: line {} has empty text".format(idx))
                 xseq = ""
             xseq_list.append(xseq)
     return xseq_list
@@ -117,7 +118,7 @@ def proc_feat(
     # features: List[Dict(key,val)], where key=['inst_idx', 'input_ids', 'attention_mask', 'token_type_ids']
     features, xseq_lens = [], []
     for (inst_idx, xseq) in enumerate(xseq_list):
-        if inst_idx % 1000 == 0:
+        if inst_idx % 5000 == 0:
             logger.info("Writing example %d" % (inst_idx))
 
         # truncate long text by 4096 chars as they will exceed max_seq_len anyway
@@ -126,6 +127,7 @@ def proc_feat(
             text_pair=None,
             add_special_tokens=True,
             max_length=args.max_xseq_len,
+            truncation = True, #CHANGED
         )
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
         xseq_lens.append(len(input_ids))
@@ -173,6 +175,7 @@ def main(args):
 
     elif args.do_proc_feat:
         # load pretrained model tokenizers
+        print('setting model type')
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
         tokenizer = tokenizer_class.from_pretrained(
