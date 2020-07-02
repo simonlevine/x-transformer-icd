@@ -91,11 +91,12 @@ def run_label_embedding(args):
 
 def load_feat_data(text_path):
     xseq_list = []
+    print(loading feature data...)
     with open(text_path, "r") as fin:
         for idx, line in enumerate(tqdm(fin)):
             xseq = line.strip()
             if len(xseq) == 0:
-                logger.info("WARNING: line {} has empty text".format(idx))
+                # logger.info("WARNING: line {} has empty text".format(idx))
                 xseq = ""
             xseq_list.append(xseq)
     return xseq_list
@@ -173,6 +174,7 @@ def main(args):
 
     elif args.do_proc_feat:
         # load pretrained model tokenizers
+        print('setting model type')
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
         tokenizer = tokenizer_class.from_pretrained(
