@@ -1,15 +1,15 @@
 #!/bin/bash
 
-GPID=$1 #CUDA visible devices. 0 for just one 2070 GPU.
+GPID=$0 #CUDA visible devices. 0 for just one 2070 GPU.
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
 MODEL_NAME='Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
-OUTPUT_DIR=save_models/${DATASET} 
+OUTPUT_DIR=/content/auto-icd-transformers/xbert_output/saved_models/${DATASET} 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data 
-MAX_XSEQ_LEN=128
+MAX_XSEQ_LEN=64 #128 - SAME AS BEFORE!
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 

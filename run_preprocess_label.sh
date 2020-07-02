@@ -5,7 +5,7 @@ LABEL_EMB=$'pifa-tfidf'
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-DATA_DIR=$'/content/auto-icd/data/intermediary-data/xbert_inputs' 
+DATA_DIR=$'/content/auto-icd/data/intermediary-data/xbert_input' 
 label_emb_inst_path=${DATA_DIR}/${DATASET}/X.trn.npz
 
 # construct label embedding
@@ -21,7 +21,6 @@ python -m xbert.preprocess \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path}
-
 
 # semantic label indexing
 SEED_LIST=( 0 1 2 )
