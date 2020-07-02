@@ -1,4 +1,13 @@
 #!/bin/bash
+mkdir /xbert_output/
+mkdir /xbert_output/saved_models
+mkdir /xbert_output/saved_models/mimiciii-14
+mkdir /xbert_output/processed_data
+mkdir /xbert_output/processed_data/mimiciii-14
+
+
+
+
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
 
