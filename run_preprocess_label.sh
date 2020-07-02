@@ -15,7 +15,6 @@ label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 
-PROC_DATA_DIR=$'/auto-icd-transformers/xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 
 python -m xbert.preprocess \
