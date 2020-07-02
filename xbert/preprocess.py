@@ -118,7 +118,7 @@ def proc_feat(
     # features: List[Dict(key,val)], where key=['inst_idx', 'input_ids', 'attention_mask', 'token_type_ids']
     features, xseq_lens = [], []
     for (inst_idx, xseq) in enumerate(xseq_list):
-        if inst_idx % 1000 == 0:
+        if inst_idx % 5000 == 0:
             logger.info("Writing example %d" % (inst_idx))
 
         # truncate long text by 4096 chars as they will exceed max_seq_len anyway
