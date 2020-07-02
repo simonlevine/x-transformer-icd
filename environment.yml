@@ -85,5 +85,6 @@ dependencies:
     - transformers
     - typed-ast
     - urllib3
+    - loguru
 prefix: /home/ubuntu/anaconda3/envs/pt1.2_xmlc_transformer
 

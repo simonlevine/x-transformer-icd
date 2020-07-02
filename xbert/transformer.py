@@ -73,7 +73,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 
 # global variable within the module
 
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config)), (),)
+ALL_MODELS = ('emilyalsentzer/Bio_ClinicalBERT')#sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config)), (),)
 
 
 MODEL_CLASSES = {
