@@ -28,5 +28,5 @@ stages:
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
     outs:
-    - ../data/intermediary-data/proc_data/procdir/L.pifa-tfidf.npz
-    - ../data/intermediary-data/proc_data/procdir/L.pifa-tfidf.npz
+    - ../data/intermediary-data/proc_data/L.pifa-tfidf.npz
+    - ../data/intermediary-data/proc_data/L.pifa-tfidf.npz
