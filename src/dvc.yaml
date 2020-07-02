@@ -14,3 +14,19 @@ stages:
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+  xbert_label_embedding:
+    cmd: ./auto-icd-transformers/run_preprocess_label.sh
+    deps:
+    - auto-icd-transformers/run_preprocess_label.sh
+    - auto-icd-transformers/environment.yml
+    # from prepare_for_xbert... TODO: Use an anchor/alias, if thats supported...
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+    outs:
+    - ../data/intermediary-data/proc_data/procdir/L.pifa-tfidf.npz
+    - ../data/intermediary-data/proc_data/procdir/L.pifa-tfidf.npz
