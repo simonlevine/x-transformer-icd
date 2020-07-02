@@ -5,3 +5,5 @@
 /X.tst.npz
 /Y.trn.npz
 /Y.tst.npz
+/train_raw_texts.txt
+/test_raw_texts.txt
