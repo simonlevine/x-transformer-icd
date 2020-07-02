@@ -91,7 +91,7 @@ def run_label_embedding(args):
 
 def load_feat_data(text_path):
     xseq_list = []
-    print('loading feature data...)
+    print('loading feature data...')
     with open(text_path, "r") as fin:
         for idx, line in enumerate(tqdm(fin)):
             xseq = line.strip()
