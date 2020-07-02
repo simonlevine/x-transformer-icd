@@ -1,4 +1,6 @@
 if [[ $(conda info -e) == *pt1.2_xmlc_transformer* ]]; then
+    source activate pt1.2_xmlc_transformer
+else
     conda env create -f environment.yml
     source activate pt1.2_xmlc_transformer
     pip install -e .
@@ -9,6 +11,4 @@ if [[ $(conda info -e) == *pt1.2_xmlc_transformer* ]]; then
                 sentencepiece toml torch tqdm transformers \
                 typed-ast urllib3
     python setup.py install --force
-else
-    source activate pt1.2_xmlc_transformer
 fi
