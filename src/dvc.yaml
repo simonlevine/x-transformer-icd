@@ -2,14 +2,15 @@ stages:
   prepare_for_xbert:
     cmd: python pipeline/xbert_preprocessing.py
     deps:
+    - requirements.txt
     - ../data/ICD_general_equivalence_mapping.csv
     - ../data/mimiciii-14/DIAGNOSES_ICD.csv.gz
     - ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
     - pipeline/xbert_preprocessing.py
     outs:
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_labels.txt
-    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
@@ -21,8 +22,8 @@ stages:
     - auto-icd-transformers/environment.yml
     # from prepare_for_xbert... TODO: Use an anchor/alias, if thats supported...
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_labels.txt
-    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_labels.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
