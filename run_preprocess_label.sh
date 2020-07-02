@@ -4,19 +4,19 @@
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
 
-DATA_DIR=$'~/auto-icd/src/intermediary-data/xbert_inputs/' 
+DATA_DIR=$'/auto-icd/src/intermediary-data/xbert_inputs' 
 label_emb_inst_path=${DATA_DIR}/X.trn.npz
 
 # construct label embedding
-OUTPUT_DIR=$'~/auto-icd-transformers/xbert_output/saved_models' #/${DATASET}
+OUTPUT_DIR=$'/auto-icd-transformers/xbert_output/saved_models' #/${DATASET}
 mkdir -p ${OUTPUT_DIR}
 
-PROC_DATA_DIR=$'~/auto-icd-transformers/xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
+PROC_DATA_DIR=$'/auto-icd-transformers/xbert_output/processed_data' #${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 
 python -m xbert.preprocess \
 	--do_label_embedding \
-	-i ${DATA_DIR}/ \
+	-i ${DATA_DIR} \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path}
