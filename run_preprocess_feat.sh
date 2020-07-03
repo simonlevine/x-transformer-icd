@@ -15,9 +15,6 @@ OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 
-
-PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
-
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
     --do_proc_feat \
