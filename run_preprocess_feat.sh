@@ -14,7 +14,7 @@ PROC_DATA_DIR=${OUTPUT_DIR}/processed_data
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
     --do_proc_feat \
-    -i ../auto-icd/data/intermediary-data/xbert_inputs \
+    -i ../auto-icd/data/intermediary-data/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
