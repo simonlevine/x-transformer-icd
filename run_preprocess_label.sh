@@ -8,13 +8,15 @@ source create_conda_env_as_necessary.sh
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-DATA_DIR=../../data/intermediary-data
-label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
+
 
 # construct label embedding
+DATA_DIR=../auto-icd/data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
-PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 
+label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
+
+PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 
 python -m xbert.preprocess \

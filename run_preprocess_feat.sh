@@ -9,12 +9,16 @@ MAX_XSEQ_LEN=$'128'
 MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
-OUTPUT_DIR=saved_models/${DATASET}
-PROC_DATA_DIR=${OUTPUT_DIR}/processed_data
+
+DATA_DIR=../auto-icd/data/intermediary-data
+OUTPUT_DIR=${DATA_DIR}/xbert_outputs
+
+PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
+
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
     --do_proc_feat \
-    -i /content/auto-icd/data/intermediary-data/xbert_inputs/ \
+    -i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \

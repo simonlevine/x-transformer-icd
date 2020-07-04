@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DATASET=$'mimiciii-14'
-DATA_DIR=./datasets/${DATASET}
+DATA_DIR=../../data/intermediary-data/xbert_inputs
 
 LABEL_NAME = $'pifa-tfidf-s0'
-MODEL_NAME = $'Bio_ClinicalBERT'
+MODEL_NAME = $'emilyalsentzer/Bio_ClinicalBERT'
 EXP_NAME=${DATASET}.final
 
 PRED_NPZ_PATHS=""
