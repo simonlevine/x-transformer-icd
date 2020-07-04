@@ -126,7 +126,7 @@ def proc_feat(
             text_pair=None,
             add_special_tokens=True,
             max_length=args.max_xseq_len,
-            truncation = True, #CHANGED
+            truncation=True, #CHANGED
         )
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
         xseq_lens.append(len(input_ids))
@@ -174,7 +174,7 @@ def main(args):
 
     elif args.do_proc_feat:
         # load pretrained model tokenizers
-        print('setting model type')
+        logger.info('setting model type')
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
         tokenizer = tokenizer_class.from_pretrained(
@@ -250,7 +250,7 @@ def main(args):
         smat.save_npz(out_tst_label_path, C_tst)
 
     else:
-        raise ValueError("one of --do_label_embedding or --do_proc_feeat or --do_proc_label must be set!")
+        raise ValueError("one of --do_label_embedding or --do_proc_feat or --do_proc_label must be set!")
 
 
 if __name__ == "__main__":
@@ -345,5 +345,5 @@ if __name__ == "__main__":
     )
     # parse argument
     args = parser.parse_args()
-    print(args)
+    logger.info(f'{args}')
     main(args)
