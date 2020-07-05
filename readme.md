@@ -13,18 +13,14 @@ To get access to the MIMIC data, please authenticate first:
 export GOOGLE_APPLICATION_CREDENTIALS="$(PWD)/autoicd-gcp-credentials.json"
 ```
 
-To run app locally, install [poetry](https://python-poetry.org/docs/#installation) and [DVC](https://dvc.org). Then:
+The base dependencies are [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) and [DVC](https://dvc.org).
+
+Run the pipeline using `dvc repro <step>`. To run the front-end app, 
+
 ```bash
-dvc pull # <- this only needs to be done once
 cd src
-poetry install # <- this also only needs to be done once
-poetry shell
-make app
+python -m virtualenv .venv
+./.venv/bin/pip install -r requirements.txt
+make app PY="./.venv/bin/python"
 ``` 
 
-The rest of the pipeline can be run through make rules:
-```
-app                            run streamlit app locally
-format_data                    data preprocessing step
-train                          model training
-```
