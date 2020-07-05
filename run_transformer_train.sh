@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPID=${0,1,2,3} #CUDA visible devices. 0 for just one 2070 GPU.
+GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
@@ -10,6 +10,9 @@ MODEL_TYPE=$'bert'
 OUTPUT_DIR=/content/auto-icd-transformers/xbert_output/saved_models/${DATASET} 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data 
 MAX_XSEQ_LEN=128
+
+NPROC_PER_NODE=1
+
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
@@ -36,7 +39,7 @@ mkdir -p ${MODEL_DIR}
 
 # train
 CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
-    --nproc_per_node 4 xbert/transformer.py \
+    --nproc_per_node {NPROC_PER_NODE} xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
