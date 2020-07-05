@@ -30,11 +30,30 @@ stages:
     - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
     outs:
     - ../data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
+    - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
+    - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/config.json
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/code.npz
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/config.json
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/code.npz
     - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/config.json
-    - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
-    - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
+
+  xbert_feat_embedding:
+    cmd: cd ./auto-icd-transformers && ./run_preprocess_feat.sh
+    deps:
+    - auto-icd-transformers/run_preprocess_feat.sh
+    - auto-icd-transformers/environment.yml
+    # from prepare_for_xbert... TODO: Use an anchor/alias, if thats supported...
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
+    - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+    outs:
+
+    - ../data/intermediary-data/xbert_outputs/proc_data/log.bert.24.txt
+    - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.24.pkl
+    - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.24.pkl
+

@@ -44,7 +44,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
 try:
-    import format_data_for_training
+    import format_data_for_training #script from auto-icd
 except ImportError:
     # when running in a pytest context
     from . import format_data_for_training
@@ -53,6 +53,7 @@ except ImportError:
 DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
+
 
 #output filepaths
 XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'

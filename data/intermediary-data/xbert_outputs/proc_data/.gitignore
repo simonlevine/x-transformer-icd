@@ -1,3 +1,6 @@
 /L.pifa-tfidf.npz
 /C.trn.pifa-tfidf-s0.npz
 /C.tst.pifa-tfidf-s0.npz
+/log.bert.24.txt
+/X.bert.trn.24.pkl
+/X.bert.tst.24.pkl
