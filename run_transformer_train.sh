@@ -9,7 +9,7 @@ MODEL_TYPE=$'bert'
 
 OUTPUT_DIR=/content/auto-icd-transformers/xbert_output/saved_models/${DATASET} 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data 
-MAX_XSEQ_LEN=128
+MAX_XSEQ_LEN=$'128'
 
 NPROC_PER_NODE=1
 
