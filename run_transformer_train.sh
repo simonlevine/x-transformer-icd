@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
-NPROC_PER_NODE=1
+NPROC_PER_NODE={'1'}
 
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
