@@ -46,7 +46,7 @@ CUDA_VISIBLE_DEVICES=${GPID} python -m xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
-    # -o ${MODEL_DIR} \
+    -o ${MODEL_DIR} \
     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
     --gradient_accumulation_steps ${GRAD_ACCU_STEPS} \
     --max_steps ${MAX_STEPS} \
