@@ -10,7 +10,7 @@ MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
 
-DATA_DIR=../auto-icd/data/intermediary-data
+DATA_DIR=~/auto-icd/data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data

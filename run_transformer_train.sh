@@ -1,17 +1,23 @@
 #!/bin/bash
 
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
+NPROC_PER_NODE=1
+
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
-MODEL_NAME='Bio_ClinicalBERT'
+MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
+<<<<<<< Updated upstream
 OUTPUT_DIR=/content/auto-icd-transformers/xbert_output/saved_models/${DATASET} 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data 
 MAX_XSEQ_LEN=$'128'
-
-NPROC_PER_NODE=1
+=======
+OUTPUT_DIR=~/auto-icd/saved_models/${DATASET} 
+PROC_DATA_DIR=~/auto-icd/data/intermediary-data/xbert_outputs/proc_data
+MAX_XSEQ_LEN=128
+>>>>>>> Stashed changes
 
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
