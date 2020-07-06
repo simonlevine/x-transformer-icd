@@ -10,7 +10,7 @@
 
 To get access to the MIMIC data, please authenticate first:
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS="$(PWD)/autoicd-gcp-credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/autoicd-gcp-credentials.json"
 ```
 
 The base dependencies are [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) and [DVC](https://dvc.org).
