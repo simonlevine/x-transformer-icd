@@ -9,6 +9,7 @@ MAX_XSEQ_LEN=$'128'
 MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
+
 DATA_DIR=~/auto-icd/data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
