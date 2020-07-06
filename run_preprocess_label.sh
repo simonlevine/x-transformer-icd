@@ -11,7 +11,7 @@ source create_conda_env_as_necessary.sh
 
 
 # construct label embedding
-DATA_DIR=../auto-icd/data/intermediary-data
+DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
 label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
@@ -47,5 +47,5 @@ python -u -m xbert.preprocess \
     -l ${LABEL_EMB_NAME} \
     -c ${INDEXER_DIR}/code.npz
 
-# #### end ####
+#### end ####
 
