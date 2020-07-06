@@ -1,7 +1,0 @@
-md5: 064a0fd0968ccbe79b39af109a035456
-outs:
-- md5: 88ec8e5aa63f3f50c49b67482a0a691d
-  path: CPTEVENTS.csv.gz
-  cache: true
-  metric: false
-  persist: false

@@ -1,7 +1,0 @@
-md5: f61130835efce5cad5b9b26626420501
-outs:
-- md5: 34f5b2327cda3ffa53089b6c23b53191
-  path: DRGCODES.csv.gz
-  cache: true
-  metric: false
-  persist: false

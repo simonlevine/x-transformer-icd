@@ -1,7 +1,0 @@
-md5: 27c083fe38ab8108619133d9ad598d67
-outs:
-- md5: 4440b72090dc9207c88368cfb1ae2146
-  path: TRANSFERS.csv.gz
-  cache: true
-  metric: false
-  persist: false

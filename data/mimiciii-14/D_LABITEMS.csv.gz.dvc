@@ -1,7 +1,0 @@
-md5: 1e99c4248b71ecf5fbb7a83f36f34608
-outs:
-- md5: 75e79ca14a2b8c02e3535b87498c4f9d
-  path: D_LABITEMS.csv.gz
-  cache: true
-  metric: false
-  persist: false

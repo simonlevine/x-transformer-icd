@@ -1,7 +1,0 @@
-md5: b882aa31210e9caa821024711f75eafa
-outs:
-- md5: 15c67d6d84e88ec57044064e170390f6
-  path: PRESCRIPTIONS.csv.gz
-  cache: true
-  metric: false
-  persist: false

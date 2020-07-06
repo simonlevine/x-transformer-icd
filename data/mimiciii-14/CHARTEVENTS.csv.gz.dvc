@@ -1,7 +1,0 @@
-md5: 1bf8cfacc4e40429fa22f2fa624a8fa1
-outs:
-- md5: 31f4ecfd69b24ec88d58e270af51ab12
-  path: CHARTEVENTS.csv.gz
-  cache: true
-  metric: false
-  persist: false

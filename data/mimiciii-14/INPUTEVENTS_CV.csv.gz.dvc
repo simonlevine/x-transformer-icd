@@ -1,7 +1,0 @@
-md5: e5b0556a7f1543ddeb6ad113cdd3cccc
-outs:
-- md5: 1d02246e9fd8d379a4e0c41623890c25
-  path: INPUTEVENTS_CV.csv.gz
-  cache: true
-  metric: false
-  persist: false

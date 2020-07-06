@@ -1,4 +1,4 @@
 [core]
-    remote = gs
-['remote "gs"']
-    url = gs://auto-icd-dvc
+    remote = gcp
+['remote "gcp"']
+    url = gs://icd-ml-bucket
