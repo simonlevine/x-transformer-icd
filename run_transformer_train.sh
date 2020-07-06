@@ -7,12 +7,12 @@ DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
 MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
+MODEL_FOLDER_NAME='Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
 OUTPUT_DIR=~/auto-icd/saved_models/${DATASET} 
 PROC_DATA_DIR=~/auto-icd/data/intermediary-data/xbert_outputs/proc_data
 MAX_XSEQ_LEN=128
-
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
@@ -38,7 +38,7 @@ LOGGING_STEPS=50
 LEARNING_RATE=5e-5
 
 
-MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_NAME}
+MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 mkdir -p ${MODEL_DIR}
 
 
