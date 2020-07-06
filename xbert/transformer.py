@@ -188,6 +188,7 @@ class TransformerMatcher(object):
             "-o",
             "--output_dir",
             default="./tmp",
+            required=True
             type=str,
             help="The output directory where the model predictions and checkpoints will be written.",
         )
