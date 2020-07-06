@@ -10,7 +10,7 @@ prepare_for_xbert:
   - path: ../data/mimiciii-14/NOTEEVENTS.csv.gz
     md5: d0345c072f1e3107c56cfa76c83b48a9
   - path: .venv/bin/python
-    md5: c716cc3fe45100365c25e0f34bb43f81
+    md5: 02ac32469305febb6715790a2d7072ec
   - path: pipeline/xbert_preprocessing.py
     md5: 5bbb1dbe99d5784949e142b3f2088186
   - path: requirements.txt
@@ -70,3 +70,29 @@ xbert_label_embedding:
     md5: 3787ea108f552fc2ccd03dc48c028880
   - path: ../data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
     md5: 19d0afa67ae55861ba9be5dd39d7ea64
+xbert_feat_embedding:
+  cmd: cd ./auto-icd-transformers && ./run_preprocess_feat.sh
+  deps:
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
+    md5: dd3c163c79b2d3c4c35a9bdfeb2d130e
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
+    md5: 6f89e6398ae32ca672b3ad40a5984d52
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
+    md5: 115a518c6ad75db276befabd3c8d438a
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+    md5: 57eaa6bd3b17368ad1b31930c705eabd
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
+    md5: 57bb404dde35ade77db098c195b55438
+  - path: ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
+    md5: ce993fda00034d224e49442b67c882f0
+  - path: auto-icd-transformers/environment.yml
+    md5: 3cd6521773f3b954d12b25c18b46f8d2
+  - path: auto-icd-transformers/run_preprocess_feat.sh
+    md5: 94a4ca04d734b5eeb2a2c2e121dfd29a
+  outs:
+  - path: ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
+    md5: 479bc938f62ce1c8e407c026713eb4c7
+  - path: ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
+    md5: fd9560378acfeb8aa12b5d6be6ca475f
+  - path: ../data/intermediary-data/xbert_outputs/proc_data/log.bert.128.txt
+    md5: c8bcec4075a326354047de73e2cab9d4

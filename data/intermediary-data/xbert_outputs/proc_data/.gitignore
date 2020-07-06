@@ -4,3 +4,6 @@
 /log.bert.24.txt
 /X.bert.trn.24.pkl
 /X.bert.tst.24.pkl
+/X.trn.bert.128.pkl
+/X.tst.bert.128.pkl
+/log.bert.128.txt
