@@ -53,14 +53,21 @@ from tqdm import tqdm, trange
 
 import xbert.rf_linear as rf_linear
 import xbert.rf_util as rf_util
+from loguru import logger
+
 
 from xbert.modeling import BertForXMLC #truncated to just have bert model.
 
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 # ---- substitute with local copy eventually...
+
+logger.info('loading huggingface model...')
 bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
+
+
+logger.info('loading huggingface config...')
 bioclinical_bert_Config = AutoConfig.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
 
@@ -75,6 +82,10 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 
 ALL_MODELS = ('emilyalsentzer/Bio_ClinicalBERT')#sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config)), (),)
 
+logger.info('building model class:\n ( \
+    bioclinical_bert_Config, \
+    BertForXMLC, \
+    bioclinical_bert_Tokenizer)...')
 
 MODEL_CLASSES = {
     "bioclinical_bert": (
@@ -83,7 +94,7 @@ MODEL_CLASSES = {
                         bioclinical_bert_Tokenizer),
 }
 
-logger = None
+# logger = None
 
 
 def set_seed(args):
@@ -309,7 +320,7 @@ class TransformerMatcher(object):
             torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
 
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+        config_class, model_class, tokenizer_class = MODEL_CLASSES[0]#args.model_type]
         config = config_class.from_pretrained(
             args.config_name if args.config_name else args.model_name_or_path,
             hidden_dropout_prob=args.hidden_dropout_prob,
@@ -512,6 +523,7 @@ class TransformerMatcher(object):
         self.model.zero_grad()
         set_seed(args)  # Added here for reproductibility (even between python 2 and 3)
         for epoch in range(1, int(args.num_train_epochs) + 1):
+            logger.info(f'Now reached epoch {epoch}.')
             for step, batch in enumerate(train_dataloader):
                 self.model.train()
                 start_time = time.time()
@@ -593,6 +605,7 @@ def main():
 
     # do_train and save model
     if args.do_train:
+        logger.info('Transformer training initiated!')
         # setup output_dir
         if os.path.exists(args.output_dir) and os.listdir(args.output_dir) and args.do_train and not args.overwrite_output_dir:
             raise ValueError(
@@ -603,18 +616,24 @@ def main():
 
         # load data
         with open(args.trn_feat_path, "rb") as fin:
+            logger.info('loading data...')
             X_trn = pickle.load(fin)
         C_trn = smat.load_npz(args.trn_label_path)
 
         # prepare transformer pretrained models
         TransformerMatcher.set_device(args)
+        logger.info('setting device...')
         matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
+        logger.info('preparing model...')
+
         matcher.prepare_model(args)
 
         # train
         matcher.train(args, X_trn, C_trn)
         if args.local_rank in [-1, 0]:
+            logger.info('saving model...')
             matcher.save_model(args)
+            logger.info('...model saved!')
 
     # do_eval on test set and save prediction output
     if args.do_eval:
@@ -633,10 +652,12 @@ def main():
         TransformerMatcher.set_device(args)
         matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        matcher.config = config_class.from_pretrained(args.output_dir)
+        config_class, model_class, tokenizer_class = MODEL_CLASSES[0] #]args.model_type]
+        matcher.config = config_class.from_pretrained(
+            "emilyalsentzer/Bio_ClinicalBERT")  # args.output_dir)
         matcher.config.output_hidden_states = True
-        model = model_class.from_pretrained(args.output_dir, config=matcher.config)
+        model = model_class.from_pretrained(
+            "emilyalsentzer/Bio_ClinicalBERT", config=matcher.config)
         model.to(args.device)
         matcher.model = model
 
