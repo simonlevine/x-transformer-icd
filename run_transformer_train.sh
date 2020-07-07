@@ -42,7 +42,7 @@ MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 mkdir -p ${MODEL_DIR}
 
 
-CUDA_VISIBLE_DEVICES=${GPID} python -m xbert.transformer.py \
+CUDA_VISIBLE_DEVICES=${GPID} python -m auto-icd-transformers/xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
@@ -73,14 +73,14 @@ CUDA_VISIBLE_DEVICES=${GPID} python -m xbert.transformer.py \
 
 
 # predict
-CUDA_VISIBLE_DEVICES=${GPID} python -u xbert.transformer.py \
-    -m ${MODEL_TYPE} -n ${MODEL_NAME} \
-    --do_eval -o ${MODEL_DIR} \
-    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
-    -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-    -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
-    -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
-    --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
+# CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
+#     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
+#     --do_eval -o ${MODEL_DIR} \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
+#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
+#     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
 #### end ####
 
