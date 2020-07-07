@@ -42,7 +42,7 @@ MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 mkdir -p ${MODEL_DIR}
 
 
-CUDA_VISIBLE_DEVICES=${GPID} python -m xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=${GPID} python -m xbert.transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
