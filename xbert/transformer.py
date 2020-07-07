@@ -320,7 +320,7 @@ class TransformerMatcher(object):
             torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
 
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+        config_class, model_class, tokenizer_class = MODEL_CLASSES[0]#args.model_type]
         config = config_class.from_pretrained(
             args.config_name if args.config_name else args.model_name_or_path,
             hidden_dropout_prob=args.hidden_dropout_prob,
