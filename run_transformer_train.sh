@@ -73,7 +73,7 @@ CUDA_VISIBLE_DEVICES=${GPID} python -m xbert.transformer.py \
 
 
 # predict
-CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=${GPID} python -u xbert.transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
