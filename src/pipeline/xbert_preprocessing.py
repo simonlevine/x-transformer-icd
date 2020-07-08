@@ -66,7 +66,7 @@ XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
 
 
 def main():
-    df_train, df_test = format_data_for_training.construct_datasets()
+    df_train, df_test = format_data_for_training.construct_datasets(subsampling=True)
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
