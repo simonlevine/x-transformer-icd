@@ -88,11 +88,9 @@ xbert_feat_embedding:
   - path: auto-icd-transformers/environment.yml
     md5: 3cd6521773f3b954d12b25c18b46f8d2
   - path: auto-icd-transformers/run_preprocess_feat.sh
-    md5: 94a4ca04d734b5eeb2a2c2e121dfd29a
+    md5: d43d2313e47060316149864daa41ede8
   outs:
   - path: ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
     md5: 479bc938f62ce1c8e407c026713eb4c7
   - path: ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
     md5: fd9560378acfeb8aa12b5d6be6ca475f
-  - path: ../data/intermediary-data/xbert_outputs/proc_data/log.bert.128.txt
-    md5: c8bcec4075a326354047de73e2cab9d4

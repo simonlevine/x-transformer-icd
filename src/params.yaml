@@ -1,0 +1,4 @@
+# file params.yaml
+
+prepare_for_xbert:
+    subsampling: True

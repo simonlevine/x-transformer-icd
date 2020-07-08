@@ -20,10 +20,16 @@ def load_and_serialize_dataset():
         df_.to_json(fp_out, orient="split")
 
 
-def construct_datasets():
+def construct_datasets(subsampling = False):
     dataset, _ = load_mimic_dataset()
     dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
     df_train, df_test = test_train_validation_split(dataset)
+
+    if subsampling == True:
+        logger.info('Subsampling 80 training rows, 20 testing rows of data.')
+        df_train = df_train.sample(n=80)
+        df_test = df_test.sample(n=20)
+
     return df_train, df_test
 
 
