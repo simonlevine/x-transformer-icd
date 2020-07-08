@@ -43,7 +43,7 @@ sudo mkdir -p ${MODEL_DIR}
 
 
 
-python xbert/transformer.py -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz -o ${MODEL_DIR} --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} --gradient_accumulation_steps ${GRAD_ACCU_STEPS} --max_steps ${MAX_STEPS} --warmup_steps ${WARMUP_STEPS} --learning_rate ${LEARNING_RATE} --logging_steps ${LOGGING_STEPS} & tee ${MODEL_DIR}/log.txt
+python xbert/transformer.py -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz --output_dir ${MODEL_DIR} --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} --gradient_accumulation_steps ${GRAD_ACCU_STEPS} --max_steps ${MAX_STEPS} --warmup_steps ${WARMUP_STEPS} --learning_rate ${LEARNING_RATE} --logging_steps ${LOGGING_STEPS} & tee ${MODEL_DIR}/log.txt
 
 
 
