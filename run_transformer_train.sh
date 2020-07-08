@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
-NPROC_PER_NODE='1'
+# NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
@@ -17,14 +17,14 @@ MAX_XSEQ_LEN=128
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
 # # Nvidia 2070, fp32
-PER_DEVICE_TRN_BSZ=4
-PER_DEVICE_VAL_BSZ=8
-GRAD_ACCU_STEPS=6
+# PER_DEVICE_TRN_BSZ=4
+# PER_DEVICE_VAL_BSZ=8
+# GRAD_ACCU_STEPS=6
 
 # # # Nvidia 2080Ti (11Gb), fp32
-# PER_DEVICE_TRN_BSZ=8
-# PER_DEVICE_VAL_BSZ=16
-# GRAD_ACCU_STEPS=4
+PER_DEVICE_TRN_BSZ=8
+PER_DEVICE_VAL_BSZ=16
+GRAD_ACCU_STEPS=4
 
 # # Nvidia V100 (16Gb), fp32
 # PER_DEVICE_TRN_BSZ=16
@@ -43,7 +43,7 @@ sudo mkdir -p ${MODEL_DIR}
 
 
 
-CUDA_VISIBLE_DEVICES=${GPID} python -m xbert/transformer.py \
+python xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
@@ -58,9 +58,9 @@ CUDA_VISIBLE_DEVICES=${GPID} python -m xbert/transformer.py \
 
 
 
-# # train
+# train - multi-gpu
 # CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
-#     --nproc_per_node ${N_PROC_PER_NODE} xbert/transformer.py \
+#     --nproc_per_node 1 xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
 #     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
 #     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
