@@ -1,4 +1,3 @@
 [submodule "src/auto-icd-transformers"]
-	branch = multi-gpu
 	path = src/auto-icd-transformers
 	url = git@github.com:jeremyadamsfisher/auto-icd-transformers.git
