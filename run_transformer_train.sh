@@ -47,7 +47,6 @@ sudo mkdir -p ${MODEL_DIR}
 
 
 
-
 # train - multi-gpu
 CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
     --nproc_per_node 1 xbert/transformer.py \
@@ -61,6 +60,7 @@ CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
     --logging_steps ${LOGGING_STEPS} \
+    --no_cuda \
     |& sudo tee ${MODEL_DIR}/log.txt
 
 
