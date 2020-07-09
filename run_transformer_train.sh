@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
+GPID=$0 #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
