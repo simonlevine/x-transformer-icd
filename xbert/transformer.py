@@ -406,7 +406,7 @@ class TransformerMatcher(object):
                     c_pred = outputs[0]
 
                 # compute loss
-                # c_eval = np.array(C_eval_true[inst_idx].toarray()) #BUG C_eval_true[inst_idx] does not exist.
+                c_eval = np.array(C_eval_true[inst_idx].toarray()) #BUG C_eval_true[inst_idx] does not exist.
                 c_eval = torch.tensor(c_eval, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(c_pred, c_eval)
 
@@ -549,7 +549,7 @@ class TransformerMatcher(object):
                 logits = outputs[0]  # model outputs are always tuple in transformers (see doc)
 
                 # compute loss, average across multi-gpu
-                labels = np.array(C_trn[inst_idx].toarray())
+                labels = np.array(C_trn[inst_idx].toarray())  # BUG indx is too large
                 labels = torch.tensor(labels, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(logits, labels)
 
