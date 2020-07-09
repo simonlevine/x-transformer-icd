@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPID=$0,1,2,3 #CUDA visible devices. 0 for just one 2070 GPU.
+GPID=$0 #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
@@ -49,7 +49,7 @@ sudo mkdir -p ${MODEL_DIR}
 
 # train - multi-gpu
 CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
-    --nproc_per_node 4 xbert/transformer.py \
+    --nproc_per_node 1 xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
