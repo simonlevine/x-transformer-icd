@@ -1,4 +1,4 @@
-name: pt1.2_xmlc_transformer
+name: modified_xmlc_transformer
 channels:
   - pytorch
   - defaults
@@ -59,7 +59,7 @@ dependencies:
   - xz
   - zlib
   - zstd
-  - pytorch
+  - pytorch=1.2.0=py3.7_cuda10.0.130_cudnn7.6.2_0
   - torchvision
   - pip:
     - appdirs
@@ -86,5 +86,5 @@ dependencies:
     - typed-ast
     - urllib3
     - loguru
-prefix: /home/ubuntu/anaconda3/envs/pt1.2_xmlc_transformer
+prefix: /home/ubuntu/anaconda3/envs/modified_xmlc_transformer
 
