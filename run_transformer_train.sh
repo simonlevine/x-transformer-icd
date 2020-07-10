@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPID='0' #CUDA visible devices. 0 for just one 2070 GPU.
+GPID=0,1,2,3 #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
@@ -42,11 +42,11 @@ MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 sudo mkdir -p ${MODEL_DIR}
 
 
-
 # python xbert/transformer.py -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz --output_dir ${MODEL_DIR} --overwrite_output_dir --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} --gradient_accumulation_steps ${GRAD_ACCU_STEPS} --max_steps ${MAX_STEPS} --warmup_steps ${WARMUP_STEPS} --learning_rate ${LEARNING_RATE} --logging_steps ${LOGGING_STEPS} & sudo tee ${MODEL_DIR}/log.txt
 
 # train - single-gpu
-CUDA_VISIBLE_DEVICES='0' python xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=0, python -m torch.distributed.launch \
+    --nproc_per_node 1 xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
@@ -57,14 +57,14 @@ CUDA_VISIBLE_DEVICES='0' python xbert/transformer.py \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
     --logging_steps ${LOGGING_STEPS} \
-    # --no_cuda \
     |& sudo tee ${MODEL_DIR}/log.txt
 
 
 
 
-# # train - multi-gpu
-# CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
+
+# train - multi-gpu
+# CUDA_VISIBLE_DEVICES=${GPID}, python -m torch.distributed.launch \
 #     --nproc_per_node 1 xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
 #     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
