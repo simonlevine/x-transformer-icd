@@ -294,8 +294,13 @@ class TransformerMatcher(object):
          # Setup CUDA, GPU & distributed training
         if args.no_cuda:
             device = torch.device("cpu")
+            logger.info('No-CUDA specified. Setting training device to CPU...')
             args.n_gpu = 0
         elif args.local_rank == -1:
+            if torch.cuda.is_available():
+                logger.info('Setting training device to GPU...')
+            else:
+                logger.info('Setting training device to CPU...')
             device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             args.n_gpu = torch.cuda.device_count()
         else:
@@ -306,6 +311,8 @@ class TransformerMatcher(object):
         if device.type == "cuda":
             torch.cuda.set_device(device)
         args.device = device
+        logger.info(f'Training device set to {device}...')
+
 
         logger.info(
             "Process rank: %s, device: %s, n_gpu: %s, distributed training: %s, 16-bits training: %s",
