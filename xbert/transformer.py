@@ -196,7 +196,8 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-c_tst",
 			"--tst_label_path",
-			default="./save_models/Eurlex-4K/proc_data/Y.tst.pifa-tfidf-s0.npz", #was Y... ?
+			# was "./save_models/Eurlex-4K/proc_data/Y.tst.pifa-tfidf-s0.npz"... ?
+			default="~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz",
             type=str,
         )
         parser.add_argument(
