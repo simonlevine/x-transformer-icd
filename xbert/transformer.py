@@ -177,13 +177,13 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-x_trn",
 			"--trn_feat_path",
-			default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
+			# default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
             "-x_tst",
 			"--tst_feat_path",
-			default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
+			# default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
@@ -557,7 +557,8 @@ class TransformerMatcher(object):
                 logits = outputs[0]  # model outputs are always tuple in transformers (see doc)
 
                 # compute loss, average across multi-gpu
-                labels = np.array(C_trn[inst_idx].toarray())  # BUG indx is too large
+                # C_trn[inst_idx].toarray())  # BUG indx is too large
+                labels = np.array(X_trn[inst_idx].toarray())
                 labels = torch.tensor(labels, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(logits, labels)
 
@@ -628,8 +629,9 @@ def main():
 
         # load data
         with open(args.trn_feat_path, "rb") as fin:
-            logger.info('loading data...')
+            logger.info('loading feature data...')
             X_trn = pickle.load(fin)
+        logger.info('loading cluster-label...')
         C_trn = smat.load_npz(args.trn_label_path)
 
         # prepare transformer pretrained models
