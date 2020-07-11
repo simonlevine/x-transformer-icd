@@ -557,8 +557,8 @@ class TransformerMatcher(object):
                 logits = outputs[0]  # model outputs are always tuple in transformers (see doc)
 
                 # compute loss, average across multi-gpu
-                # C_trn[inst_idx].toarray())  # BUG indx is too large
-                labels = np.array(X_trn[inst_idx].toarray())
+                 # BUG indx is too large
+                labels = np.array(C_trn[inst_idx].toarray())
                 labels = torch.tensor(labels, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(logits, labels)
 
