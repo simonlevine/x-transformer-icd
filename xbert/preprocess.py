@@ -98,6 +98,7 @@ def load_feat_data(text_path):
                 # logger.info("WARNING: line {} has empty text".format(idx))
                 xseq = ""
             xseq_list.append(xseq)
+    logger.info(f'Created X_seq list of size {len(xseq_list)}')
     return xseq_list
 
 

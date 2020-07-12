@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This should yield L.${LABEL_EMB}.npz in the PROC_DATA_DIR.
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
@@ -27,6 +28,8 @@ python -m xbert.preprocess \
     -x ${label_emb_inst_path}
 
 # semantic label indexing
+# This should yield code.npz in the INDEXER_DIR
+
 SEED_LIST=( 0 1 2 )
 for SEED in "${SEED_LIST[@]}"; do
     LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
@@ -37,6 +40,7 @@ for SEED in "${SEED_LIST[@]}"; do
 done
 
 # construct C.[trn|tst].[label-emb].npz for training matcher
+# This should yield the instance-to-cluster matrix C.trn.npz and C.tst.npz in the PROC_DATA_DIR.
 SEED=0
 LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
