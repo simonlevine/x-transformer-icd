@@ -8,6 +8,7 @@ stages:
       - ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
       - ../data/mimiciii-14/NOTEEVENTS.csv.gz
       - pipeline/xbert_preprocessing.py
+      - pipeline/format_data_for_training.py
     params:
       - prepare_for_xbert.subsampling
     outs:
@@ -22,6 +23,7 @@ stages:
     cmd: cd ./auto-icd-transformers && ./run_preprocess_label.sh
     deps:
       - auto-icd-transformers/run_preprocess_label.sh
+      - auto-icd-transformers/xbert/preprocess.py
       - auto-icd-transformers/environment.yml
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
@@ -44,6 +46,7 @@ stages:
     cmd: cd ./auto-icd-transformers && ./run_preprocess_feat.sh
     deps:
       - auto-icd-transformers/run_preprocess_feat.sh
+      - auto-icd-transformers/xbert/preprocess.py
       - auto-icd-transformers/environment.yml
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt

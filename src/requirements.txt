@@ -5,3 +5,5 @@ loguru
 scikit-learn
 better-exceptions
 altair
+numpy
+scipy

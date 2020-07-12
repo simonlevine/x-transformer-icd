@@ -43,6 +43,8 @@ from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
+# import yaml
+
 try:
     import format_data_for_training #script from auto-icd
 except ImportError:
@@ -64,9 +66,15 @@ XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
 XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
 XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
 
+# import yaml
+# with open('src/params.yaml', 'rb') as f:
+#     params = yaml.load(f.read())    # load the config file
+
+# subsample_param = (params['prepare_for_xbert'].get('subsampling'))
 
 def main():
-    df_train, df_test = format_data_for_training.construct_datasets(subsampling=True)
+    df_train, df_test = format_data_for_training.construct_datasets(
+        subsampling=True)
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
@@ -128,8 +136,8 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels):
 def xbert_prepare_txt_inputs(df, df_subset):
     logger.info(
         f'Collecting {df_subset} free-text as input features to X-BERT...')
-    return df[['TEXT']]
-
+    raw_texts = df[['TEXT']].replace(r'\n', ' ', regex=True)  # train stage expects each example to fit on a single line
+    return raw_texts
 
 def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     """
@@ -162,14 +170,14 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     #writing label map (icd descriptions) to txt
     logger.info('Writing icd LONG_TITLE (label map) to txt.')
     desc_labels.to_csv(path_or_buf=XBERT_LABEL_MAP_FP,
-                      header=None, index=None, sep='\t', mode='a')
+                      header=None, index=None, sep='\t', mode='w')
 
     #writing raw text features to txts
     logger.info('Writing data raw features to txt.')
     X_trn.to_csv(path_or_buf=XBERT_TRAIN_RAW_TEXTS_FP,
-                 header=None, index=None, sep='\t', mode='a')
+                 header=None, index=None, sep='\t', mode='w')
     X_tst.to_csv(path_or_buf=XBERT_TEST_RAW_TEXTS_FP,
-                 header=None, index=None, sep='\t', mode='a')
+                 header=None, index=None, sep='\t', mode='w')
 
     #writing X.trn.npz, X.tst.npz files.
     logger.info(

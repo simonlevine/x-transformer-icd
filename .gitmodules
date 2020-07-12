@@ -1,3 +1,4 @@
 [submodule "src/auto-icd-transformers"]
+	branch = f36758ca42a77e035fab5ae67c62110cb5a226f4
 	path = src/auto-icd-transformers
 	url = git@github.com:jeremyadamsfisher/auto-icd-transformers.git
