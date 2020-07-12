@@ -59,7 +59,7 @@ dependencies:
   - xz
   - zlib
   - zstd
-  - pytorch=1.2.0=py3.7_cuda10.0.130_cudnn7.6.2_0
+  - pytorch=1.2.0=py3.7_cuda10.0.130_cudnn7.6.2_0 #forget if this step is necessary. If it us, pip install -U transformers should follow it.
   - torchvision
   - pip:
     - appdirs
