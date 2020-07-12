@@ -417,7 +417,7 @@ class TransformerMatcher(object):
                     c_pred = outputs[0]
 
                 # compute loss
-                c_eval = np.array(C_eval_true[inst_idx].toarray()) #BUG index does not exist.
+                c_eval = np.array(C_eval_true[inst_idx].toarray())
                 c_eval = torch.tensor(c_eval, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(c_pred, c_eval)
 
