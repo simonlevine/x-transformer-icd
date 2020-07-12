@@ -66,7 +66,6 @@ logger.info('loading huggingface model...')
 bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
 
-
 logger.info('loading huggingface config...')
 bioclinical_bert_Config = AutoConfig.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
