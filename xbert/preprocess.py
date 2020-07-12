@@ -126,7 +126,7 @@ def proc_feat(
             text_pair=None,
             add_special_tokens=True,
             max_length=args.max_xseq_len,
-            # truncation=True, #CHANGED
+            truncation=True, #CHANGED
         )
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
         xseq_lens.append(len(input_ids))
