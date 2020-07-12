@@ -87,6 +87,8 @@ logger.info('building model class:\n ( \
     BertForXMLC, \
     bioclinical_bert_Tokenizer)...')
 
+
+#"model_type" below is set to 'bert'
 MODEL_CLASSES = {
     "bert": (
                         bioclinical_bert_Config,
@@ -94,7 +96,8 @@ MODEL_CLASSES = {
                         bioclinical_bert_Tokenizer),
 }
 
-# logger = None
+logger = None
+
 
 
 def set_seed(args):
@@ -186,13 +189,14 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-c_trn",
 			"--trn_label_path",
-			default="./save_models/Eurlex-4K/proc_data/X.trn.pifa-tfidf-s0.npz",
+			# ./save_models/Eurlex-4K/proc_data/X.trn.pifa-tfidf-s0.npz", #was X...?
+			default=":~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz",
             type=str,
         )
         parser.add_argument(
             "-c_tst",
 			"--tst_label_path",
-			default="./save_models/Eurlex-4K/proc_data/Y.tst.pifa-tfidf-s0.npz",
+			default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
             type=str,
         )
         parser.add_argument(
@@ -320,7 +324,7 @@ class TransformerMatcher(object):
             torch.distributed.barrier()  # Make sure only the first process in distributed training will download model & vocab
 
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES["bert"]
+        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
         config = config_class.from_pretrained(
             args.config_name if args.config_name else args.model_name_or_path,
             hidden_dropout_prob=args.hidden_dropout_prob,
