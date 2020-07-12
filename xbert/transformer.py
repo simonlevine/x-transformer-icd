@@ -470,6 +470,9 @@ class TransformerMatcher(object):
 
     def train(self, args, X_trn, C_trn):
         """ Train the model """
+        logger.info(
+            f'training model with X_trn of dimensions f{X_trn.shape},
+            C_trn of shape {C_trn.shape}')
         args.train_batch_size = args.per_device_train_batch_size * max(1, args.n_gpu)
         all_inst_idx = torch.tensor([f["inst_idx"] for f in X_trn], dtype=torch.long)
         all_input_ids = torch.tensor([f["input_ids"] for f in X_trn], dtype=torch.long)
