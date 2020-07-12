@@ -559,7 +559,7 @@ class TransformerMatcher(object):
 
                 # compute loss, average across multi-gpu
                  # BUG indx is too large
-                labels = np.array(C_trn[inst_idx].toarray())
+                labels = np.array(X_trn[inst_idx].toarray())
                 labels = torch.tensor(labels, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(logits, labels)
 
