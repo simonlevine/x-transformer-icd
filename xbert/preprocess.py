@@ -98,19 +98,6 @@ def load_feat_data(text_path):
     logger.info(f'Created X_seq list of size {len(xseq_list)}')
     return xseq_list
 
-# def load_feat_data(text_path):
-#     xseq_list = []
-#     with open(text_path, "r") as fin:
-#         for idx, line in enumerate(tqdm(fin)):
-#             xseq = line.strip()
-#             if len(xseq) == 0:
-#                 # logger.info("WARNING: line {} has empty text".format(idx))
-#                 xseq = ""
-#             xseq_list.append(xseq)
-#     logger.info(f'Created X_seq list of size {len(xseq_list)}')
-#     return xseq_list
-
-
 def proc_feat(
     args,
     input_text_path,
