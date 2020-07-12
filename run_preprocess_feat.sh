@@ -18,7 +18,7 @@ PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
     --do_proc_feat \
-    -i ${DATA_DIR}/xbert_inputs/${DATASET} \
+    -i ${DATA_DIR}/xbert_inputs/${DATASET} \ #takes in train_raw_texts.txt
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
