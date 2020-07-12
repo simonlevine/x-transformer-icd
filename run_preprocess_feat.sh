@@ -9,11 +9,11 @@ MAX_XSEQ_LEN=$'128'
 MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
 
-
-DATA_DIR=~/auto-icd/data/intermediary-data
+DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
-
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
+
+source create_conda_env_as_necessary.sh
 
 mkdir -p ${PROC_DATA_DIR}
 python -u -m xbert.preprocess \
