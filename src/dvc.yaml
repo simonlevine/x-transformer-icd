@@ -3,7 +3,6 @@ stages:
     cmd: .venv/bin/python pipeline/xbert_preprocessing.py
     deps:
       - requirements.txt
-      - .venv/bin/python
       - ../data/ICD_general_equivalence_mapping.csv
       - ../data/mimiciii-14/DIAGNOSES_ICD.csv.gz
       - ../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
