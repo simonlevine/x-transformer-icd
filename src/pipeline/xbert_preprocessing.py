@@ -39,6 +39,7 @@ import re
 import numpy as np
 import pandas as pd
 import scipy
+import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
@@ -51,13 +52,13 @@ except ImportError:
     # when running in a pytest context
     from . import format_data_for_training
 
-#Input filepaths.
+# input filepaths.
 DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
 
-#output filepaths
+# output filepaths
 XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'
 XBERT_TRAIN_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt'
 XBERT_TEST_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt'
@@ -72,9 +73,14 @@ XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
 
 # subsample_param = (params['prepare_for_xbert'].get('subsampling'))
 
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f.read())
+
 def main():
-    df_train, df_test = format_data_for_training.construct_datasets(
-        subsampling=True)
+    subsampling_enabled = params['prepare_for_xbert']['subsampling']
+    logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
+    df_train, df_test = \
+        format_data_for_training.construct_datasets(subsampling_enabled)
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
