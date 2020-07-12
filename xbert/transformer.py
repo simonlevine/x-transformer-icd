@@ -71,6 +71,10 @@ logger.info('loading huggingface config...')
 bioclinical_bert_Config = AutoConfig.from_pretrained(
     "emilyalsentzer/Bio_ClinicalBERT")
 
+logger.info('Assembling XMLC model...')
+
+bioclinical_BertForXMLC = BertForXMLC.from_pretrained(
+    "emilyalsentzer/Bio_ClinicalBERT")
 
 from transformers import (
     WEIGHTS_NAME,
@@ -84,7 +88,7 @@ ALL_MODELS = ('emilyalsentzer/Bio_ClinicalBERT')#sum((tuple(conf.pretrained_conf
 
 logger.info('building model class:\n ( \
     bioclinical_bert_Config, \
-    BertForXMLC, \
+    bioclinical_BertForXMLC, \
     bioclinical_bert_Tokenizer)...')
 
 
