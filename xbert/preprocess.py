@@ -91,8 +91,9 @@ def run_label_embedding(args):
 
 def load_feat_data(text_path):
     xseqs = pd.read_csv(text_path, header=None, sep='\t').replace(
-        r'\n', ' ', regex=True)[0]
-    xseqs = xseqs.apply(lambda x: x.strip())
+        r'\n', ' ', regex=True)[0] #we replaced any newline characters within each "line" here.
+        #Note that this is actually not necessary due to the to_list method.
+    xseqs = xseqs.str.Strip()
     xseq_list = xseqs.to_list()
     logger.info(f'Created X_seq list of size {len(xseq_list)}')
     return xseq_list
