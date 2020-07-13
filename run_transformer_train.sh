@@ -74,8 +74,8 @@ python xbert/transformer.py \
 #     |& tee ${MODEL_DIR}/log.txt
 
 
-# predict
-CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
+# predict - single GPU
+python xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
@@ -83,6 +83,16 @@ CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
+
+# # predict - multi GPU
+# CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
+#     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
+#     --do_eval -o ${MODEL_DIR} \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
+#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
+#     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
 #### end ####
 
