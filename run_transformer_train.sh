@@ -2,6 +2,9 @@
 
 source create_conda_env_as_necessary.sh
 
+CUDA_VISIBLE_DEVICES=0
+NVIDIA_VISIBLE_DEVICES=0
+
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
