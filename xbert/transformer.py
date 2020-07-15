@@ -411,6 +411,7 @@ class TransformerMatcher(object):
                 c_eval = np.array(C_eval_true[inst_idx].toarray())
                 c_eval = torch.tensor(c_eval, dtype=torch.float).to(args.device)
                 loss = self.loss_fn(c_pred, c_eval)
+                logger.info(f'computing loss for c_pred of shape {c_pred.shape} and c_eval of shape {c_eval.shape}...')
 
                 if args.n_gpu > 1:
                     loss = loss.mean()  # mean() to average on multi-gpu parallel training
