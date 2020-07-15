@@ -69,7 +69,7 @@ stages:
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     outs:
-      - ./auto-icd-transformers/saved_models/mimiciii-14/pifa-tfidf-s0/matcher/Bio-ClinicalBERT/log.txt # Not an output per se, used for logging in the console.
+      # - ./auto-icd-transformers/saved_models/mimiciii-14/pifa-tfidf-s0/matcher/Bio-ClinicalBERT/log.txt # Not an output per se, used for logging in the console.
       - ./auto-icd-transformers/saved_models/mimiciii-14/training_args.bin
   xbert_trained_model_prediction:
     cmd: cd ./auto-icd-transformers && ./run_transformer_training_prediction.sh
