@@ -59,7 +59,8 @@ dependencies:
   - xz
   - zlib
   - zstd
-  - pytorch
+  # - pytorch
+  - pytorch=1.2.0=py3.7_cuda10.0.130_cudnn7.6.2_0
   - torchvision
   - pip:
     - appdirs
