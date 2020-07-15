@@ -51,36 +51,36 @@ LEARNING_RATE=5e-2
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 sudo mkdir -p ${MODEL_DIR}
 
-python xbert/transformer.py \
-    -m ${MODEL_TYPE} \
-    -n ${MODEL_NAME} \
-    --do_train \
-    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
-    -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-    -o ${MODEL_DIR} \
-    --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
-    --gradient_accumulation_steps ${GRAD_ACCU_STEPS} \
-    --max_steps ${MAX_STEPS} \
-    --warmup_steps ${WARMUP_STEPS} \
-    --learning_rate ${LEARNING_RATE} \
-    --overwrite_output_dir \
-    --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
-
-
-# train - multi-gpu
-# CUDA_VISIBLE_DEVICES=${GPID} python -m torch.distributed.launch \
-#     --nproc_per_node 1 xbert/transformer.py \
-#     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
+# python xbert/transformer.py \
+#     -m ${MODEL_TYPE} \
+#     -n ${MODEL_NAME} \
+#     --do_train \
 #     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
-#     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
+#     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
 #     -o ${MODEL_DIR} \
 #     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
 #     --gradient_accumulation_steps ${GRAD_ACCU_STEPS} \
 #     --max_steps ${MAX_STEPS} \
 #     --warmup_steps ${WARMUP_STEPS} \
 #     --learning_rate ${LEARNING_RATE} \
-#     --logging_steps ${LOGGING_STEPS} \
-#     |& tee ${MODEL_DIR}/log.txt
+#     --overwrite_output_dir \
+#     --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
+
+
+train - multi-gpu
+CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
+    --nproc_per_node 1 xbert/transformer.py \
+    -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
+    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+    -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \ 
+    -o ${MODEL_DIR} \
+    --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
+    --gradient_accumulation_steps ${GRAD_ACCU_STEPS} \
+    --max_steps ${MAX_STEPS} \
+    --warmup_steps ${WARMUP_STEPS} \
+    --learning_rate ${LEARNING_RATE} \
+    --logging_steps ${LOGGING_STEPS} \
+    |& tee ${MODEL_DIR}/log.txt
 
 
 #### end ####
