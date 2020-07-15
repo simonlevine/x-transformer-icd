@@ -122,29 +122,29 @@ def transform_prediction(csr_codes, transform="lpsvm-l2"):
     return csr_codes
 
 class HingeLoss(nn.Module):
-	"""criterion for loss function
-	y: 0/1 ground truth matrix of size: batch_size x output_size
-	f: real number pred matrix of size: batch_size x output_size
-	"""
+    """criterion for loss function
+    y: 0/1 ground truth matrix of size: batch_size x output_size
+    f: real number pred matrix of size: batch_size x output_size
+    """
 
-	def __init__(self, margin=1.0, squared=True):
-		super(HingeLoss, self).__init__()
-		self.margin = margin
-		self.squared = squared
+    def __init__(self, margin=1.0, squared=True):
+        super(HingeLoss, self).__init__()
+        self.margin = margin
+        self.squared = squared
 
-	def forward(self, f, y, C_pos=1.0, C_neg=1.0):
-		# convert y into {-1,1}
+    def forward(self, f, y, C_pos=1.0, C_neg=1.0):
+        # convert y into {-1,1}
         logger.info(f'computing hinge-loss for y of dims {y.shape} and f of dims {f.shape}...')
-		y_new = 2.0 * y - 1.0
+        y_new = 2.0 * y - 1.0
         logger.info(f'y_new is of dims {y_new.shape}')
-		tmp = y_new * f
+        tmp = y_new * f
 
-		# Hinge loss
-		loss = F.relu(self.margin - tmp)
-		if self.squared:
-			loss = loss ** 2
-		loss = loss * (C_pos * y + C_neg * (1.0 - y))
-		return loss.mean()
+        # Hinge loss
+        loss = F.relu(self.margin - tmp)
+        if self.squared:
+            loss = loss ** 2
+        loss = loss * (C_pos * y + C_neg * (1.0 - y))
+        return loss.mean()
 
 
 class TransformerMatcher(object):
@@ -178,27 +178,27 @@ class TransformerMatcher(object):
         )
         parser.add_argument(
             "-x_trn",
-			"--trn_feat_path",
-			default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
+            "--trn_feat_path",
+            default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
             "-x_tst",
-			"--tst_feat_path",
-			default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
+            "--tst_feat_path",
+            default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
             "-c_trn",
-			"--trn_label_path",
-			# ./save_models/Eurlex-4K/proc_data/X.trn.pifa-tfidf-s0.npz", #was X...?
-			default=":~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz",
+            "--trn_label_path",
+            # ./save_models/Eurlex-4K/proc_data/X.trn.pifa-tfidf-s0.npz", #was X...?
+            default=":~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz",
             type=str,
         )
         parser.add_argument(
             "-c_tst",
-			"--tst_label_path",
-			default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
+            "--tst_label_path",
+            default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
             type=str,
         )
         parser.add_argument(
