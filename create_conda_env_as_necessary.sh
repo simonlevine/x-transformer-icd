@@ -20,4 +20,4 @@ else
     python setup.py install --force
 fi
 
-python -c 'from loguru import logger; logger.info("Activated pt1.2_xmlc_transformer enviornment!")'
+python -c 'from loguru import logger; logger.info("Activated pt1.2_xmlc_transformer environment!")'

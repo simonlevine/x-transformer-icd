@@ -1,6 +1,5 @@
 source create_conda_env_as_necessary.sh
 
-CUDA_VISIBLE_DEVICES=0
 NVIDIA_VISIBLE_DEVICES=0
 
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
@@ -42,7 +41,7 @@ LEARNING_RATE=5e-5
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 # predict - single GPU
-python xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=0 python -u xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
