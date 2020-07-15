@@ -134,9 +134,9 @@ class HingeLoss(nn.Module):
 
     def forward(self, f, y, C_pos=1.0, C_neg=1.0):
         # convert y into {-1,1}
-        logger.info(f'computing hinge-loss for y of dims {y.shape} and f of dims {f.shape}...')
+        # logger.info(f'computing hinge-loss for y of dims {y.shape} and f of dims {f.shape}...')
         y_new = 2.0 * y - 1.0
-        logger.info(f'y_new is of dims {y_new.shape}')
+        # logger.info(f'y_new is of dims {y_new.shape}')
         tmp = y_new * f
 
         # Hinge loss
