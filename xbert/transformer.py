@@ -296,9 +296,14 @@ class TransformerMatcher(object):
          # Setup CUDA, GPU & distributed training
         if args.no_cuda:
             device = torch.device("cpu")
+            logger.info('Setting device for training to cpu')
             args.n_gpu = 0
         elif args.local_rank == -1:
             device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+            if torch.cuda.is_available():
+                logger.info('Setting device for training to CUDA gpu')
+            else:
+                logger.info('Setting device for training to cpu')
             args.n_gpu = torch.cuda.device_count()
         else:
             # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
