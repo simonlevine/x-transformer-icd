@@ -301,7 +301,7 @@ class TransformerMatcher(object):
         elif args.local_rank == -1:
             device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             if torch.cuda.is_available():
-                logger.info('Setting device for training to CUDA gpu')
+                logger.info('Local rank = -1 --> Setting device for training to available CUDA gpu')
             else:
                 logger.info('Setting device for training to cpu')
             args.n_gpu = torch.cuda.device_count()
