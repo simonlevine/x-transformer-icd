@@ -57,7 +57,7 @@ stages:
     outs:
       - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
       - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
-      # - ../data/intermediary-data/xbert_outputs/proc_data/log.bert.128.txt
+      - ../data/intermediary-data/xbert_outputs/proc_data/log.bert.128.txt
   xbert_model_training:
     cmd: cd ./auto-icd-transformers && ./run_transformer_train.sh
     deps:
@@ -69,5 +69,19 @@ stages:
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     outs:
-      # - ../saved_models/mimiciii-14/pifa-tfidf-s0/matcher/Bio-ClinicalBERT/log.txt
+      - ../saved_models/mimiciii-14/pifa-tfidf-s0/matcher/Bio-ClinicalBERT/log.txt
       - ../saved_models/mimiciii-14/training_args.bin
+  xbert_trained_model_prediction:
+    cmd: cd ./auto-icd-transformers && ./run_transformer_training_prediction.sh
+    deps:
+      - ./auto-icd-transformers/run_transformer_train.sh
+      - ./auto-icd-transformers/environment.yml
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
+      - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
+      - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
+      - ../saved_models/mimiciii-14/training_args.bin
+
+    outs:
+      - ../saved_models/mimiciii-14/pifa-tfidf-s0/matcher/Bio-ClinicalBERT/log.txt
