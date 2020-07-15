@@ -1,2 +1,2 @@
 prepare_for_xbert:
-    subsampling: false
+    subsampling: true
