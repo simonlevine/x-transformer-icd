@@ -51,7 +51,7 @@ LEARNING_RATE=5e-2
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 sudo mkdir -p ${MODEL_DIR}
 
-python xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
     --do_train \
