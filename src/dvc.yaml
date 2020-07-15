@@ -82,7 +82,6 @@ stages:
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
       - ../saved_models/mimiciii-14/training_args.bin
-
     outs:
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
