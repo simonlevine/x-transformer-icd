@@ -49,7 +49,7 @@ MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 # predict - single GPU
 CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
-    --do_eval -o ${MODEL_DIR} \
+    --do_eval -o ${MODEL_DIR} --overwrite_output_dir \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
