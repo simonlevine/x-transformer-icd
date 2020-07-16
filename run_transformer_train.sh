@@ -64,7 +64,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
     --overwrite_output_dir \
-    --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
+    # --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
 
 
 # #train - multi-gpu
