@@ -69,7 +69,7 @@ stages:
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     outs:
-      # - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/log.txt # Not an output per se, used for logging in the console.
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/log.txt # Not an output per se, used for logging in the console.
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/training_args.bin
   xbert_trained_model_prediction:
     cmd: cd ./auto-icd-transformers && ./run_transformer_training_prediction.sh
@@ -82,6 +82,7 @@ stages:
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/training_args.bin
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/log.txt
     outs:
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
