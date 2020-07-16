@@ -666,11 +666,10 @@ def main():
         matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        matcher.config = config_class.from_pretrained(
-            "emilyalsentzer/Bio_ClinicalBERT")  # args.output_dir)
+        matcher.config = config_class.from_pretrained(args.output_dir)
         matcher.config.output_hidden_states = True
         model = model_class.from_pretrained(
-            "emilyalsentzer/Bio_ClinicalBERT", config=matcher.config)
+            args.output_dir, config=matcher.config)
         model.to(args.device)
         matcher.model = model
 
