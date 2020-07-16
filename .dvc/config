@@ -1,4 +1,0 @@
-[core]
-    remote = gcp
-['remote "gcp"']
-    url = gs://icd-ml-bucket
