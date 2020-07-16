@@ -23,4 +23,4 @@ python -u -m xbert.preprocess \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
     --max_xseq_len ${MAX_XSEQ_LEN} \
-    |& sudo tee ${PROC_DATA_DIR}/log.${MODEL_TYPE}.${MAX_XSEQ_LEN}.txt
+    |& tee ${PROC_DATA_DIR}/log.${MODEL_TYPE}.${MAX_XSEQ_LEN}.txt
