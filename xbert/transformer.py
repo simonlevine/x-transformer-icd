@@ -378,7 +378,7 @@ class TransformerMatcher(object):
         if args.n_gpu > 1 and not isinstance(self.model, torch.nn.DataParallel):
             self.model = torch.nn.DataParallel(self.model)
 
-        if args.local_rank in [-1, 0]:
+        if True: #args.local_rank in [-1, 0]:
             logger.info("***** Running evaluation *****")
             logger.info("  Num examples = %d", len(X_eval))
             logger.info("  Batch size = %d", args.eval_batch_size)
