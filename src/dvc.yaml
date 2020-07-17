@@ -100,7 +100,4 @@ stages:
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     outs:
-      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
-      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
-      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
-      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/Bio_ClinicalBERT/tst.pred.npz
