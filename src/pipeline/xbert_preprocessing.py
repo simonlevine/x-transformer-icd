@@ -67,12 +67,6 @@ XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
 XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
 XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
 
-# import yaml
-# with open('src/params.yaml', 'rb') as f:
-#     params = yaml.load(f.read())    # load the config file
-
-# subsample_param = (params['prepare_for_xbert'].get('subsampling'))
-
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
