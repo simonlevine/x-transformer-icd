@@ -22,7 +22,9 @@ python -m xbert.preprocess \
 	-i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
-    -x ${label_emb_inst_path}
+    -x ${label_emb_inst_path} \
+    --max_xseq_len ${MAX_XSEQ_LEN}
+
 
 # semantic label indexing
 SEED_LIST=( 0 1 2 )
