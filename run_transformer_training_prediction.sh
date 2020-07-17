@@ -14,7 +14,8 @@ MODEL_TYPE=$'bert'
 
 OUTPUT_DIR=../../data/intermediary-data/xbert_outputs
 PROC_DATA_DIR=../../data/intermediary-data/xbert_outputs/proc_data
-MAX_XSEQ_LEN=128
+
+# MAX_XSEQ_LEN=128
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
@@ -42,6 +43,8 @@ MAX_STEPS=$(params max_steps)
 WARMUP_STEPS=$(params warmup_steps)
 LOGGING_STEPS=$(params logging_steps)
 LEARNING_RATE=$(params learning_rate)
+
+MAX_XSEQ_LEN=$(params max_seq_len)
 
 # #HYPERPARAMETERS for MIMIC:
 # MAX_STEPS=1000
