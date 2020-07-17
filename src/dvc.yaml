@@ -55,15 +55,15 @@ stages:
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
     outs:
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
   xbert_model_training:
     cmd: cd ./auto-icd-transformers && ./run_transformer_train.sh
     deps:
       - ./auto-icd-transformers/run_transformer_train.sh
       - ./auto-icd-transformers/environment.yml
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
       - ../data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
@@ -74,8 +74,8 @@ stages:
     deps:
       - ./auto-icd-transformers/run_transformer_train.sh
       - ./auto-icd-transformers/environment.yml
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.128.pkl
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.128.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
       - ../data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - ../data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
