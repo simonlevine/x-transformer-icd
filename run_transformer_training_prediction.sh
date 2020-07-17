@@ -15,7 +15,6 @@ MODEL_TYPE=$'bert'
 OUTPUT_DIR=../../data/intermediary-data/xbert_outputs
 PROC_DATA_DIR=../../data/intermediary-data/xbert_outputs/proc_data
 
-# MAX_XSEQ_LEN=128
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 

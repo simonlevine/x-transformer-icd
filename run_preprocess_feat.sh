@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# DATASET=$1
 DATASET=$'mimiciii-14'
-# MODEL_TYPE=$2
-# MAX_XSEQ_LEN=$'128'
 
 function params {
   ../.venv/bin/python -c \
