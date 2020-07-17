@@ -1,5 +1,7 @@
 prepare_for_xbert:
   subsampling: true
+xbert_label_embedding:
+  max_seq_len: 24
 xbert_feat_embedding:
   max_seq_len: 24
 xbert_model_training:
