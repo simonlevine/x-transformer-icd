@@ -3,8 +3,7 @@
 # DATASET=$1
 DATASET=$'mimiciii-14'
 # MODEL_TYPE=$2
-MAX_XSEQ_LEN=$'128'
-#$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
+MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
 MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
@@ -22,5 +21,5 @@ python -u -m xbert.preprocess \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
-    --max_xseq_len ${MAX_XSEQ_LEN} \
+    --max_xseq_len ${MAX_XSEQ_LEN} #\
     # |& tee ${PROC_DATA_DIR}/log.${MODEL_TYPE}.${MAX_XSEQ_LEN}.txt
