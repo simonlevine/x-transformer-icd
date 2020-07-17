@@ -43,7 +43,9 @@ python -u -m xbert.preprocess \
     -i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB_NAME} \
-    -c ${INDEXER_DIR}/code.npz
+    -c ${INDEXER_DIR}/code.npz \
+    --max_xseq_len ${MAX_XSEQ_LEN}
+
 
 #### end ####
 
