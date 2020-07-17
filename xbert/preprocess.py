@@ -177,11 +177,13 @@ def main(args):
         logger.info('setting model type')
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
-        tokenizer = tokenizer_class.from_pretrained(
-            args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
-            do_lower_case=args.do_lower_case,
-            cache_dir=args.cache_dir if args.cache_dir else None,
-        )
+        tokenizer = bioclinical_bert_Tokenizer
+
+        # tokenizer = tokenizer_class.from_pretrained(
+        #     args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
+        #     do_lower_case=args.do_lower_case,
+        #     cache_dir=args.cache_dir if args.cache_dir else None,
+        # )
 
         # process train features
         inp_trn_feat_path = os.path.join(args.input_data_dir, 'train_raw_texts.txt')
@@ -200,7 +202,9 @@ def main(args):
 
         # save trn features
         os.makedirs(args.output_data_dir, exist_ok=True)
-        out_trn_feat_path = path.join(args.output_data_dir, "X.trn.{}.{}.pkl".format(args.model_type, args.max_xseq_len))
+        out_trn_feat_path = path.join(args.output_data_dir, "X.trn.{}.pkl".format(args.model_type))
+        logger.info(
+            f'Created pickled training feat file for max seq len of {args.max_xseq_len}')
         with open(out_trn_feat_path, "wb") as fout:
             pickle.dump(trn_features, fout, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -220,7 +224,9 @@ def main(args):
         )
 
         # save tst features
-        out_tst_feat_path = path.join(args.output_data_dir, "X.tst.{}.{}.pkl".format(args.model_type, args.max_xseq_len))
+        out_tst_feat_path = path.join(args.output_data_dir, "X.tst.{}.pkl".format(args.model_type))
+        logger.info(
+            f'Created pickled test feat file for max seq len of {args.max_xseq_len}')
         with open(out_tst_feat_path, "wb") as fout:
             pickle.dump(tst_features, fout, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -308,7 +314,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        # default=128,  # NEED TO UPDATE, goes to default
+        default=128,
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"
@@ -334,7 +340,6 @@ if __name__ == "__main__":
         "--input-code-path",
         type=str,
         metavar="PATH", #UPDATED default
-        default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )
     parser.add_argument(
