@@ -19,7 +19,7 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-# ---- substitute with local copy eventually...
+# ---- can substitute with local copy eventually...
 
 
 # https://huggingface.co/emilyalsentzer
@@ -345,5 +345,5 @@ if __name__ == "__main__":
     )
     # parse argument
     args = parser.parse_args()
-    logger.info(f'{args}')
+    logger.info(f'Parsed Arguments:\n {args}')
     main(args)
