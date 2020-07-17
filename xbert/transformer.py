@@ -292,6 +292,7 @@ class TransformerMatcher(object):
         )
 
         args = parser.parse_args()
+        logger.info(f'Parsed Arguments:\n {args}')
         return {"parser": parser, "logger": logger, "args": args}
 
     @staticmethod
