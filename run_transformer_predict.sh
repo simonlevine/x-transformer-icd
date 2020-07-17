@@ -1,21 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+source create_conda_env_as_necessary.sh
 
 DATASET=$'mimiciii-14'
-DATA_DIR=../../data/intermediary-data/xbert_inputs
+DATA_DIR=../../data/intermediary-data/xbert_inputs/${DATASET}
 
-LABEL_NAME = $'pifa-tfidf-s0'
-MODEL_NAME = $'emilyalsentzer/Bio_ClinicalBERT'
+LABEL_NAME=$'pifa-tfidf-s0'
+MODEL_NAME=$'Bio_ClinicalBERT'
 EXP_NAME=${DATASET}.final
 
-PRED_NPZ_PATHS=""
-OUTPUT_DIR=saved_models/${DATASET}/${LABEL_NAME}
+OUTPUT_DIR=../../data/intermediary-data/xbert_outputs/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
 MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_NAME}
 RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_NAME}
 mkdir -p ${RANKER_DIR}
 
 # train linear ranker
-python -m xbert.ranker train \
+python xbert/ranker.py train \
     -x1 ${DATA_DIR}/X.trn.npz \
     -x2 ${MATCHER_DIR}/trn_embeddings.npy \
     -y ${DATA_DIR}/Y.trn.npz \
@@ -26,7 +27,7 @@ python -m xbert.ranker train \
 
 # predict final label ranking
 PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
-python -m xbert.ranker predict \
+python xbert/ranker.py predict \
     -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
     -x1 ${DATA_DIR}/X.tst.npz \
     -x2 ${MATCHER_DIR}/tst_embeddings.npy \
@@ -34,13 +35,12 @@ python -m xbert.ranker predict \
     -z ${MATCHER_DIR}/C_tst_pred.npz \
     -f 0 -t noop
 
-# append the prediction path (changed to just one here.)
-PRED_NPZ_PATHS="${PRED_NPZ_PATHS} ${PRED_NPZ_PATH}"
+PRED_NPZ_PATHS="${PRED_NPZ_PATH}"
 
 # final eval
 EVAL_DIR=results_transformer-large
 mkdir -p ${EVAL_DIR}
-python -u -m xbert.evaluator \
+python xbert/evaluator.py \
     -y ${DATA_DIR}/Y.tst.npz \
     -e -p ${PRED_NPZ_PATHS} \
     |& tee ${EVAL_DIR}/${EXP_NAME}.txt

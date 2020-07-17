@@ -42,7 +42,7 @@ done
 SEED=0
 LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
-python -u -m xbert.preprocess \
+python xbert/preprocess.py \
     --do_proc_label \
     -i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \

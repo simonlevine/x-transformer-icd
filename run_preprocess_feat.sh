@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source create_conda_env_as_necessary.sh
 source params.sh
