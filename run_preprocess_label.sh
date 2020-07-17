@@ -2,6 +2,8 @@
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
+MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
+MODEL_TYPE=$'bert'
 
 source create_conda_env_as_necessary.sh
 
@@ -24,7 +26,11 @@ python -m xbert.preprocess \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path} \
-    --max_xseq_len ${MAX_XSEQ_LEN}
+    --max_xseq_len ${MAX_XSEQ_LEN} \
+    --max_trunc_char 4096 \
+    --model_name_or_path ${MODEL_NAME} \
+    --model_type ${MODEL_TYPE} \
+
 
 
 # semantic label indexing
