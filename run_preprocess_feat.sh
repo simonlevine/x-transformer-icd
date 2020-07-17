@@ -3,7 +3,14 @@
 # DATASET=$1
 DATASET=$'mimiciii-14'
 # MODEL_TYPE=$2
-MAX_XSEQ_LEN=$'128'
+# MAX_XSEQ_LEN=$'128'
+
+function params {
+  ../.venv/bin/python -c \
+    "import yaml; y = yaml.safe_load(open('../params.yaml'))['xbert_model_training']['$1']; print(y)"
+}
+MAX_XSEQ_LEN=$(params max_seq_len)
+
 #$3 #NEED TO MODIFY THIS? number tokens, = 128 by default. Perhaps too short.
 
 MODEL_TYPE=$'bert'
