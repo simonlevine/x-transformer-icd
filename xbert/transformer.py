@@ -426,18 +426,22 @@ class TransformerMatcher(object):
                 # get pooled_output, which is the [CLS] embedding for the document
                 # assume self.model hasattr module because torch.nn.DataParallel
                 if get_hidden:
+                    try:
+                        module = self.model.module
+                    except AttributeError:
+                        module = self.model
                     if args.model_type == "bert": #type is BERT but model pulled in should be bioclinicalBERT
-                        pooled_output = self.model.module.bert.pooler(hidden_states[-1])
-                        pooled_output = self.model.module.dropout(pooled_output)
+                        pooled_output = module.bert.pooler(hidden_states[-1])
+                        pooled_output = module.dropout(pooled_output)
                         # logits = self.model.classifier(pooled_output)
                     elif args.model_type == "roberta":
-                        pooled_output = self.model.module.classifier.dropout(hidden_states[-1][:, 0, :])
-                        pooled_output = self.model.module.classifier.dense(pooled_output)
+                        pooled_output = module.classifier.dropout(hidden_states[-1][:, 0, :])
+                        pooled_output = module.classifier.dense(pooled_output)
                         pooled_output = torch.tanh(pooled_output)
-                        pooled_output = self.model.module.classifier.dropout(pooled_output)
+                        pooled_output = module.classifier.dropout(pooled_output)
                         # logits = self.model.classifier.out_proj(pooled_output)
                     elif args.model_type == "xlnet":
-                        pooled_output = self.model.module.sequence_summary(hidden_states[-1])
+                        pooled_output = module.sequence_summary(hidden_states[-1])
                         # logits = self.model.logits_proj(pooled_output)
                     else:
                         raise NotImplementedError("unknown args.model_type {}".format(args.model_type))
@@ -663,11 +667,14 @@ def main():
 
         # load fine-tuned model in the args.output_dir
         TransformerMatcher.set_device(args)
-        matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
+        _, num_labels = C_trn.shape
+        matcher = TransformerMatcher(num_clusters=num_labels)
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        matcher.config = config_class.from_pretrained(
+        config = config_class.from_pretrained(
             "emilyalsentzer/Bio_ClinicalBERT")  # args.output_dir)
+        config.num_labels = num_labels
+        matcher.config = config
         matcher.config.output_hidden_states = True
         model = model_class.from_pretrained(
             "emilyalsentzer/Bio_ClinicalBERT", config=matcher.config)

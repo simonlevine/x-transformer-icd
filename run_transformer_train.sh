@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# source create_conda_env_as_necessary.sh
+source create_conda_env_as_necessary.sh
 source params.sh
 
 CUDA_VISIBLE_DEVICES=0
@@ -44,13 +44,13 @@ LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
-sudo mkdir -p ${MODEL_DIR}
+mkdir -p ${MODEL_DIR}
 
 CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
     --do_train \
-    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
     -o ${MODEL_DIR} --overwrite_output_dir \
     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
@@ -58,7 +58,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     --max_steps ${MAX_STEPS} \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
-    --overwrite_output_dir \
+    --overwrite_output_dir #\
     # --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
 
 

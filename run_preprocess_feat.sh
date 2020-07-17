@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source create_conda_env_as_necessary.sh
+source params.sh
+
 # DATASET=$1
 DATASET=$'mimiciii-14'
 # MODEL_TYPE=$2
@@ -12,10 +15,8 @@ DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 
-source create_conda_env_as_necessary.sh
-
 mkdir -p ${PROC_DATA_DIR}
-python -u -m xbert.preprocess \
+python xbert/preprocess.py \
     --do_proc_feat \
     -i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
