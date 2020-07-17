@@ -28,7 +28,7 @@ python -m xbert.ranker train \
     -f 0 -ns 0 --mode ranker \
 
 # predict final label ranking, using transformer's predicted cluster scores
-PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
+PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz #OUTPUT
 python -m xbert.ranker predict \
     -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
     -x1 datasets/${DATASET}/X.tst.npz \
@@ -40,7 +40,7 @@ python -m xbert.ranker predict \
 
 # done
 
-# final eval
+# final eval, prec and recall
 EVAL_DIR=results_transformer
 mkdir -p ${EVAL_DIR}
 python -u -m xbert.evaluator \
