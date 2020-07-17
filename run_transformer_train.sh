@@ -36,6 +36,7 @@ GRAD_ACCU_STEPS=4
 # PER_DEVICE_VAL_BSZ=32
 # GRAD_ACCU_STEPS=2
 
+
 function params {
   ../.venv/bin/python -c \
     "import yaml; y = yaml.safe_load(open('../params.yaml'))['xbert_model_training']['$1']; print(y)"

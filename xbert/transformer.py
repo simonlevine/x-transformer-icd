@@ -447,6 +447,7 @@ class TransformerMatcher(object):
                 # get pooled_output, which is the [CLS] embedding for the document
                 # assume self.model hasattr module because torch.nn.DataParallel
                 if get_hidden:
+
                     if args.model_type == "bert":  # "type" is BERT but model pulled in should be fine-tuned bioclinicalBERT
                         if args.n_gpu > 1:
                          # assume self.model hasattr module because torch.nn.DataParallel. Else, just pull model.bert.
