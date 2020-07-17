@@ -314,7 +314,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        default=128,  # NEED TO UPDATE, goes to default
+        default=128,
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"

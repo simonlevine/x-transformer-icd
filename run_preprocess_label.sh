@@ -27,7 +27,7 @@ python -m xbert.preprocess \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path} \
     --max_xseq_len ${MAX_XSEQ_LEN} \
-    --max_trunc_char 4096 \
+    --max_trunc_char 4096 \ #default = 4096
     --model_name_or_path ${MODEL_NAME} \
     --model_type ${MODEL_TYPE} \
 
