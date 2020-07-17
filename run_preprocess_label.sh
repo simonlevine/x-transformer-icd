@@ -32,7 +32,6 @@ python -m xbert.preprocess \
     --model_type ${MODEL_TYPE} \
 
 
-
 # semantic label indexing
 SEED_LIST=( 0 1 2 )
 for SEED in "${SEED_LIST[@]}"; do
