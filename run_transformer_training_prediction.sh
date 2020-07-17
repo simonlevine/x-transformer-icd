@@ -34,12 +34,16 @@ GRAD_ACCU_STEPS=4
 # GRAD_ACCU_STEPS=2
 
 #sample / testing
-MAX_STEPS=10
-WARMUP_STEPS=3
-LOGGING_STEPS=2
-LEARNING_RATE=5e-1
+function params {
+  ../.venv/bin/python -c \
+    "import yaml; y = yaml.safe_load(open('../params.yaml'))['xbert_model_training']['$1']; print(y)"
+}
+MAX_STEPS=$(params max_steps)
+WARMUP_STEPS=$(params warmup_steps)
+LOGGING_STEPS=$(params logging_steps)
+LEARNING_RATE=$(params learning_rate)
 
-# #HYPERPARAMETERS for MIMIC: can change
+# #HYPERPARAMETERS for MIMIC:
 # MAX_STEPS=1000
 # WARMUP_STEPS=100
 # LOGGING_STEPS=50
