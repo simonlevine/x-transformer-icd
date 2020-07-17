@@ -93,25 +93,35 @@ def xbert_clean_label(label):
       return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 
-def xbert_create_label_map(icd_version='10') -> t.Tuple[t.List[str], t.List[str]]:
-    """creates a dataframe of all ICD10 labels and corresponding
-    descriptions in 2018 ICD code set.
+def xbert_create_label_map(icd_version='9'):
+    """creates a dataframe of all ICD9 or ICD10 labels and corresponding
+    descriptions in 2018 ICD code set (if 10).
     Note that this is inclusive of, but not limited to,
     the set of codes appearing in cases of MIMIC-iii."""
-    if icd_version != "10":
-        raise ValueError('Only ICD10 is currently supported.')
-    logger.info('Creating ICD and long title lists for xbert...')
+
+    logger.info(
+        f'Creating ICD {icd_version} and long title lists for xbert...')
+
     ##TODO: this block should be imported from format data
-    icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
-        (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True).dropna()
-    desc_labels = icd_equivalence_df['LONG_TITLE']
-    assert desc_labels.shape == desc_labels.dropna().shape
-    icd_labels = icd_equivalence_df['ICD10_CODE']
-    assert icd_labels.shape == icd_labels.dropna().shape
+
+    if icd_version == '10': #use general equivalnce mapping to create label map.
+        icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
+            (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True).dropna()
+        desc_labels = icd_equivalence_df['LONG_TITLE']
+        assert desc_labels.shape == desc_labels.dropna().shape
+        icd_labels = icd_equivalence_df['ICD10_CODE']
+        assert icd_labels.shape == icd_labels.dropna().shape
+
+    else:  # use icd9 labels directly from mimic dataset.
+        icd9_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+        desc_labels = icd9_df['LONG_TITLE']
+        assert desc_labels.shape == desc_labels.dropna().shape
+        icd_labels = icd9_df['ICD9_CODE']
+        assert icd_labels.shape == icd_labels.dropna().shape
+
     return icd_labels, desc_labels
 
-
-def xbert_prepare_Y_maps(df, df_subset, icd_labels):
+def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version='9'):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -129,7 +139,9 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels):
     hadm_ids = df.HADM_ID.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
     for idx, row in tqdm(df.iterrows(), unit="HADM id"):
-        Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+        if icd_version == '10':
+            Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+        else: Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
     return Y_.fillna(0)
 
 
