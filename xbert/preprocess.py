@@ -312,7 +312,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        # default=128,  # NEED TO UPDATE, goes to default
+        default=128,  # NEED TO UPDATE, goes to default
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"
@@ -338,7 +338,6 @@ if __name__ == "__main__":
         "--input-code-path",
         type=str,
         metavar="PATH", #UPDATED default
-        default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )
     parser.add_argument(

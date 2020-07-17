@@ -11,6 +11,7 @@ source create_conda_env_as_necessary.sh
 # construct label embedding
 DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
+MAX_XSEQ_LEN=$(params max_seq_len)
 
 label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
 
