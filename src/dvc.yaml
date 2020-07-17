@@ -85,3 +85,22 @@ stages:
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
       - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
+  xbert_ranker_and_eval:
+    cmd: cd ./auto-icd-transformers && ./run_transformer_predict.sh
+    deps:
+      - ./auto-icd-transformers/run_transformer_predict.sh
+      - ./auto-icd-transformers/environment.yml
+      - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
+      - ../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
+      - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
+      - ../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
+    outs:
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
+      - ../data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
