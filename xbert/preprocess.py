@@ -262,7 +262,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./datasets/mimiciii-14",
+        # default="./datasets/mimiciii-14",
         help="path to the dataset directory containing train_texts.txt and test_texts.txt",
     )
     parser.add_argument(
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./save_models/mimiciii-14/proc_data",
+        # default="./save_models/mimiciii-14/proc_data",
         help="directory for storing X.[trn|tst].[model-type].[xseq-len].pkl and C.[trn|tst].npz",
     )
     parser.add_argument(
@@ -291,7 +291,7 @@ if __name__ == "__main__":
         "-n",
         "--model_name_or_path",
         type=str,
-        default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
+        # default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
         help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
     )
     parser.add_argument(
@@ -308,7 +308,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        default=128,  # NEED TO UPDATE, possibly
+        # default=128,  # NEED TO UPDATE, goes to default
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"

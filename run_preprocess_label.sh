@@ -8,8 +8,6 @@ source create_conda_env_as_necessary.sh
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
 
-
-
 # construct label embedding
 DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
