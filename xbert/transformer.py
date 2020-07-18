@@ -179,13 +179,13 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-x_trn",
             "--trn_feat_path",
-            default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
+            # default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
             "-x_tst",
             "--tst_feat_path",
-            default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
+            # default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
@@ -198,7 +198,7 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-c_tst",
             "--tst_label_path",
-            default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
+            # default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
             type=str,
         )
         parser.add_argument(

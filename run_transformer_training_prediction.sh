@@ -73,8 +73,8 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
 # CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
 #     --do_eval -o ${MODEL_DIR} \
-#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
 #     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.pkl \
 #     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
 #     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}

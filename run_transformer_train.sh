@@ -66,7 +66,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
 # CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
 #     --nproc_per_node 1 xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
-#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
 #     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
 #     -o ${MODEL_DIR} --overwrite_output_dir \
 #     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
