@@ -1,4 +1,4 @@
 [submodule "src/auto-icd-transformers"]
-	branch = hook-up-max-seq-len
+	branch = master
 	path = src/auto-icd-transformers
 	url = git@github.com:jeremyadamsfisher/auto-icd-transformers.git
