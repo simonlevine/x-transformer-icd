@@ -671,13 +671,12 @@ def main():
         matcher = TransformerMatcher(num_clusters=num_labels)
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        config = config_class.from_pretrained(
-            "emilyalsentzer/Bio_ClinicalBERT")  # args.output_dir)
+        config = config_class.from_pretrained(args.output_dir) #config fix
         config.num_labels = num_labels
         matcher.config = config
         matcher.config.output_hidden_states = True
         model = model_class.from_pretrained(
-            "emilyalsentzer/Bio_ClinicalBERT", config=matcher.config)
+            args.output_dir, config=matcher.config)
         model.to(args.device)
         matcher.model = model
 
