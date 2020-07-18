@@ -1,9 +1,7 @@
+max_seq_len: 24
 prepare_for_xbert:
   subsampling: true
-xbert_label_embedding:
-  max_seq_len: 24
-xbert_feat_embedding:
-  max_seq_len: 24
+  icd_version: 10
 xbert_model_training:
   # max_steps: 1000
   # warmup_steps: 100
@@ -14,6 +12,3 @@ xbert_model_training:
   warmup_steps: 2
   logging_steps: 5
   learning_rate: 0.05
-  max_seq_len: 24
-xbert_trained_model_prediction:
-  max_seq_len: 24

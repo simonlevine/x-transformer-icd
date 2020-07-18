@@ -57,7 +57,6 @@ DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
 
-
 # output filepaths
 XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'
 XBERT_TRAIN_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt'
@@ -72,6 +71,10 @@ with open('params.yaml', 'r') as f:
 
 def main():
     subsampling_enabled = params['prepare_for_xbert']['subsampling']
+    icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
+    logger.info(f'Using ICD version {icd_version_specified}...')
+    assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
+    print(type(icd_version_specified))
     logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
     df_train, df_test = \
         format_data_for_training.construct_datasets(subsampling_enabled)
@@ -79,11 +82,13 @@ def main():
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
-    icd_labels, desc_labels = xbert_create_label_map(icd_version='10')
+    icd_labels, desc_labels = xbert_create_label_map(icd_version_specified)
     desc_labels = desc_labels.apply(xbert_clean_label)
 
-    Y_trn_map = xbert_prepare_Y_maps(df_train, 'training', icd_labels.tolist())
-    Y_tst_map = xbert_prepare_Y_maps(df_test, 'testing', icd_labels.tolist())
+    Y_trn_map = xbert_prepare_Y_maps(
+        df_train, 'training', icd_labels.tolist(), icd_version_specified)
+    Y_tst_map = xbert_prepare_Y_maps(
+        df_test, 'testing', icd_labels.tolist(), icd_version_specified)
 
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
@@ -93,7 +98,7 @@ def xbert_clean_label(label):
       return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 
-def xbert_create_label_map(icd_version='9'):
+def xbert_create_label_map(icd_version):
     """creates a dataframe of all ICD9 or ICD10 labels and corresponding
     descriptions in 2018 ICD code set (if 10).
     Note that this is inclusive of, but not limited to,
@@ -112,7 +117,7 @@ def xbert_create_label_map(icd_version='9'):
         icd_labels = icd_equivalence_df['ICD10_CODE']
         assert icd_labels.shape == icd_labels.dropna().shape
 
-    else:  # use icd9 labels directly from mimic dataset.
+    elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
         icd9_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
         desc_labels = icd9_df['LONG_TITLE']
         assert desc_labels.shape == desc_labels.dropna().shape
@@ -121,7 +126,8 @@ def xbert_create_label_map(icd_version='9'):
 
     return icd_labels, desc_labels
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version='9'):
+
+def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -141,7 +147,8 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version='9'):
     for idx, row in tqdm(df.iterrows(), unit="HADM id"):
         if icd_version == '10':
             Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
-        else: Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
+        elif icd_version == '9':
+            Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
     return Y_.fillna(0)
 
 
