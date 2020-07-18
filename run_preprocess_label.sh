@@ -30,7 +30,7 @@ python xbert/preprocess.py \
     --max_xseq_len ${MAX_XSEQ_LEN} \
     --max_trunc_char 4096 \
     --model_name_or_path ${MODEL_NAME} \
-    --model_type ${MODEL_TYPE}
+    -m ${MODEL_TYPE}
 
 
 # semantic label indexing
