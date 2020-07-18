@@ -65,6 +65,9 @@ XBERT_X_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz'
 XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
 XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
 XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
+DF_TRAIN_FP ='../data/intermediary-data/df_train.pkl'
+DF_TEST_FP = '../data/intermediary-data/df_test.pkl'
+
 
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
@@ -74,7 +77,6 @@ def main():
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
-    print(type(icd_version_specified))
     logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
     df_train, df_test = \
         format_data_for_training.construct_datasets(subsampling_enabled)
@@ -92,6 +94,14 @@ def main():
 
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
+
+    logger.info(
+        'Done preprocessing. Saving pickled dataframes to file for later postprocessing.'
+    )
+    df_train.to_pickle(DF_TRAIN_FP)
+    df_test.to_pickle(DF_TEST_FP)
+    logger.info('Done.')
+
 
 
 def xbert_clean_label(label):

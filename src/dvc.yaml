@@ -13,6 +13,8 @@ stages:
       - prepare_for_xbert.subsampling
       - prepare_for_xbert.icd_version
     outs:
+      - ../data/intermediary-data/df_train.pkl
+      - ../data/intermediary-data/df_test.pkl
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
       - ../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
