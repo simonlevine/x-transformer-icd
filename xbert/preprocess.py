@@ -117,9 +117,10 @@ def proc_feat(
     # convert raw text into tokens, and convert tokens into tok_ids
     # features: List[Dict(key,val)], where key=['inst_idx', 'input_ids', 'attention_mask', 'token_type_ids']
     features, xseq_lens = [], []
+    n_examples = len(xseq_list)
     for (inst_idx, xseq) in enumerate(xseq_list):
-        if inst_idx % 5000 == 0:
-            logger.info("Writing example %d" % (inst_idx))
+        if inst_idx % 1000 == 0:
+            logger.info(f"Writing example {inst_idx} of {n_examples}")
 
         # truncate long text by 4096 chars as they will exceed max_seq_len anyway
         inputs = tokenizer.encode_plus(
