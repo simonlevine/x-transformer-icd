@@ -20,7 +20,7 @@ mkdir -p ${RANKER_DIR}
 python xbert/ranker.py train \
     -x1 ${DATA_DIR}/X.trn.npz \
     -x2 ${MATCHER_DIR}/trn_embeddings.npy \
-    -y ${DATA_DIR}/${DATASET}/Y.trn.npz \
+    -y ${DATA_DIR}/Y.trn.npz \
     -z ${MATCHER_DIR}/C_trn_pred.npz \
     -c ${INDEXER_DIR}/code.npz \
     -o ${RANKER_DIR} -t 0.01 \
@@ -31,9 +31,9 @@ PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
 
 python xbert/ranker.py predict \
     -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
-    -x1 ${DATA_DIR}/${DATASET}/X.tst.npz \
+    -x1 ${DATA_DIR}/X.tst.npz \
     -x2 ${MATCHER_DIR}/tst_embeddings.npy \
-    -y ${DATA_DIR}/${DATASET}/Y.tst.npz \
+    -y ${DATA_DIR}/Y.tst.npz \
     -z ${MATCHER_DIR}/C_tst_pred.npz \
     -f 0 -t noop
 
