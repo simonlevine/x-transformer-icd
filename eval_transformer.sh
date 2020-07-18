@@ -1,18 +1,17 @@
 #!/bin/bash
 
 DATASET = $'mimiciii-14'
-DATA_DIR=./datasets/${DATASET}
+DATA_DIR=../../data/intermediary-data/xbert_inputs
 
-# LABEL_NAME_ARR=( pifa-tfidf-s0 pifa-neural-s0 text-emb-s0 )
-MODEL_NAME_ARR=( bert-large-cased-whole-word-masking roberta-large xlnet-large-cased )
+LABEL_NAME='pifa-tfidf-s0'
 EXP_NAME=${DATASET}.final
 
-LABEL_NAME = $'pifa-tfidf-s0'
-MODEL_NAME= $'Bio_ClinicalBERT'
+LABEL_NAME='pifa-tfidf-s0'
+MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
+MODEL_FOLDER_NAME='Bio_ClinicalBERT'
 
-PRED_NPZ_PATHS=""
 
-OUTPUT_DIR=pretrained_models/${DATASET}/${LABEL_NAME}
+OUTPUT_DIR=../../data/intermediary-data/xbert_outputs/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
 MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_NAME}
 RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_NAME}
@@ -29,7 +28,7 @@ python -m xbert.ranker train \
     -f 0 -ns 0 --mode ranker \
 
 # predict final label ranking, using transformer's predicted cluster scores
-PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
+PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz #OUTPUT
 python -m xbert.ranker predict \
     -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
     -x1 datasets/${DATASET}/X.tst.npz \
@@ -38,14 +37,13 @@ python -m xbert.ranker predict \
     -z ${MATCHER_DIR}/C_tst_pred.npz \
     -f 0 -t noop
 
-# append all prediction path
-PRED_NPZ_PATHS="${PRED_NPZ_PATHS} ${PRED_NPZ_PATH}"
+
 # done
 
-# final eval
+# final eval, prec and recall
 EVAL_DIR=results_transformer
 mkdir -p ${EVAL_DIR}
 python -u -m xbert.evaluator \
     -y datasets/${DATASET}/Y.tst.npz \
-    -e -p ${PRED_NPZ_PATHS} |& tee ${EVAL_DIR}/${EXP_NAME}.txt
+    -e -p ${PRED_NPZ_PATH} |& tee ${EVAL_DIR}/${EXP_NAME}.txt
 

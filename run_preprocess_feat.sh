@@ -3,10 +3,10 @@
 source create_conda_env_as_necessary.sh
 source params.sh
 
-# DATASET=$1
 DATASET=$'mimiciii-14'
-# MODEL_TYPE=$2
+
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
+
 
 MODEL_TYPE=$'bert'
 MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'

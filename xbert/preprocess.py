@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # encoding: utf-8
 
@@ -19,7 +20,7 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-# ---- substitute with local copy eventually...
+# ---- can substitute with local copy eventually...
 
 
 # https://huggingface.co/emilyalsentzer
@@ -177,11 +178,13 @@ def main(args):
         logger.info('setting model type')
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
-        tokenizer = tokenizer_class.from_pretrained(
-            args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
-            do_lower_case=args.do_lower_case,
-            cache_dir=args.cache_dir if args.cache_dir else None,
-        )
+        tokenizer = bioclinical_bert_Tokenizer
+
+        # tokenizer = tokenizer_class.from_pretrained(
+        #     args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
+        #     do_lower_case=args.do_lower_case,
+        #     cache_dir=args.cache_dir if args.cache_dir else None,
+        # )
 
         # process train features
         inp_trn_feat_path = os.path.join(args.input_data_dir, 'train_raw_texts.txt')
@@ -201,6 +204,9 @@ def main(args):
         # save trn features
         os.makedirs(args.output_data_dir, exist_ok=True)
         out_trn_feat_path = path.join(args.output_data_dir, "X.trn.{}.pkl".format(args.model_type))
+        logger.info(
+            f'Created pickled training feat file for max seq len of {args.max_xseq_len}')
+
         with open(out_trn_feat_path, "wb") as fout:
             pickle.dump(trn_features, fout, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -221,6 +227,8 @@ def main(args):
 
         # save tst features
         out_tst_feat_path = path.join(args.output_data_dir, "X.tst.{}.pkl".format(args.model_type))
+        logger.info(
+            f'Created pickled test feat file for max seq len of {args.max_xseq_len}')
         with open(out_tst_feat_path, "wb") as fout:
             pickle.dump(tst_features, fout, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -262,7 +270,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./datasets/mimiciii-14",
+        # default="./datasets/mimiciii-14",
         help="path to the dataset directory containing train_texts.txt and test_texts.txt",
     )
     parser.add_argument(
@@ -271,7 +279,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
         metavar="DIR",
-        default="./save_models/mimiciii-14/proc_data",
+        # default="./save_models/mimiciii-14/proc_data",
         help="directory for storing X.[trn|tst].[model-type].[xseq-len].pkl and C.[trn|tst].npz",
     )
     parser.add_argument(
@@ -291,7 +299,7 @@ if __name__ == "__main__":
         "-n",
         "--model_name_or_path",
         type=str,
-        default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
+        # default="bert-large-cased-whole-word-masking",  # NEED TO UPDATE
         help="Path to pre-trained model or shortcut name selected in the list: " + ", ".join(ALL_MODELS),
     )
     parser.add_argument(
@@ -308,7 +316,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--max_xseq_len",
-        default=128,  # NEED TO UPDATE, possibly
+        default=128,
         type=int,
         help="The maximum total input sequence length after WordPiece tokenization. \n"
         "Sequences longer than this will be truncated, and sequences shorter \n"
@@ -334,7 +342,6 @@ if __name__ == "__main__":
         "--input-code-path",
         type=str,
         metavar="PATH", #UPDATED default
-        default="./save_models/mimiciii-14/pifa-tfidf-a5-s0/indexer/code.npz",
         help="path to the npz file of the indexing codes (CSR, nr_labels * nr_codes)",
     )
     parser.add_argument(
@@ -345,5 +352,5 @@ if __name__ == "__main__":
     )
     # parse argument
     args = parser.parse_args()
-    logger.info(f'{args}')
+    logger.info(f'Parsed Arguments:\n {args}')
     main(args)

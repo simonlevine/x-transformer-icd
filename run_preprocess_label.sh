@@ -2,6 +2,8 @@
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
+MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
+MODEL_TYPE=$'bert'
 
 source create_conda_env_as_necessary.sh
 source params.sh
@@ -10,7 +12,6 @@ source params.sh
 #overwritten by Simon Levine for mimic.
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
-
 # construct label embedding
 DATA_DIR=../../data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
@@ -26,7 +27,11 @@ python xbert/preprocess.py \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path} \
-    --max_xseq_len ${MAX_XSEQ_LEN}
+    --max_xseq_len ${MAX_XSEQ_LEN} \
+    --max_trunc_char 4096 \
+    --model_name_or_path ${MODEL_NAME} \
+    --model_type ${MODEL_TYPE}
+
 
 # semantic label indexing
 SEED_LIST=( 0 1 2 )
@@ -49,6 +54,5 @@ python xbert/preprocess.py \
     -l ${LABEL_EMB_NAME} \
     -c ${INDEXER_DIR}/code.npz \
     --max_xseq_len ${MAX_XSEQ_LEN}
-
 #### end ####
 
