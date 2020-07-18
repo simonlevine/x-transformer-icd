@@ -1,4 +1,7 @@
+#!/usr/bin/env bash
+
 source create_conda_env_as_necessary.sh
+source params.sh
 
 NVIDIA_VISIBLE_DEVICES=0
 
@@ -14,6 +17,10 @@ MODEL_TYPE=$'bert'
 
 OUTPUT_DIR=../../data/intermediary-data/xbert_outputs
 PROC_DATA_DIR=../../data/intermediary-data/xbert_outputs/proc_data
+
+MAX_XSEQ_LEN=$(params "['max_seq_len']")
+
+
 
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
@@ -34,31 +41,32 @@ GRAD_ACCU_STEPS=4
 # GRAD_ACCU_STEPS=2
 
 #sample / testing
-function params {
-  ../.venv/bin/python -c \
-    "import yaml; y = yaml.safe_load(open('../params.yaml'))['xbert_model_training']['$1']; print(y)"
-}
-MAX_STEPS=$(params max_steps)
-WARMUP_STEPS=$(params warmup_steps)
-LOGGING_STEPS=$(params logging_steps)
-LEARNING_RATE=$(params learning_rate)
 
-MAX_XSEQ_LEN=$(params max_seq_len)
 
-# #HYPERPARAMETERS for MIMIC:
-# MAX_STEPS=1000
-# WARMUP_STEPS=100
-# LOGGING_STEPS=50
-# LEARNING_RATE=5e-5
+ #HYPERPARAMETERS for MIMIC: can change
+MAX_STEPS=$(params "['xbert_model_training']['max_steps']")
+WARMUP_STEPS=$(params "['xbert_model_training']['warmup_steps']")
+LOGGING_STEPS=$(params "['xbert_model_training']['logging_steps']")
+LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
+echo python xbert/transformer.py \
+    -m ${MODEL_TYPE} -n ${MODEL_NAME} \
+    --do_eval -o ${MODEL_DIR} \
+    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
+    -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
+    -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.pkl \
+    -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
+    --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
+
+
 # predict - single GPU
 CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
-    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-    -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+    -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.pkl \
     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
@@ -66,8 +74,8 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
 # CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
 #     --do_eval -o ${MODEL_DIR} \
-#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
 #     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_tst ${PROC_DATA_DIR}/X.tst.${MODEL_TYPE}.pkl \
 #     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
 #     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}

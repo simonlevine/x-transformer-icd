@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # encoding: utf-8
 
@@ -205,6 +206,7 @@ def main(args):
         out_trn_feat_path = path.join(args.output_data_dir, "X.trn.{}.pkl".format(args.model_type))
         logger.info(
             f'Created pickled training feat file for max seq len of {args.max_xseq_len}')
+
         with open(out_trn_feat_path, "wb") as fout:
             pickle.dump(trn_features, fout, protocol=pickle.HIGHEST_PROTOCOL)
 

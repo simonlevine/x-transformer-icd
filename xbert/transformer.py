@@ -179,13 +179,13 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-x_trn",
             "--trn_feat_path",
-            default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
+            # default="./save_models/Eurlex-4K/proc_data/X.trn.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
             "-x_tst",
             "--tst_feat_path",
-            default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
+            # default="./save_models/Eurlex-4K/proc_data/X.tst.bert.128.pkl",
             type=str,
         )
         parser.add_argument(
@@ -198,7 +198,7 @@ class TransformerMatcher(object):
         parser.add_argument(
             "-c_tst",
             "--tst_label_path",
-            default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz",  # was Y... ?
+            # default="./save_models/Eurlex-4K/proc_data/C.tst.pifa-tfidf-s0.npz", #was Y... ?
             type=str,
         )
         parser.add_argument(
@@ -448,19 +448,23 @@ class TransformerMatcher(object):
                 # get pooled_output, which is the [CLS] embedding for the document
                 # assume self.model hasattr module because torch.nn.DataParallel
                 if get_hidden:
-
-                    if args.model_type == "bert":  # "type" is BERT but model pulled in should be fine-tuned bioclinicalBERT
-                        if args.n_gpu > 1:
-                         # assume self.model hasattr module because torch.nn.DataParallel. Else, just pull model.bert.
-                            pooled_output = self.model.module.bert.pooler(
-                                hidden_states[-1])
-                            pooled_output = self.model.module.dropout(
-                                pooled_output)
-                        else:
-                            pooled_output = self.model.bert.pooler(
-                                hidden_states[-1])
-                            pooled_output = self.model.dropout(pooled_output)
+                    try:
+                        module = self.model.module
+                    except AttributeError:
+                        module = self.model
+                    if args.model_type == "bert": #type is BERT but model pulled in should be bioclinicalBERT
+                        pooled_output = module.bert.pooler(hidden_states[-1])
+                        pooled_output = module.dropout(pooled_output)
                         # logits = self.model.classifier(pooled_output)
+                    elif args.model_type == "roberta":
+                        pooled_output = module.classifier.dropout(hidden_states[-1][:, 0, :])
+                        pooled_output = module.classifier.dense(pooled_output)
+                        pooled_output = torch.tanh(pooled_output)
+                        pooled_output = module.classifier.dropout(pooled_output)
+                        # logits = self.model.classifier.out_proj(pooled_output)
+                    elif args.model_type == "xlnet":
+                        pooled_output = module.sequence_summary(hidden_states[-1])
+                        # logits = self.model.logits_proj(pooled_output)
                     else:
                         raise NotImplementedError(
                             "unknown args.model_type {}".format(args.model_type))
@@ -717,10 +721,13 @@ def main():
 
         # load fine-tuned model in the args.output_dir
         TransformerMatcher.set_device(args)
-        matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
+        _, num_labels = C_trn.shape
+        matcher = TransformerMatcher(num_clusters=num_labels)
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        matcher.config = config_class.from_pretrained(args.output_dir)
+        config = config_class.from_pretrained(args.output_dir) #config fix
+        config.num_labels = num_labels
+        matcher.config = config
         matcher.config.output_hidden_states = True
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)

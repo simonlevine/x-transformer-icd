@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source create_conda_env_as_necessary.sh
+source params.sh
 
 CUDA_VISIBLE_DEVICES=0
 NVIDIA_VISIBLE_DEVICES=0
@@ -17,6 +18,8 @@ MODEL_TYPE=$'bert'
 
 OUTPUT_DIR=../../data/intermediary-data/xbert_outputs
 PROC_DATA_DIR=../../data/intermediary-data/xbert_outputs/proc_data
+
+MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
@@ -35,27 +38,20 @@ GRAD_ACCU_STEPS=4
 # PER_DEVICE_VAL_BSZ=32
 # GRAD_ACCU_STEPS=2
 
-
-function params {
-  ../.venv/bin/python -c \
-    "import yaml; y = yaml.safe_load(open('../params.yaml'))['xbert_model_training']['$1']; print(y)"
-}
-MAX_STEPS=$(params max_steps)
-WARMUP_STEPS=$(params warmup_steps)
-LOGGING_STEPS=$(params logging_steps)
-LEARNING_RATE=$(params learning_rate)
-
-MAX_XSEQ_LEN=$(params max_seq_len)
+MAX_STEPS=$(params "['xbert_model_training']['max_steps']")
+WARMUP_STEPS=$(params "['xbert_model_training']['warmup_steps']")
+LOGGING_STEPS=$(params "['xbert_model_training']['logging_steps']")
+LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
-sudo mkdir -p ${MODEL_DIR}
+mkdir -p ${MODEL_DIR}
 
 CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
     --do_train \
-    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+    -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
     -o ${MODEL_DIR} --overwrite_output_dir \
     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
@@ -63,7 +59,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     --max_steps ${MAX_STEPS} \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
-    --overwrite_output_dir \
+    --overwrite_output_dir #\
     # --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
 
 
@@ -71,7 +67,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
 # CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
 #     --nproc_per_node 1 xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
-#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.${MAX_XSEQ_LEN}.pkl \
+#     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
 #     -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
 #     -o ${MODEL_DIR} --overwrite_output_dir \
 #     --per_device_train_batch_size ${PER_DEVICE_TRN_BSZ} \
