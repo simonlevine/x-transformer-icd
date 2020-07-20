@@ -78,8 +78,6 @@ def process_note(note):
         pass
         #print ('error', e)
 
-
-
 if len(sys.argv) < 2:
         print('Please specify the note category.')
         sys.exit()
@@ -97,6 +95,7 @@ print('Begin reading notes')
 # con = psycopg2.connect(dbname='mimic', host="/var/run/postgresql")
 # notes_query = "(select * from mimiciii.noteevents);"
 # notes = pd.read_sql_query(notes_query, con)
+
 notes = pd.read_csv(MIMIC_NOTES_FILE, index_col = 0)
 notes.columns = map(str.lower, notes.columns)
 
