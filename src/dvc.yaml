@@ -60,8 +60,8 @@ stages:
     params:
       - max_seq_len
     outs:
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - ../data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
   xbert_model_training:
     cmd: cd ./auto-icd-transformers && ./run_transformer_train.sh
     deps:
