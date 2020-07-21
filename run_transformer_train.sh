@@ -46,7 +46,7 @@ LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
 mkdir -p ${MODEL_DIR}
 
-CUDA_VISIBLE_DEVICES=0 $(PY_CONDA) xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=0 $PY_CONDA xbert/transformer.py \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
     --do_train \
@@ -63,7 +63,7 @@ CUDA_VISIBLE_DEVICES=0 $(PY_CONDA) xbert/transformer.py \
 
 
 # #train - multi-gpu
-# CUDA_VISIBLE_DEVICES=0 $(PY_CONDA) -m torch.distributed.launch \
+# CUDA_VISIBLE_DEVICES=0 $PY_CONDA -m torch.distributed.launch \
 #     --nproc_per_node 1 xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} --do_train \
 #     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \

@@ -44,8 +44,6 @@ from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
-# import yaml
-
 try:
     import format_data_for_training #script from auto-icd
 except ImportError:
@@ -53,20 +51,20 @@ except ImportError:
     from . import format_data_for_training
 
 # input filepaths.
-DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
-ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
+DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 # output filepaths
-XBERT_LABEL_MAP_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'
-XBERT_TRAIN_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt'
-XBERT_TEST_RAW_TEXTS_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt'
-XBERT_X_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz'
-XBERT_X_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
-XBERT_Y_TRN_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
-XBERT_Y_TST_FP = '../data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
-DF_TRAIN_FP ='../data/intermediary-data/df_train.pkl'
-DF_TEST_FP = '../data/intermediary-data/df_test.pkl'
+XBERT_LABEL_MAP_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt'
+XBERT_TRAIN_RAW_TEXTS_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt'
+XBERT_TEST_RAW_TEXTS_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt'
+XBERT_X_TRN_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz'
+XBERT_X_TST_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz'
+XBERT_Y_TRN_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz'
+XBERT_Y_TST_FP = './data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz'
+DF_TRAIN_FP ='./data/intermediary-data/df_train.pkl'
+DF_TEST_FP = './data/intermediary-data/df_test.pkl'
 
 
 with open('params.yaml', 'r') as f:

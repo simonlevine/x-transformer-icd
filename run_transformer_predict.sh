@@ -15,7 +15,7 @@ RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_FOLDER_NAME}
 mkdir -p ${RANKER_DIR}
 
 # train linear ranker
-$(PY_CONDA) xbert/ranker.py train \
+$PY_CONDA xbert/ranker.py train \
     -x1 ${DATA_DIR}/X.trn.npz \
     -x2 ${MATCHER_DIR}/trn_embeddings.npy \
     -y ${DATA_DIR}/Y.trn.npz \
@@ -27,7 +27,7 @@ $(PY_CONDA) xbert/ranker.py train \
 # predict final label ranking
 PRED_NPZ_PATH=${RANKER_DIR}/tst.pred.npz
 
-$(PY_CONDA) xbert/ranker.py predict \
+$PY_CONDA xbert/ranker.py predict \
     -m ${RANKER_DIR} -o ${PRED_NPZ_PATH} \
     -x1 ${DATA_DIR}/X.tst.npz \
     -x2 ${MATCHER_DIR}/tst_embeddings.npy \
@@ -38,7 +38,7 @@ $(PY_CONDA) xbert/ranker.py predict \
 # final eval
 EVAL_DIR=results_transformer-large
 mkdir -p ${EVAL_DIR}
-$(PY_CONDA) xbert/evaluator.py \
+$PY_CONDA xbert/evaluator.py \
     -y ${DATA_DIR}/Y.tst.npz \
     -e -p ${PRED_NPZ_PATH} \
     |& tee ${EVAL_DIR}/${EXP_NAME}.txt

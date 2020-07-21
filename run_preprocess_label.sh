@@ -20,7 +20,7 @@ label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 
-$(PY_CONDA) xbert/preprocess.py \
+$PY_CONDA xbert/preprocess.py \
 	--do_label_embedding \
 	-i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \
@@ -37,7 +37,7 @@ SEED_LIST=( 0 1 2 )
 for SEED in "${SEED_LIST[@]}"; do
     LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 	INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
-	$(PY_CONDA) -u -m xbert.indexer \
+	$PY_CONDA -u -m xbert.indexer \
 		-i ${PROC_DATA_DIR}/L.${LABEL_EMB}.npz \
 		-o ${INDEXER_DIR} --seed ${SEED}
 done
@@ -46,7 +46,7 @@ done
 SEED=0
 LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
-$(PY_CONDA) xbert/preprocess.py \
+$PY_CONDA xbert/preprocess.py \
     --do_proc_label \
     -i ${DATA_DIR}/xbert_inputs/${DATASET} \
     -o ${PROC_DATA_DIR} \

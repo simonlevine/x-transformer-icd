@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+eval "$(conda shell.bash hook)"
+
 python -m venv .venv \
 && ./.venv/bin/pip install -r requirements-app.txt
 
 pipx install "dvc[all]"
 
 conda env create -f environment.yml \
-&& conda activate $(CONDA_ENV_NAME) \
+&& conda activate $CONDA_ENV_NAME \
 && pip install -e . \
 && pip install appdirs attrs black boto3 \
                 botocore chardet click docutils \

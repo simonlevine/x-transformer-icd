@@ -4,10 +4,10 @@ import pandas as pd
 import numpy as np
 from loguru import logger
 
-DIAGNOSIS_CSV_FP = "../data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
-NOTE_EVENTS_CSV_FP = "../data/mimiciii-14/NOTEEVENTS.csv.gz"
-ICD9_KEY_FP = "../data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD_GEM_FP = "../data/ICD_general_equivalence_mapping.csv"
+DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+NOTE_EVENTS_CSV_FP = "./data/mimiciii-14/NOTEEVENTS.csv.gz"
+ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 
 def load_and_serialize_dataset():

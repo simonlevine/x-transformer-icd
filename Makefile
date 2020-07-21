@@ -1,4 +1,3 @@
-CONDA_ENV_NAME=`grep name: environment.yml | sed -e 's/name: //' | cut -d "'" -f 2 | cut -d '"' -f 2`
 OPTS=""
 
 default: app

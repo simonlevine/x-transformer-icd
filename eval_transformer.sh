@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATASET = $'mimiciii-14'
-DATA_DIR=../../data/intermediary-data/xbert_inputs
+DATA_DIR=.data/intermediary-data/xbert_inputs
 
 LABEL_NAME='pifa-tfidf-s0'
 EXP_NAME=${DATASET}.final
@@ -11,7 +11,7 @@ MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
 MODEL_FOLDER_NAME='Bio_ClinicalBERT'
 
 
-OUTPUT_DIR=../../data/intermediary-data/xbert_outputs/${LABEL_NAME}
+OUTPUT_DIR=./data/intermediary-data/xbert_outputs/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
 MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_NAME}
 RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_NAME}
