@@ -1,4 +1,4 @@
-max_seq_len: 512
+max_seq_len: 4096
 prepare_for_xbert:
   subsampling: false
   icd_version: 9
