@@ -1,4 +1,26 @@
-# Taming Pretrained Transformers for XMC problems
+# autoICD startup
+
+<div style="text-align: center; padding: 10px; margin: 10px; border-outline: 1px solid darkgray; border-radius: 3px; background-color: #ff3333; color: white;">
+  <strong>WARNING</strong> Never, ever open source this repository!
+</div>
+
+To get access to the MIMIC data, authenticate first:
+
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/autoicd-gcp-credentials.json"
+```
+
+This is performed automatically if [`direnv`](https://direnv.net/) is installed and enabled (`direnv allow .`).
+
+The base dependencies are [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) and [DVC](https://dvc.org). [pipx](https://github.com/pipxproject/pipx) and [direnv](https://github.com/direnv/direnv) are also recommended for quickly setting up a development enviornment.
+
+![autoICD](autoICD.jpeg)
+
+<hr/>
+
+# Original Readme
+
+## Taming Pretrained Transformers for XMC problems
 
 This is a README for the experimental code of the following paper
 >[Taming Pretrained Transformers for eXtreme Multi-label Text Classification](https://arxiv.org/abs/1905.02331)
