@@ -1,6 +1,6 @@
 max_seq_len: 4096
 prepare_for_xbert:
-  subsampling: false
+  subsampling: true
   icd_version: 9
 xbert_model_training:
   max_steps: 1000
