@@ -1,0 +1,11 @@
+# spec for user interface python
+pandas
+streamlit
+tqdm
+loguru
+scikit-learn
+better-exceptions
+altair
+pyyaml
+numpy
+scipy
