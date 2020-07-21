@@ -1,0 +1,10 @@
+pandas
+streamlit
+tqdm
+loguru
+scikit-learn
+better-exceptions
+altair
+pyyaml
+numpy
+scipy

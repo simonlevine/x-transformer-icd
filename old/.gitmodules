@@ -1,0 +1,4 @@
+[submodule "src/auto-icd-transformers"]
+	branch = longformer-large-4096
+	path = src/auto-icd-transformers
+	url = git@github.com:jeremyadamsfisher/auto-icd-transformers.git
