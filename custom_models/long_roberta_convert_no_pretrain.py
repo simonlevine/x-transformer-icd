@@ -9,12 +9,26 @@ from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
 MODEL_OUT_DIR = 'custom_models'
+LOCAL_ATTN_WINDOW = 512
+GLOBAL_MAX_POS = 4096
 
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
     base_model_name = 'biomed_roberta_base'
-    convert_biomed_roberta_to_long(
-        MODEL_OUT_DIR, base_model_name, base_model_name_HF, 512, 4096)
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{GLOBAL_MAX_POS}'
+
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
+
+    logger.info(
+        f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
+
+    model, tokenizer, config = create_long_model(
+        model_specified=base_model_name_HF, attention_window=LOCAL_ATTN_WINDOW, max_pos=GLOBAL_MAX_POS)
+        
+    model.save_pretrained(model_path)
+    tokenizer.save_pretrained(model_path)
+    config.save_pretrained(model_path)
 
 class RobertaLongSelfAttention(LongformerSelfAttention):
     def forward(
@@ -91,19 +105,6 @@ def create_long_model(model_specified, attention_window, max_pos):
         layer.attention.self = longformer_self_attn
 
     return model, tokenizer, config
-
-
-def convert_biomed_roberta_to_long(base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
-    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{global_attn_size}'
-    if not os.path.exists(model_path):
-        os.makedirs(model_path)
-    logger.info(
-        f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
-    model, tokenizer, config = create_long_model(model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
-    model.save_pretrained(model_path)
-    tokenizer.save_pretrained(model_path)
-    config.save_pretrained(model_path)
-
 
 if __name__ == "__main__":
     main()
