@@ -11,7 +11,7 @@ init:  ## set up development enviornment
 uninstall:  ## tear down development enviornment
 	eval "$$(conda shell.bash hook)" \
 	&& conda deactivate \
-	&& conda remove -y -n $$CONDA_ENV_NAME --all
+	&& conda remove -y -n $(CONDA_ENV_NAME) --all
 	rm -rf .venv
 train:  ## model training
 	dvc repro
