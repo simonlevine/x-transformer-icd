@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 DATASET=$'mimiciii-14'
 DATA_DIR=./data/intermediary-data/xbert_inputs/${DATASET}
 
@@ -10,8 +11,6 @@ EXP_NAME=${DATASET}.final
 
 OUTPUT_DIR=./data/intermediary-data/xbert_outputs/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
-MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_FOLDER_NAME}
-RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_FOLDER_NAME}
 MATCHER_DIR=${OUTPUT_DIR}/matcher
 RANKER_DIR=${OUTPUT_DIR}/ranker
 mkdir -p ${RANKER_DIR}
