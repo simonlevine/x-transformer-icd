@@ -2,12 +2,19 @@ import logging
 import os
 import math
 from dataclasses import dataclass, field
-from transformers import RobertaForMaskedLM, RobertaTokenizerFast, TextDataset, DataCollatorForLanguageModeling, Trainer
+from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+MODEL_OUT_FPATH = '../custom_models'
+
+def main():
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=logging.INFO)
+    model_specified = 'allenai/biomed_roberta_base'
+    convert_biomed_roberta_to_long(
+        MODEL_OUT_FPATH, model_specified, 512, 4096)
+
 
 
 class RobertaLongSelfAttention(LongformerSelfAttention):
@@ -22,8 +29,7 @@ class RobertaLongSelfAttention(LongformerSelfAttention):
     ):
         return super().forward(hidden_states, attention_mask=attention_mask, output_attentions=output_attentions)
 
-
-class RobertaLongForMaskedLM(RobertaForMaskedLM):
+class RobertaLongModel(RobertaModel):
     """RobertaLongForMaskedLM represents the "long" version of the RoBERTa model.
      It replaces BertSelfAttention with RobertaLongSelfAttention, which is 
      a thin wrapper around LongformerSelfAttention."""
@@ -34,15 +40,7 @@ class RobertaLongForMaskedLM(RobertaForMaskedLM):
             layer.attention.self = RobertaLongSelfAttention(config, layer_id=i)
 
 
-class RobertaLongForMaskedLM(RobertaForMaskedLM):
-    def __init__(self, config):
-        super().__init__(config)
-        for i, layer in enumerate(self.roberta.encoder.layer):
-            # replace the `modeling_bert.BertSelfAttention` object with `LongformerSelfAttention`
-            layer.attention.self = RobertaLongSelfAttention(config, layer_id=i)
-
-
-def create_long_model(model_specified, save_model_to, attention_window, max_pos):
+def create_long_model(save_model_to, model_specified, attention_window, max_pos):
     """Starting from the `roberta-base` (or similar) checkpoint, the following function converts it into an instance of `RobertaLong`.
      It makes the following changes:
         1)extend the position embeddings from `512` positions to `max_pos`. In Longformer, we set `max_pos=4096`
@@ -55,7 +53,7 @@ def create_long_model(model_specified, save_model_to, attention_window, max_pos)
         Check tables 6 and 11 in [the paper](https://arxiv.org/pdf/2004.05150.pdf) to get a sense of 
         the expected performance of this model before pretraining."""
 
-    model = RobertaForMaskedLM.from_pretrained(model_specified)
+    model = RobertaModel.from_pretrained(model_specified)
     tokenizer = RobertaTokenizerFast.from_pretrained(
         model_specified, model_max_length=max_pos)
     config = model.config
@@ -99,23 +97,6 @@ def create_long_model(model_specified, save_model_to, attention_window, max_pos)
     return model, tokenizer
 
 
-def copy_proj_layers(model):
-    for i, layer in enumerate(model.roberta.encoder.layer):
-        layer.attention.self.query_global = layer.attention.self.query
-        layer.attention.self.key_global = layer.attention.self.key
-        layer.attention.self.value_global = layer.attention.self.value
-    return model
-
-
-@dataclass
-class ModelArgs:
-    attention_window: int = field(
-        default=512, metadata={"help": "Size of attention window"})
-    max_pos: int = field(default=4096, metadata={"help": "Maximum position"})
-
-parser = HfArgumentParser((TrainingArguments, ModelArgs,))
-
-
 def convert_biomed_roberta_to_long(spec_model, local_attn_window=512, global_attn_size=4096):
     model_path = f'{training_args.output_dir}/{spec_model}-{model_args.max_pos}'
     if not os.path.exists(model_path):
@@ -123,6 +104,9 @@ def convert_biomed_roberta_to_long(spec_model, local_attn_window=512, global_att
     logger.info(
         f'Converting roberta-base into {spec_model}-{global_attn_size}')
     model, tokenizer = create_long_model(
-        save_model_to=model_path, attention_window=local_attn_window, max_pos=global_attn_size)
+        save_model_to=model_path, model_specified = spec_model, attention_window=local_attn_window, max_pos=global_attn_size)
     logger.info(f'Saving the model from {model_path}')
 
+
+if __name__ == "__main__":
+    main()

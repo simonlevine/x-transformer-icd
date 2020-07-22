@@ -8,7 +8,6 @@ import torch.nn.functional as F
 
 from transformers.file_utils import add_start_docstrings
 
-#NEED TO UPDATE #NEED TO UPDATE #NEED TO UPDATE
 
 from transformers import(
     LongformerTokenizer,
