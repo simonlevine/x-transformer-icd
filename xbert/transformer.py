@@ -68,19 +68,19 @@ from xbert.modeling import LongformerForXMLC  # truncated to just have bert mode
 
 from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
 logger.info(
-    "loading Longformer tokenizer, model, etc. + huggingface ...")
+    "loading Longformer tokenizer, model, and config. ...")
 
 longformer_tokenizer = LongformerTokenizer.from_pretrained(
-    'allenai/longformer-base-4096', gradient_checkpointing=True, return_token_type_ids=True) #must return token ids to avert error
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
 longformer_model = LongformerModel.from_pretrained(
-    'allenai/longformer-base-4096', gradient_checkpointing=True)
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
-    'allenai/longformer-base-4096', gradient_checkpointing=True)
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 
 
 # global variable within the module
 
-ALL_MODELS = ('allenai/longformer-large-4096')
+ALL_MODELS = ('custom_models/biomed_roberta_base-4096')
 
 logger.info('building model class:\n ( \
     longformer_config, \

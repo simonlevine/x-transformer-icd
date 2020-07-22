@@ -16,9 +16,9 @@ from transformers import(
     )
 
 longformer_model = LongformerModel.from_pretrained(
-    'allenai/longformer-base-4096', gradient_checkpointing=True)
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
-    'allenai/longformer-base-4096', gradient_checkpointing=True)
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 #ensure these are actuallly used below...
 
 from transformers.modeling_utils import SequenceSummary
