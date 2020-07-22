@@ -14,7 +14,7 @@ def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
     base_model_name = 'biomed_roberta_base'
     convert_biomed_roberta_to_long(
-        MODEL_OUT_FPATH, base_model_name, base_model_name_HF, 512, 4096)
+        MODEL_OUT_DIR, base_model_name, base_model_name_HF, 512, 4096)
 
 class RobertaLongSelfAttention(LongformerSelfAttention):
     def forward(
@@ -93,7 +93,7 @@ def create_long_model(model_specified, attention_window, max_pos):
     return model, tokenizer, config
 
 
-def convert_biomed_roberta_to_long(save_model_to, base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
+def convert_biomed_roberta_to_long(base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
     model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{global_attn_size}'
     if not os.path.exists(model_path):
         os.makedirs(model_path)
