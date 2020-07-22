@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
+source params.sh
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
-MODEL_NAME=$"allenai/longformer-base-4096"
+MODEL_NAME=$(params "['model_name']")
 MODEL_TYPE=$'longformer'
-
-source params.sh
 
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.

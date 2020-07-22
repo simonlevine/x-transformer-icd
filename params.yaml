@@ -1,6 +1,7 @@
 # max_seq_len: 4096
 max_seq_len: 24
-
+model_name: 'custom_models/biomed_roberta_base-4096'
+#model_name: 'allenai/longformer-base-4096'
 prepare_for_xbert:
   subsampling: true
   icd_version: 9

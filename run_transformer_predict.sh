@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+source params.sh
 
 DATASET=$'mimiciii-14'
 DATA_DIR=./data/intermediary-data/xbert_inputs/${DATASET}
 
 LABEL_NAME=$'pifa-tfidf-s0'
-MODEL_NAME="allenai/longformer-base-4096"
+MODEL_NAME=$(params "['model_name']")
 MODEL_FOLDER_NAME='longformer'
 EXP_NAME=${DATASET}.final
 

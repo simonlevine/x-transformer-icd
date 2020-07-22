@@ -11,7 +11,7 @@ GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
-MODEL_NAME='allenai/longformer-base-4096'
+MODEL_NAME=$(params "['model_name']")
 MODEL_FOLDER_NAME='longformer'
 MODEL_TYPE=$'longformer'
 

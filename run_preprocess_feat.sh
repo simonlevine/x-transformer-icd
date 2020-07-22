@@ -5,10 +5,8 @@ source params.sh
 DATASET=$'mimiciii-14'
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
-
-
 MODEL_TYPE=$'longformer'
-MODEL_NAME=$'allenai/longformer-base-4096'
+MODEL_NAME=$(params "['model_name']")
 
 DATA_DIR=./data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
