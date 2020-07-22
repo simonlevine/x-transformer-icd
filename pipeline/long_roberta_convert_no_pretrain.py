@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from loguru import logger
 import os
 import math
