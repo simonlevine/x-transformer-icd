@@ -11,10 +11,10 @@ from transformers.modeling_longformer import LongformerSelfAttention
 MODEL_OUT_FPATH = '../custom_models'
 
 def main():
-    model_specified = 'allenai/biomed_roberta_base'
+    base_model_name_HF = 'allenai/biomed_roberta_base'
     base_model_name = 'biomed_roberta_base'
     convert_biomed_roberta_to_long(
-        MODEL_OUT_FPATH, base_model_name, 512, 4096)
+        MODEL_OUT_FPATH, base_model_name, base_model_name_HF, 512, 4096)
 
 
 class RobertaLongSelfAttention(LongformerSelfAttention):
@@ -97,14 +97,14 @@ def create_long_model(save_model_to, model_specified, attention_window, max_pos)
     return model, tokenizer
 
 
-def convert_biomed_roberta_to_long(save_model_to, base_model_name, local_attn_window=512, global_attn_size=4096):
+def convert_biomed_roberta_to_long(save_model_to, base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
     model_path = f'{save_model_to}/{base_model_name}-{global_attn_size}'
     if not os.path.exists(model_path):
         os.makedirs(model_path)
     logger.info(
         f'Converting roberta-base into {base_model_name}-{global_attn_size}')
     model, tokenizer = create_long_model(
-        save_model_to=model_path, model_specified=base_model_name, attention_window=local_attn_window, max_pos=global_attn_size)
+        save_model_to=model_path, model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
     logger.info(f'Saving the model from {model_path}')
 
 
