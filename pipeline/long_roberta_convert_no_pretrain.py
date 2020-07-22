@@ -104,7 +104,7 @@ def convert_biomed_roberta_to_long(save_model_to, base_model_name, local_attn_wi
     logger.info(
         f'Converting roberta-base into {base_model_name}-{global_attn_size}')
     model, tokenizer = create_long_model(
-        save_model_to=model_path, model_specified = spec_model, attention_window=local_attn_window, max_pos=global_attn_size)
+        save_model_to=model_path, model_specified=base_model_name, attention_window=local_attn_window, max_pos=global_attn_size)
     logger.info(f'Saving the model from {model_path}')
 
 
