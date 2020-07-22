@@ -8,7 +8,7 @@ from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCo
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
-MODEL_OUT_FPATH = './custom_models'
+MODEL_OUT_FPATH = '~/auto-icd-transformers/custom_models'
 
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
