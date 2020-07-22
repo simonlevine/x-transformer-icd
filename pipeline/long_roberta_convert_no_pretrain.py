@@ -8,7 +8,7 @@ from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCo
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
-MODEL_OUT_FPATH = '../custom_models'
+MODEL_OUT_FPATH = './custom_models'
 
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
@@ -39,7 +39,7 @@ class RobertaLongModel(RobertaModel):
             layer.attention.self = RobertaLongSelfAttention(config, layer_id=i)
 
 
-def create_long_model(save_model_to, model_specified, attention_window, max_pos):
+def create_long_model(model_specified, attention_window, max_pos):
     """Starting from the `roberta-base` (or similar) checkpoint, the following function converts it into an instance of `RobertaLong`.
      It makes the following changes:
         1)extend the position embeddings from `512` positions to `max_pos`. In Longformer, we set `max_pos=4096`
@@ -90,21 +90,20 @@ def create_long_model(save_model_to, model_specified, attention_window, max_pos)
 
         layer.attention.self = longformer_self_attn
 
-    logger.info(f'saving model to {save_model_to}')
-    model.save_pretrained(save_model_to)
-    tokenizer.save_pretrained(save_model_to)
-    return model, tokenizer
+    return model, tokenizer, config
 
 
 def convert_biomed_roberta_to_long(save_model_to, base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
     model_path = f'{save_model_to}/{base_model_name}-{global_attn_size}'
-    # if not os.path.exists(model_path):
-    os.makedirs(model_path)
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
     logger.info(
         f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
-    model, tokenizer = create_long_model(
-        save_model_to=model_path, model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
-    logger.info(f'Saving the model from {model_path}')
+    model, tokenizer, config = create_long_model(model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
+    model.save_pretrained(model_path)
+    tokenizer.save_pretrained(model_path)
+    config.save_pretrained(model_path)
+
 
 if __name__ == "__main__":
     main()
