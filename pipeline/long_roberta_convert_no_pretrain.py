@@ -16,7 +16,6 @@ def main():
     convert_biomed_roberta_to_long(
         MODEL_OUT_FPATH, base_model_name, base_model_name_HF, 512, 4096)
 
-
 class RobertaLongSelfAttention(LongformerSelfAttention):
     def forward(
         self,
