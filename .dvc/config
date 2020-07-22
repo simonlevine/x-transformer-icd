@@ -1,0 +1,4 @@
+[core]
+    remote = gs
+['remote "gs"']
+    url = gs://icd-ml-bucket-2

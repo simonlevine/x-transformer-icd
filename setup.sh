@@ -1,19 +1,19 @@
-#!/bin/bash
-git clone --recursive -b training-on-sample https://simonlevine:viphuK-tybfiv-4guxqa@github.com/jeremyadamsfisher/auto-icd.git
-git submodule update --recursive --remote
-pip install dvc[gcp]
-cd auto-icd
-export GOOGLE_APPLICATION_CREDENTIALS=$"autoicd-gcp-credentials.json"
+#!/usr/bin/env bash
 
+eval "$(conda shell.bash hook)"
 
-cd auto-icd-transformers
-conda env create -f environment.yml
-conda activate pt1.2_xmlc_transformer
-pip install -e . loguru
-python setup.py install --force
-pip install -U transformers
+python -m venv .venv \
+&& ./.venv/bin/pip install -r requirements-app.txt
 
-cd .. && make init
+pipx install "dvc[all]"
 
-NVIDIA_VISIBLE_DEVICES=0
-CUDA_VISIBLE_DEVICES=0
+conda env create -f environment.yml \
+&& conda activate $CONDA_ENV_NAME \
+&& pip install -e . \
+&& pip install appdirs attrs black boto3 \
+                botocore chardet click docutils \
+                idna jmespath pathspec python-dateutil \
+                regex requests s3transfer sacremoses \
+                sentencepiece toml torch tqdm transformers \
+                typed-ast urllib3 loguru \
+&& python setup.py install --force

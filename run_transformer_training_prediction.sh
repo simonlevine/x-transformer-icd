@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-source create_conda_env_as_necessary.sh
 source params.sh
 
 NVIDIA_VISIBLE_DEVICES=0
@@ -15,12 +14,10 @@ MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
 MODEL_FOLDER_NAME='Bio_ClinicalBERT'
 MODEL_TYPE=$'bert'
 
-OUTPUT_DIR=../../data/intermediary-data/xbert_outputs
-PROC_DATA_DIR=../../data/intermediary-data/xbert_outputs/proc_data
+OUTPUT_DIR=./data/intermediary-data/xbert_outputs
+PROC_DATA_DIR=./data/intermediary-data/xbert_outputs/proc_data
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
-
-
 
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
@@ -50,7 +47,7 @@ LOGGING_STEPS=$(params "['xbert_model_training']['logging_steps']")
 LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher/${MODEL_FOLDER_NAME}
-echo python xbert/transformer.py \
+echo $PY_CONDA xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
@@ -61,7 +58,7 @@ echo python xbert/transformer.py \
 
 
 # predict - single GPU
-CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
+CUDA_VISIBLE_DEVICES=0 $PY_CONDA xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
@@ -71,7 +68,7 @@ CUDA_VISIBLE_DEVICES=0 python xbert/transformer.py \
     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
 # # predict - multi GPU
-# CUDA_VISIBLE_DEVICES=${GPID} python -u xbert/transformer.py \
+# CUDA_VISIBLE_DEVICES=${GPID} $PY_CONDA -u xbert/transformer.py \
 #     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
 #     --do_eval -o ${MODEL_DIR} \
 #     -x_trn ${PROC_DATA_DIR}/X.trn.${MODEL_TYPE}.pkl \
