@@ -35,7 +35,7 @@ class RobertaLongModel(RobertaModel):
      a thin wrapper around LongformerSelfAttention."""
     def __init__(self, config):
         super().__init__(config)
-        for i, layer in enumerate(self.roberta.encoder.layer):
+        for i, layer in enumerate(self.encoder.layer):
             # replace the `modeling_bert.BertSelfAttention` object with `LongformerSelfAttention`
             layer.attention.self = RobertaLongSelfAttention(config, layer_id=i)
 
@@ -61,25 +61,25 @@ def create_long_model(save_model_to, model_specified, attention_window, max_pos)
     # extend position embeddings
     tokenizer.model_max_length = max_pos
     tokenizer.init_kwargs['model_max_length'] = max_pos
-    current_max_pos, embed_size = model.roberta.embeddings.position_embeddings.weight.shape
+    current_max_pos, embed_size = model.embeddings.position_embeddings.weight.shape
     max_pos += 2  # NOTE: RoBERTa has positions 0,1 reserved, so embedding size is max position + 2
     config.max_position_embeddings = max_pos
     assert max_pos > current_max_pos
     # allocate a larger position embedding matrix
-    new_pos_embed = model.roberta.embeddings.position_embeddings.weight.new_empty(
+    new_pos_embed = model.embeddings.position_embeddings.weight.new_empty(
         max_pos, embed_size)
     # copy position embeddings over and over to initialize the new position embeddings
     k = 2
     step = current_max_pos - 2
     while k < max_pos - 1:
         new_pos_embed[k:(
-            k + step)] = model.roberta.embeddings.position_embeddings.weight[2:]
+            k + step)] = model.embeddings.position_embeddings.weight[2:]
         k += step
-    model.roberta.embeddings.position_embeddings.weight.data = new_pos_embed
+    model.embeddings.position_embeddings.weight.data = new_pos_embed
 
     # replace the `modeling_bert.BertSelfAttention` object with `LongformerSelfAttention`
     config.attention_window = [attention_window] * config.num_hidden_layers
-    for i, layer in enumerate(model.roberta.encoder.layer):
+    for i, layer in enumerate(model.encoder.layer):
         longformer_self_attn = LongformerSelfAttention(config, layer_id=i)
         longformer_self_attn.query = layer.attention.self.query
         longformer_self_attn.key = layer.attention.self.key
@@ -102,11 +102,10 @@ def convert_biomed_roberta_to_long(save_model_to, base_model_name, base_model_na
     if not os.path.exists(model_path):
         os.makedirs(model_path)
     logger.info(
-        f'Converting roberta-base into {base_model_name}-{global_attn_size}')
+        f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
     model, tokenizer = create_long_model(
         save_model_to=model_path, model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
     logger.info(f'Saving the model from {model_path}')
-
 
 if __name__ == "__main__":
     main()
