@@ -1,12 +1,12 @@
 stages:
-  initialize_environment:
-    cmd: make init && direnv allow .
-    deps:
-      - setup.sh
-      - requirements-app.txt
-      - environment.yml
-      - .envrc
-      - xbert/
+  # initialize_environment:
+  #   cmd: make uninstall && make init && direnv allow .
+  #   deps:
+  #     - setup.sh
+  #     - requirements-app.txt
+  #     - environment.yml
+  #     - .envrc
+  #     - xbert/
   convert_longformer:
     cmd: $PY_SECONDARY custom_models/long_roberta_convert_no_pretrain.py
     outs:
