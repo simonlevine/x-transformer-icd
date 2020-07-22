@@ -731,7 +731,7 @@ def main():
         config = config_class.from_pretrained(args.output_dir, gradient_checkpointing=True) #config fix
         config.num_labels = num_labels
         matcher.config = config
-        matcher.config.output_hidden_states = True
+        matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)
         model.to(args.device)
