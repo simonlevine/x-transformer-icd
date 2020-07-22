@@ -17,4 +17,4 @@ pip install -e . \
                 sentencepiece toml torch tqdm transformers \
                 typed-ast urllib3 loguru \
 && python setup.py install --force
-&& pytorch torchvision cudatoolkit=10.1 -c pytorch 
+&& conda install pytorch torchvision cudatoolkit=10.1 -c pytorch 
