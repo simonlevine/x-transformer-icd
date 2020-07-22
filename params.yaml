@@ -6,11 +6,11 @@ prepare_for_xbert:
   subsampling: true
   icd_version: 9
 xbert_model_training:
-  max_steps: 10
-  warmup_steps: 100
-  logging_steps: 50
-  learning_rate: 0.00005
   # max_steps: 10
-  # warmup_steps: 2
-  # logging_steps: 5
-  # learning_rate: 0.05
+  # warmup_steps: 100
+  # logging_steps: 50
+  # learning_rate: 0.00005
+  max_steps: 10
+  warmup_steps: 2
+  logging_steps: 5
+  learning_rate: 0.05
