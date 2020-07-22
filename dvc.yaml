@@ -65,15 +65,15 @@ stages:
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
   xbert_model_training:
     cmd: ./run_transformer_train.sh
     deps:
       - xbert/transformer.py
       - run_transformer_train.sh
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
@@ -85,8 +85,8 @@ stages:
     cmd: ./run_transformer_training_prediction.sh
     deps:
       - run_transformer_training_prediction.sh
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
