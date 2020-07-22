@@ -20,38 +20,25 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
+from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+logger.info(
+    "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
+
 # ---- can substitute with local copy eventually...
-
-
-# https://huggingface.co/emilyalsentzer
-
-# HUGGINGFACE:
-logger.info('Loading pre-trained BioClinicalBERT tokenizer (1/4)...')
-bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #or local path.
-logger.info('Loading pre-trained BioClinicalBERT model (2/4)...')
-bioclinical_bert_Model = AutoModel.from_pretrained("emilyalsentzer/Bio_ClinicalBERT") #base model.
-logger.info('Loading pre-trained BioClinicalBERT config (3/4)...')
-bioclinical_bert_Config = AutoConfig.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
-logger.info('Loading pre-trained BioClinicalBERT model-for-sequence-classification (4/4)...')
-# bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_config(bioclinical_bert_Config)
-bioclinical_bert_ForSequenceClassification = AutoModelForSequenceClassification.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
 
 
 from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
 )
 
-ALL_MODELS = 'Bio_ClinicalBERT'
-#  sum(
-#     (tuple(conf.pretrained_config_archive_map.keys()) for conf in (
-#         bioclinical_bert_Config,)),
-#     (),
-# )
+ALL_MODELS = 'longformer'
+
 
 MODEL_CLASSES = {
-    "bert": (bioclinical_bert_Config, bioclinical_bert_ForSequenceClassification, bioclinical_bert_Tokenizer),
+    "longformer": (
+    LongformerConfig,
+    LongformerForSequenceClassification,
+    LongformerTokenizer),
 }
 
 
@@ -128,6 +115,7 @@ def proc_feat(
             text_pair=None,
             add_special_tokens=True,
             max_length=args.max_xseq_len,
+            return_token_type_ids=True, #CHANGED
             truncation=True, #CHANGED
         )
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
@@ -173,19 +161,17 @@ def main(args):
 
     if args.do_label_embedding:
         run_label_embedding(args)
-
     elif args.do_proc_feat:
         # load pretrained model tokenizers
         logger.info('setting model type')
         args.model_type = args.model_type.lower()
-        config_class, model_class, tokenizer_class = MODEL_CLASSES['bert'] #rgs.model_type]
-        tokenizer = bioclinical_bert_Tokenizer
+        config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        # tokenizer = tokenizer_class.from_pretrained(
-        #     args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
-        #     do_lower_case=args.do_lower_case,
-        #     cache_dir=args.cache_dir if args.cache_dir else None,
-        # )
+        tokenizer = tokenizer_class.from_pretrained(
+            args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
+            do_lower_case=args.do_lower_case,
+            cache_dir=args.cache_dir if args.cache_dir else None, return_token_type_ids=True
+        )
 
         # process train features
         inp_trn_feat_path = os.path.join(args.input_data_dir, 'train_raw_texts.txt')
@@ -204,7 +190,7 @@ def main(args):
 
         # save trn features
         os.makedirs(args.output_data_dir, exist_ok=True)
-        out_trn_feat_path = path.join(args.output_data_dir, "X.trn.{}.pkl".format(args.model_type))
+        out_trn_feat_path = path.join(args.output_data_dir, "X.trn.tomodel.pkl")
         logger.info(
             f'Created pickled training feat file for max seq len of {args.max_xseq_len}')
 
@@ -227,7 +213,7 @@ def main(args):
         )
 
         # save tst features
-        out_tst_feat_path = path.join(args.output_data_dir, "X.tst.{}.pkl".format(args.model_type))
+        out_tst_feat_path = path.join(args.output_data_dir, "X.tst.tomodel.pkl")
         logger.info(
             f'Created pickled test feat file for max seq len of {args.max_xseq_len}')
         with open(out_tst_feat_path, "wb") as fout:
@@ -281,7 +267,7 @@ if __name__ == "__main__":
         required=True,
         metavar="DIR",
         # default="./save_models/mimiciii-14/proc_data",
-        help="directory for storing X.[trn|tst].[model-type].[xseq-len].pkl and C.[trn|tst].npz",
+        help="directory for storing X.[trn|tst].tomodel.[xseq-len].pkl and C.[trn|tst].npz",
     )
     parser.add_argument(
         "--do_proc_feat", action="store_true", help="Set this flag if you are processing features.",

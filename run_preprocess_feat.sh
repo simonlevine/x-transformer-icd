@@ -7,8 +7,8 @@ DATASET=$'mimiciii-14'
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
 
-MODEL_TYPE=$'bert'
-MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
+MODEL_TYPE=$'longformer'
+MODEL_NAME=$'allenai/longformer-base-4096'
 
 DATA_DIR=./data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs

@@ -4,14 +4,16 @@ DATASET=$'mimiciii-14'
 DATA_DIR=./data/intermediary-data/xbert_inputs/${DATASET}
 
 LABEL_NAME=$'pifa-tfidf-s0'
-MODEL_NAME='emilyalsentzer/Bio_ClinicalBERT'
-MODEL_FOLDER_NAME='Bio_ClinicalBERT'
+MODEL_NAME="allenai/longformer-base-4096"
+MODEL_FOLDER_NAME='longformer'
 EXP_NAME=${DATASET}.final
 
 OUTPUT_DIR=./data/intermediary-data/xbert_outputs/${LABEL_NAME}
 INDEXER_DIR=${OUTPUT_DIR}/indexer
 MATCHER_DIR=${OUTPUT_DIR}/matcher/${MODEL_FOLDER_NAME}
 RANKER_DIR=${OUTPUT_DIR}/ranker/${MODEL_FOLDER_NAME}
+MATCHER_DIR=${OUTPUT_DIR}/matcher
+RANKER_DIR=${OUTPUT_DIR}/ranker
 mkdir -p ${RANKER_DIR}
 
 # train linear ranker

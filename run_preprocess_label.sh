@@ -2,8 +2,8 @@
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
-MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
-MODEL_TYPE=$'bert'
+MODEL_NAME=$"allenai/longformer-base-4096"
+MODEL_TYPE=$'longformer'
 
 source params.sh
 
