@@ -198,3 +198,8 @@ xbert_ranker_and_eval:
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/Bio_ClinicalBERT/tst.pred.npz
     md5: 8e7ab17d5ed4b1beda12455c9765afb1
+convert_longformer:
+  cmd: $PY_SECONDARY custom_models/long_roberta_convert_no_pretrain.py
+  outs:
+  - path: custom_models/biomed_roberta_base-4096
+    md5: 438911066c73195d5bb3825fb1f00e6d.dir
