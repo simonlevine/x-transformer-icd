@@ -9,7 +9,6 @@ stages:
       - xbert/
   convert_longformer:
     cmd: $PY_SECONDARY pipeline/long_roberta_convert_no_pretrain.py
-    deps:
     outs:
       - custom_models/biomed-roberta-base-4096
   prepare_for_xbert:
