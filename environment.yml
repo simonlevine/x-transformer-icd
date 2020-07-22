@@ -59,8 +59,7 @@ dependencies:
   - xz
   - zlib
   - zstd
-  - pytorch
-  - torchvision
+  - pytorch torchvision cudatoolkit=10.1 -c pytorch 
   - pip:
     - appdirs
     - attrs
