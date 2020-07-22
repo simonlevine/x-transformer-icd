@@ -21,11 +21,11 @@ def main():
         os.makedirs(model_path)
 
     logger.info(
-        f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
+        f'Converting roberta-biomed-base into {base_model_name}-{GLOBAL_MAX_POS}')
 
     model, tokenizer, config = create_long_model(
         model_specified=base_model_name_HF, attention_window=LOCAL_ATTN_WINDOW, max_pos=GLOBAL_MAX_POS)
-        
+
     model.save_pretrained(model_path)
     tokenizer.save_pretrained(model_path)
     config.save_pretrained(model_path)
