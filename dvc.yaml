@@ -8,7 +8,7 @@ stages:
       - .envrc
       - xbert/
   convert_longformer:
-    cmd: cd custom_models && $PY_SECONDARY long_roberta_convert_no_pretrain.py
+    cmd: $PY_SECONDARY custom_models/long_roberta_convert_no_pretrain.py
     outs:
       - custom_models/biomed_roberta_base-4096
   prepare_for_xbert:

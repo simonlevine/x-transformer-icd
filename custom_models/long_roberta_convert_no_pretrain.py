@@ -8,7 +8,7 @@ from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCo
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
-MODEL_OUT_FPATH = './custom_models'
+MODEL_OUT_DIR = 'custom_models'
 
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
@@ -94,15 +94,15 @@ def create_long_model(model_specified, attention_window, max_pos):
 
 
 def convert_biomed_roberta_to_long(save_model_to, base_model_name, base_model_name_HF, local_attn_window=512, global_attn_size=4096):
-    # model_path = f'{base_model_name}-{global_attn_size}'
-    # if not os.path.exists(model_path):
-    #     os.makedirs(model_path)
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{global_attn_size}'
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
     logger.info(
         f'Converting roberta-biomed-base into {base_model_name}-{global_attn_size}')
     model, tokenizer, config = create_long_model(model_specified=base_model_name_HF, attention_window=local_attn_window, max_pos=global_attn_size)
-    model.save_pretrained()
-    tokenizer.save_pretrained()
-    config.save_pretrained()
+    model.save_pretrained(model_path)
+    tokenizer.save_pretrained(model_path)
+    config.save_pretrained(model_path)
 
 
 if __name__ == "__main__":
