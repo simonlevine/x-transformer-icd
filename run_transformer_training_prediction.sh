@@ -3,6 +3,7 @@
 source params.sh
 
 NVIDIA_VISIBLE_DEVICES=0
+CUDA_VISIBLE_DEVICES=0
 
 GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
@@ -47,7 +48,7 @@ LOGGING_STEPS=$(params "['xbert_model_training']['logging_steps']")
 LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher
-echo $PY_CONDA xbert/transformer.py \
+$PY_CONDA xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
     --do_eval -o ${MODEL_DIR} \
     -x_trn ${PROC_DATA_DIR}/X.trn.tomodel.pkl \
