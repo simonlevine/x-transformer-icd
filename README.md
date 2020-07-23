@@ -18,6 +18,7 @@ On a GCP VM, this can be installed like so:
 
 ```bash
 python3 -m pip install --user pipx
+python3 -m pipx ensurepath
 pipx install "dvc[all]"
 sudo apt install direnv
 ```
