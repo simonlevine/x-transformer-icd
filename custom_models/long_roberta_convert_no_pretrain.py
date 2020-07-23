@@ -14,13 +14,13 @@ GLOBAL_MAX_POS = 2048
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
     base_model_name = 'biomed_roberta_base'
-    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{GLOBAL_MAX_POS}'
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-4096'
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
 
     logger.info(
-        f'Converting roberta-biomed-base into {base_model_name}-{GLOBAL_MAX_POS}')
+        f'Converting roberta-biomed-base into {base_model_name}-4096')
 
     model, tokenizer, config = create_long_model(
         model_specified=base_model_name_HF, attention_window=LOCAL_ATTN_WINDOW, max_pos=GLOBAL_MAX_POS)
