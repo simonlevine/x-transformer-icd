@@ -10,12 +10,12 @@ stages:
   convert_longformer:
     cmd: $PY_CONDA custom_models/long_roberta_convert_no_pretrain.py
     outs:
-      - custom_models/biomed_roberta_base-4096/config.json
+      # - custom_models/biomed_roberta_base-4096/config.json
       - custom_models/biomed_roberta_base-4096/pytorch_model.bin
       - custom_models/biomed_roberta_base-4096/tokenizer_config.json
-      - custom_models/biomed_roberta_base-4096/merges.txt
-      - custom_models/biomed_roberta_base-4096/special_tokens_map.json
-      - custom_models/biomed_roberta_base-4096/vocab.json
+      # - custom_models/biomed_roberta_base-4096/merges.txt
+      # - custom_models/biomed_roberta_base-4096/special_tokens_map.json
+      # - custom_models/biomed_roberta_base-4096/vocab.json
   prepare_for_xbert:
     cmd: $PY_CONDA pipeline/xbert_preprocessing.py
     deps:
