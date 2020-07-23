@@ -9,7 +9,7 @@ from transformers.modeling_longformer import LongformerSelfAttention
 
 MODEL_OUT_DIR = 'custom_models'
 LOCAL_ATTN_WINDOW = 512
-GLOBAL_MAX_POS = 4096
+GLOBAL_MAX_POS = 2048
 
 def main():
     base_model_name_HF = 'allenai/biomed_roberta_base'
