@@ -9,7 +9,7 @@ stages:
   #     - xbert/
   convert_longformer:
     cmd: $PY_CONDA custom_models/long_roberta_convert_no_pretrain.py
-    outs:
+    # outs:
       # - custom_models/biomed_roberta_base-4096/config.json
       # - custom_models/biomed_roberta_base-2048/pytorch_model.bin
       # - custom_models/biomed_roberta_base-2048/tokenizer_config.json
