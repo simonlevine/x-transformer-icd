@@ -9,7 +9,7 @@ pipx install "dvc[all]"
 
 conda env create -f environment.yml \
 && conda activate $CONDA_ENV_NAME \
-&& pip install -e . \
+pip install -e . \
 && pip install appdirs attrs black boto3 \
                 botocore chardet click docutils \
                 idna jmespath pathspec python-dateutil \
