@@ -11,12 +11,13 @@ MODEL_TYPE=$'longformer'
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
 # construct label embedding
-DATA_DIR=data/intermediary-data
+DATA_DIR=./data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
 label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
+echo $PROC_DATA_DIR
 mkdir -p ${PROC_DATA_DIR}
 
 $PY_CONDA xbert/preprocess.py \

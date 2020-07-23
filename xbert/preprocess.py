@@ -32,7 +32,6 @@ from transformers import (
 
 ALL_MODELS = 'longformer'
 
-
 MODEL_CLASSES = {
     "longformer": (
     LongformerConfig,

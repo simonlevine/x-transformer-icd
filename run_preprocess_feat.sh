@@ -8,7 +8,7 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 MODEL_TYPE=$'longformer'
 MODEL_NAME=$(params "['model_name']")
 
-DATA_DIR=data/intermediary-data
+DATA_DIR=./data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 
