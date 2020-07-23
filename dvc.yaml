@@ -31,25 +31,25 @@ stages:
     outs:
       - data/intermediary-data/df_train.pkl
       - data/intermediary-data/df_test.pkl
-      - data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/label_map.txt
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
   xbert_label_embedding:
     cmd: ./run_preprocess_label.sh
     deps:
       - run_preprocess_label.sh
       - xbert/preprocess.py
-      - data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/label_map.txt
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
     outs:
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
@@ -65,12 +65,12 @@ stages:
     deps:
       - run_preprocess_feat.sh
       - xbert/preprocess.py
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
     params:
       - max_seq_len
     outs:
@@ -113,10 +113,10 @@ stages:
       - xbert/ranker.py
       - xbert/evaluator.py
       - run_transformer_predict.sh
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
