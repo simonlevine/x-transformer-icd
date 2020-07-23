@@ -62,6 +62,7 @@ dependencies:
   - pytorch
   - torchvision
   - pip:
+    - pandas
     - appdirs
     - attrs
     - black
