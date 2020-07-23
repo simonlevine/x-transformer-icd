@@ -87,5 +87,6 @@ dependencies:
     - typed-ast
     - urllib3
     - loguru
+    - pyyaml
 prefix: /home/ubuntu/anaconda3/envs/pt_xmlc_transformer
 

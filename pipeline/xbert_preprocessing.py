@@ -51,8 +51,8 @@ except ImportError:
     from . import format_data_for_training
 
 # input filepaths.
-DIAGNOSIS_CSV_FP = "./data/DIAGNOSES_ICD.csv.gz"
-ICD9_KEY_FP = "./data/D_ICD_DIAGNOSES.csv.gz"
+DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 # output filepaths

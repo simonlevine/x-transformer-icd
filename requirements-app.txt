@@ -9,4 +9,3 @@ altair
 pyyaml
 numpy
 scipy
-transformers
