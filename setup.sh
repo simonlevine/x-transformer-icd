@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+direnv allow .
 eval "$(conda shell.bash hook)"
 
 python -m venv .venv \

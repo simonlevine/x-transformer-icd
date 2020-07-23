@@ -92,7 +92,7 @@ class LongformerForXMLC(BertPreTrainedModel):
         attention_mask=None,
         token_type_ids=None,
         position_ids=None,
-        # head_mask=None, #N/A for longformers
+        head_mask=None, #N/A for longformers ?
         inputs_embeds=None,
     ):
         outputs = self.longformer(
@@ -100,7 +100,7 @@ class LongformerForXMLC(BertPreTrainedModel):
             attention_mask=attention_mask,
             token_type_ids=token_type_ids,
             position_ids=position_ids,
-            # head_mask=head_mask, #N/A for roberta/ longformers as implemented
+            head_mask=head_mask, #N/A for roberta/ longformers as implemented
             inputs_embeds=inputs_embeds,
         )
         sequence_output = outputs[0]

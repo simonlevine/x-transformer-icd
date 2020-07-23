@@ -1,6 +1,6 @@
 stages:
   initialize_environment:
-    cmd: make init && direnv allow .
+    cmd: make init
     deps:
       - setup.sh
       - requirements-app.txt
