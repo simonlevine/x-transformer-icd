@@ -15,7 +15,7 @@ PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 $PY_CONDA xbert/preprocess.py \
     --do_proc_feat \
-    -i ${DATA_DIR}/xbert_inputs/${DATASET} \
+    -i ${DATA_DIR}/xbert_inputs \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
