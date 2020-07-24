@@ -60,7 +60,7 @@ import xbert.rf_util as rf_util
 from loguru import logger
 
 
-from xbert.modeling import LongformerForXMLC  # truncated to just have bert model.
+from xbert.modeling import LongformerForXMLC
 
 
 # from transformers import AutoTokenizer, AutoModel, AutoConfig
@@ -76,7 +76,7 @@ longformer_model = LongformerModel.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
-
+longformer_for_xmlc = LongformerForSequenceClassification('custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 
 # global variable within the module
 
@@ -84,7 +84,7 @@ ALL_MODELS = ('custom_models/biomed_roberta_base-4096')
 
 logger.info('building model class:\n ( \
     longformer_config, \
-    LongformerForXMLC, \
+    longformer_for_xmlc, \
     longformer_tokenizer)...')
 
 
@@ -92,7 +92,8 @@ logger.info('building model class:\n ( \
 MODEL_CLASSES = {
     "longformer": (
         longformer_config,
-        LongformerForXMLC,
+        # LongformerForXMLC, replaced with huggingface version.
+        longformer_for_xmlc,
         longformer_tokenizer),
 }
 
