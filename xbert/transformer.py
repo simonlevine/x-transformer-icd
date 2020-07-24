@@ -344,6 +344,7 @@ class TransformerMatcher(object):
 
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+
         config = config_class.from_pretrained(
             args.config_name if args.config_name else args.model_name_or_path,
             hidden_dropout_prob=args.hidden_dropout_prob,
@@ -352,6 +353,7 @@ class TransformerMatcher(object):
             cache_dir=args.cache_dir if args.cache_dir else None,
             gradient_checkpointing=True, #essential for memory usage
         )
+        
         model = model_class.from_pretrained(
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
@@ -700,7 +702,6 @@ def main():
         logger.info('setting device...')
         matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
         logger.info('preparing model...')
-
         matcher.prepare_model(args)
 
         # train
@@ -733,7 +734,7 @@ def main():
         config = config_class.from_pretrained(args.output_dir, gradient_checkpointing=True) #config fix
         config.num_labels = num_labels
         matcher.config = config
-        matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES
+        matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES?
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)
         model.to(args.device)

@@ -35,7 +35,7 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
 # # Nvidia V100 (16Gb), fp32
 PER_DEVICE_TRN_BSZ=16
-PER_DEVICE_VAL_BSZ=32
+PER_DEVICE_VAL_BSZ=16
 GRAD_ACCU_STEPS=2
 
 #sample / testing
