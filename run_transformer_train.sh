@@ -28,14 +28,14 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 # GRAD_ACCU_STEPS=8
 
 # # # Nvidia 2080Ti (11Gb), fp32
-PER_DEVICE_TRN_BSZ=8
-PER_DEVICE_VAL_BSZ=16
-GRAD_ACCU_STEPS=4
+# PER_DEVICE_TRN_BSZ=8
+# PER_DEVICE_VAL_BSZ=16
+# GRAD_ACCU_STEPS=4
 
 # # Nvidia V100 (16Gb), fp32
-# PER_DEVICE_TRN_BSZ=16
-# PER_DEVICE_VAL_BSZ=32
-# GRAD_ACCU_STEPS=2
+PER_DEVICE_TRN_BSZ=16
+PER_DEVICE_VAL_BSZ=32
+GRAD_ACCU_STEPS=2
 
 MAX_STEPS=$(params "['xbert_model_training']['max_steps']")
 WARMUP_STEPS=$(params "['xbert_model_training']['warmup_steps']")
