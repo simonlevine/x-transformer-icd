@@ -3,13 +3,13 @@ max_seq_len: 2048
 model_name: 'custom_models/biomed_roberta_base-4096'
 #model_name: 'allenai/longformer-base-4096'
 prepare_for_xbert:
-  subsampling: false
+  subsampling: true
   icd_version: 9
 xbert_model_training:
-  max_steps: 20000
-  warmup_steps: 2000
-  logging_steps: 100
-  learning_rate: 0.00008
+  max_steps: 1000
+  warmup_steps: 100
+  logging_steps: 50
+  learning_rate: 0.00005
   # max_steps: 10
   # warmup_steps: 2
   # logging_steps: 5
