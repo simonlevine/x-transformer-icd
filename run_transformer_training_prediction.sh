@@ -57,7 +57,6 @@ $PY_CONDA xbert/transformer.py \
     -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
     --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
-
 # predict - single GPU
 CUDA_VISIBLE_DEVICES=0 $PY_CONDA xbert/transformer.py \
     -m ${MODEL_TYPE} -n ${MODEL_NAME} \
