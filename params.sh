@@ -1,4 +1,4 @@
 function params {
-    $PY_SECONDARY -c \
+    $PY_CONDA -c \
         "import yaml; y = yaml.safe_load(open('params.yaml'))$1; print(y)"
 }

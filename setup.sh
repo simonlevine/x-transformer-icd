@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+direnv allow .
 eval "$(conda shell.bash hook)"
 
 python -m venv .venv \
@@ -16,4 +16,5 @@ conda env create -f environment.yml \
                 regex requests s3transfer sacremoses \
                 sentencepiece toml torch tqdm transformers \
                 typed-ast urllib3 loguru \
-&& python setup.py install --force
+&& python setup.py install --force \
+&& conda install --yes pytorch torchvision cudatoolkit=10.1 -c pytorch

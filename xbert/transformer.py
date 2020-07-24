@@ -60,39 +60,42 @@ import xbert.rf_util as rf_util
 from loguru import logger
 
 
-from xbert.modeling import BertForXMLC  # truncated to just have bert model.
+from xbert.modeling import LongformerForXMLC
 
 
-from transformers import AutoTokenizer, AutoModel, AutoConfig
+# from transformers import AutoTokenizer, AutoModel, AutoConfig
 # ---- substitute with local copy eventually...
 
-logger.info('loading huggingface model...')
-bioclinical_bert_Tokenizer = AutoTokenizer.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
+from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+logger.info(
+    "loading Longformer tokenizer, model, and config. ...")
 
-
-logger.info('loading huggingface config...')
-bioclinical_bert_Config = AutoConfig.from_pretrained(
-    "emilyalsentzer/Bio_ClinicalBERT")
-
+longformer_tokenizer = LongformerTokenizer.from_pretrained(
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+longformer_model = LongformerModel.from_pretrained(
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+longformer_config = LongformerConfig.from_pretrained(
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 
 # global variable within the module
 
-# sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (bioclinical_bert_Config)), (),)
-ALL_MODELS = ('emilyalsentzer/Bio_ClinicalBERT')
+ALL_MODELS = ('custom_models/biomed_roberta_base-4096')
 
 logger.info('building model class:\n ( \
-    bioclinical_bert_Config, \
-    BertForXMLC, \
-    bioclinical_bert_Tokenizer)...')
+    longformer_config, \
+    longformer_for_xmlc, \
+    longformer_tokenizer)...')
 
 
-#"model_type" below is set to 'bert'
+#"model_type" below is set to 'longformer', similar to longformer.
 MODEL_CLASSES = {
-    "bert": (
-        bioclinical_bert_Config,
-        BertForXMLC,
-        bioclinical_bert_Tokenizer),
+    "longformer": (
+        longformer_config,
+        # LongformerForXMLC, replaced with huggingface version.
+        longformer_for_xmlc,
+        longformer_tokenizer),
 }
 
 logger = None
@@ -341,13 +344,16 @@ class TransformerMatcher(object):
 
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
+
         config = config_class.from_pretrained(
             args.config_name if args.config_name else args.model_name_or_path,
             hidden_dropout_prob=args.hidden_dropout_prob,
             num_labels=self.num_clusters,
             finetuning_task=None,
             cache_dir=args.cache_dir if args.cache_dir else None,
+            gradient_checkpointing=True, #essential for memory usage
         )
+        
         model = model_class.from_pretrained(
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
@@ -418,7 +424,7 @@ class TransformerMatcher(object):
                     inputs["token_type_ids"] = (
                         batch[3].to(args.device) if args.model_type in [
                             "bert", "xlnet"] else None
-                    )  # XLM, DistilBERT and RoBERTa don't use segment_ids
+                    )  # XLM, DistilBERT and RoBERTa (ergo Longformer) don't use segment_ids
                 cur_batch_size = inputs["input_ids"].shape[0]
 
                 # forward
@@ -452,11 +458,11 @@ class TransformerMatcher(object):
                         module = self.model.module
                     except AttributeError:
                         module = self.model
-                    if args.model_type == "bert": #type is BERT but model pulled in should be bioclinicalBERT
+                    if args.model_type == "bert": #type is BERT but model pulled in could be bioclinicalBERT
                         pooled_output = module.bert.pooler(hidden_states[-1])
                         pooled_output = module.dropout(pooled_output)
                         # logits = self.model.classifier(pooled_output)
-                    elif args.model_type == "roberta":
+                    elif args.model_type == "roberta" or args.model_type == "longformer":
                         pooled_output = module.classifier.dropout(hidden_states[-1][:, 0, :])
                         pooled_output = module.classifier.dense(pooled_output)
                         pooled_output = torch.tanh(pooled_output)
@@ -600,7 +606,7 @@ class TransformerMatcher(object):
                     inputs["token_type_ids"] = (
                         batch[3].to(args.device) if args.model_type in [
                             "bert", "xlnet"] else None
-                    )  # XLM, DistilBERT and RoBERTa don't use segment_ids
+                    )  # XLM, DistilBERT and RoBERTa (and ergo Longformers) don't use segment_ids
 
                 outputs = self.model(
                     input_ids=inputs["input_ids"],
@@ -696,7 +702,6 @@ def main():
         logger.info('setting device...')
         matcher = TransformerMatcher(num_clusters=C_trn.shape[1])
         logger.info('preparing model...')
-
         matcher.prepare_model(args)
 
         # train
@@ -725,10 +730,11 @@ def main():
         matcher = TransformerMatcher(num_clusters=num_labels)
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-        config = config_class.from_pretrained(args.output_dir) #config fix
+
+        config = config_class.from_pretrained(args.output_dir, gradient_checkpointing=True) #config fix
         config.num_labels = num_labels
         matcher.config = config
-        matcher.config.output_hidden_states = True
+        matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES?
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)
         model.to(args.device)

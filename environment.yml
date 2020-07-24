@@ -1,4 +1,4 @@
-name: pt1.2_xmlc_transformer
+name: pt_xmlc_transformer
 channels:
   - pytorch
   - defaults
@@ -62,6 +62,7 @@ dependencies:
   - pytorch
   - torchvision
   - pip:
+    - pandas
     - appdirs
     - attrs
     - black
@@ -86,5 +87,6 @@ dependencies:
     - typed-ast
     - urllib3
     - loguru
-prefix: /home/ubuntu/anaconda3/envs/pt1.2_xmlc_transformer
+    - pyyaml
+prefix: /home/ubuntu/anaconda3/envs/pt_xmlc_transformer
 

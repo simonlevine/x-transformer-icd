@@ -1,14 +1,23 @@
 stages:
-  initialize_environment:
-    cmd: make uninstall && make init && direnv allow .
-    deps:
-      - setup.sh
-      - requirements-app.txt
-      - environment.yml
-      - .envrc
-      - xbert/
+  # initialize_environment:
+  #   cmd: make init
+  #   deps:
+  #     - setup.sh
+  #     - requirements-app.txt
+  #     - environment.yml
+  #     - .envrc
+  #     - xbert/
+  convert_longformer:
+    cmd: $PY_CONDA custom_models/long_roberta_convert_no_pretrain.py
+    # outs:
+      # - custom_models/biomed_roberta_base-4096/config.json
+      # - custom_models/biomed_roberta_base-2048/pytorch_model.bin
+      # - custom_models/biomed_roberta_base-2048/tokenizer_config.json
+      # - custom_models/biomed_roberta_base-4096/merges.txt
+      # - custom_models/biomed_roberta_base-4096/special_tokens_map.json
+      # - custom_models/biomed_roberta_base-4096/vocab.json
   prepare_for_xbert:
-    cmd: $PY_SECONDARY pipeline/xbert_preprocessing.py
+    cmd: $PY_CONDA pipeline/xbert_preprocessing.py
     deps:
       - pipeline/xbert_preprocessing.py
       - pipeline/format_data_for_training.py
@@ -22,25 +31,25 @@ stages:
     outs:
       - data/intermediary-data/df_train.pkl
       - data/intermediary-data/df_test.pkl
-      - data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/label_map.txt
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
   xbert_label_embedding:
     cmd: ./run_preprocess_label.sh
     deps:
       - run_preprocess_label.sh
       - xbert/preprocess.py
-      - data/intermediary-data/xbert_inputs/mimiciii-14/label_map.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/label_map.txt
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
     outs:
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
@@ -56,62 +65,62 @@ stages:
     deps:
       - run_preprocess_feat.sh
       - xbert/preprocess.py
-      - data/intermediary-data/xbert_inputs/mimiciii-14/train_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
+      - data/intermediary-data/xbert_inputs/train_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/test_raw_texts.txt
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
   xbert_model_training:
     cmd: ./run_transformer_train.sh
     deps:
       - xbert/transformer.py
       - run_transformer_train.sh
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/training_args.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
   xbert_trained_model_prediction:
     cmd: ./run_transformer_training_prediction.sh
     deps:
       - run_transformer_training_prediction.sh
-      - data/intermediary-data/xbert_outputs/proc_data/X.trn.bert.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/X.tst.bert.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
+      - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
       - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/training_args.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
   xbert_ranker_and_eval:
     cmd: ./run_transformer_predict.sh
     deps:
       - xbert/ranker.py
       - xbert/evaluator.py
       - run_transformer_predict.sh
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/X.tst.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.trn.npz
-      - data/intermediary-data/xbert_inputs/mimiciii-14/Y.tst.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_trn_pred.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/C_tst_pred.npz
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/trn_embeddings.npy
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/Bio_ClinicalBERT/tst_embeddings.npy
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/Y.trn.npz
+      - data/intermediary-data/xbert_inputs/Y.tst.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     outs:
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/Bio_ClinicalBERT/tst.pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz

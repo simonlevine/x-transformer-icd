@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
+source params.sh
 
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
-MODEL_NAME=$'emilyalsentzer/Bio_ClinicalBERT'
-MODEL_TYPE=$'bert'
-
-source params.sh
+MODEL_NAME=$(params "['model_name']")
+MODEL_TYPE=$'longformer'
 
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.
@@ -15,14 +14,14 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 DATA_DIR=./data/intermediary-data
 OUTPUT_DIR=${DATA_DIR}/xbert_outputs
 
-label_emb_inst_path=${DATA_DIR}/xbert_inputs/${DATASET}/X.trn.npz
+label_emb_inst_path=${DATA_DIR}/xbert_inputs/X.trn.npz
 
 PROC_DATA_DIR=${OUTPUT_DIR}/proc_data
 mkdir -p ${PROC_DATA_DIR}
 
 $PY_CONDA xbert/preprocess.py \
 	--do_label_embedding \
-	-i ${DATA_DIR}/xbert_inputs/${DATASET} \
+	-i ${DATA_DIR}/xbert_inputs \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path} \
@@ -48,7 +47,7 @@ LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
 $PY_CONDA xbert/preprocess.py \
     --do_proc_label \
-    -i ${DATA_DIR}/xbert_inputs/${DATASET} \
+    -i ${DATA_DIR}/xbert_inputs \
     -o ${PROC_DATA_DIR} \
     -l ${LABEL_EMB_NAME} \
     -c ${INDEXER_DIR}/code.npz \
