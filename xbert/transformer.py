@@ -76,7 +76,8 @@ longformer_model = LongformerModel.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
-longformer_for_xmlc = LongformerForSequenceClassification('custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
+    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 
 # global variable within the module
 
