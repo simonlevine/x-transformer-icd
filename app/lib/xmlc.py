@@ -1,6 +1,22 @@
 import typing as t
+
+import scipy.sparse as smat
+from sklearn.preprocessing import normalize as sk_normalize
+from pipeline.xbert_preprocessing import
 from xbert.ranker import LinearModel
-from xbert.rf_linear import PostProcessor
+from xbert.rf_linear import PostProcessor, HierarchicalMLModel
+
+
+def embedding():
+    #
+    X1 = HierarchicalMLModel.load_feature_matrix('./data/intermediary-data/xbert_inputs/X.tst.npz')
+    # xbert_trained_model_prediction.sh
+    X2 = HierarchicalMLModel.load_feature_matrix('./data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy')
+    X = smat.hstack([
+        sk_normalize(X1, axis=1),
+        sk_normalize(X2, axis=1)]
+    ).tocsr()
+    return X
 
 def inference_factory(icd_9_codes:t.List[str],
                       ranker_folder,

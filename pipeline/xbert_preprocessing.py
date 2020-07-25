@@ -66,11 +66,14 @@ XBERT_Y_TST_FP = './data/intermediary-data/xbert_inputs/Y.tst.npz'
 DF_TRAIN_FP ='./data/intermediary-data/df_train.pkl'
 DF_TEST_FP = './data/intermediary-data/df_test.pkl'
 
-
-with open('params.yaml', 'r') as f:
-    params = yaml.safe_load(f.read())
+vectorizer = TfidfVectorizer(
+    ngram_range=(1, n_gram_range_upper),
+    min_df=min_doc_freq
+)
 
 def main():
+    with open('params.yaml', 'r') as f:
+        params = yaml.safe_load(f.read())
     subsampling_enabled = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
     logger.info(f'Using ICD version {icd_version_specified}...')
@@ -103,7 +106,7 @@ def main():
 
 
 def xbert_clean_label(label):
-      return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
+    return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 
 def xbert_create_label_map(icd_version):
@@ -152,11 +155,13 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version):
             of potential ICD labels."""
     hadm_ids = df.HADM_ID.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
-    for idx, row in tqdm(df.iterrows(), unit="HADM id"):
-        if icd_version == '10':
-            Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
-        elif icd_version == '9':
-            Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
+    with tqdm(total=len(df), unit="HADM id") as pbar:
+        for idx, row in df.iterrows():
+            if icd_version == '10':
+                Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+            elif icd_version == '9':
+                Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
+            pbar.update(1)
     return Y_.fillna(0)
 
 
