@@ -34,7 +34,7 @@ class RobertaLongSelfAttention(LongformerSelfAttention):
         self,
         hidden_states,
         attention_mask=None,
-        # head_mask=None,
+        head_mask=None,
         encoder_hidden_states=None,
         encoder_attention_mask=None,
         output_attentions=False,
