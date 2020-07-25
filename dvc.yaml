@@ -8,7 +8,8 @@ stages:
   #     - .envrc
   #     - xbert/
   convert_longformer:
-    cmd: $PY_CONDA custom_models/elongate_biomed_roberta.py
+    # cmd: $PY_CONDA custom_models/elongate_biomed_roberta.py
+    cmd: $PY_CONDA custom_models/elongate_bioclinical_BERT.py
   prepare_for_xbert:
     cmd: $PY_CONDA pipeline/xbert_preprocessing.py
     deps:
