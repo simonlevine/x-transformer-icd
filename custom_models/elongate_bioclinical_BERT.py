@@ -1,26 +1,26 @@
-
-from loguru import logger
+import logging
 import os
 import math
 from dataclasses import dataclass, field
-from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCollatorForLanguageModeling, Trainer
+from transformers import BertModel, BertTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 MODEL_OUT_DIR = 'custom_models'
 LOCAL_ATTN_WINDOW = 512
 GLOBAL_MAX_POS = 2048
 
 def main():
-    base_model_name_HF = 'allenai/biomed_roberta_base'
-    base_model_name = 'biomed_roberta_base'
-    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-4096'
-
+    base_model_name_HF = 'emilyalsentzer/Bio_ClinicalBERT'
+    base_model_name = 'Bio_ClinicalBERT'
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-long'
     if not os.path.exists(model_path):
         os.makedirs(model_path)
-
     logger.info(
-        f'Converting roberta-biomed-base into {base_model_name}-4096')
+        f'Converting {base_model_name} into {base_model_name}-long')
 
     model, tokenizer, config = create_long_model(
         model_specified=base_model_name_HF, attention_window=LOCAL_ATTN_WINDOW, max_pos=GLOBAL_MAX_POS)
@@ -29,27 +29,26 @@ def main():
     tokenizer.save_pretrained(model_path)
     config.save_pretrained(model_path)
 
-class RobertaLongSelfAttention(LongformerSelfAttention):
+
+class BertLongSelfAttention(LongformerSelfAttention):
     def forward(
         self,
         hidden_states,
         attention_mask=None,
-        # head_mask=None,
+        head_mask=None,
         encoder_hidden_states=None,
         encoder_attention_mask=None,
         output_attentions=False,
     ):
         return super().forward(hidden_states, attention_mask=attention_mask, output_attentions=output_attentions)
 
-class RobertaLongModel(RobertaModel):
-    """RobertaLongForMaskedLM represents the "long" version of the RoBERTa model.
-     It replaces BertSelfAttention with RobertaLongSelfAttention, which is 
-     a thin wrapper around LongformerSelfAttention."""
+
+class BertLongModel(BertModel):
     def __init__(self, config):
         super().__init__(config)
         for i, layer in enumerate(self.encoder.layer):
             # replace the `modeling_bert.BertSelfAttention` object with `LongformerSelfAttention`
-            layer.attention.self = RobertaLongSelfAttention(config, layer_id=i)
+            layer.attention.self = BertLongSelfAttention(config, layer_id=i)
 
 
 def create_long_model(model_specified, attention_window, max_pos):
@@ -65,8 +64,8 @@ def create_long_model(model_specified, attention_window, max_pos):
         Check tables 6 and 11 in [the paper](https://arxiv.org/pdf/2004.05150.pdf) to get a sense of 
         the expected performance of this model before pretraining."""
 
-    model = RobertaModel.from_pretrained(model_specified)
-    tokenizer = RobertaTokenizerFast.from_pretrained(
+    model = BertModel.from_pretrained(model_specified)
+    tokenizer = BertTokenizer.from_pretrained(
         model_specified, model_max_length=max_pos)
     config = model.config
 
@@ -74,20 +73,21 @@ def create_long_model(model_specified, attention_window, max_pos):
     tokenizer.model_max_length = max_pos
     tokenizer.init_kwargs['model_max_length'] = max_pos
     current_max_pos, embed_size = model.embeddings.position_embeddings.weight.shape
-    max_pos += 2  # NOTE: RoBERTa has positions 0,1 reserved, so embedding size is max position + 2
+    # max_pos += 2  # NOTE: RoBERTa has positions 0,1 reserved, so embedding size is max position + 2
     config.max_position_embeddings = max_pos
     assert max_pos > current_max_pos
     # allocate a larger position embedding matrix
     new_pos_embed = model.embeddings.position_embeddings.weight.new_empty(
         max_pos, embed_size)
     # copy position embeddings over and over to initialize the new position embeddings
-    k = 2
-    step = current_max_pos - 2
+    k = 0
+    step = current_max_pos
     while k < max_pos - 1:
-        new_pos_embed[k:(
-            k + step)] = model.embeddings.position_embeddings.weight[2:]
+        new_pos_embed[k:(k + step)] = model.embeddings.position_embeddings.weight[:]
         k += step
+
     model.embeddings.position_embeddings.weight.data = new_pos_embed
+
 
     # replace the `modeling_bert.BertSelfAttention` object with `LongformerSelfAttention`
     config.attention_window = [attention_window] * config.num_hidden_layers
