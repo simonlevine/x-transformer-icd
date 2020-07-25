@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import math
 from dataclasses import dataclass, field
-from transformers import RobertaModel, RobertaTokenizerFast, TextDataset, DataCollatorForLanguageModeling, Trainer
+from transformers import RobertaModel, RobertaTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
@@ -66,7 +66,7 @@ def create_long_model(model_specified, attention_window, max_pos):
         the expected performance of this model before pretraining."""
 
     model = RobertaModel.from_pretrained(model_specified)
-    tokenizer = RobertaTokenizerFast.from_pretrained(
+    tokenizer = RobertaTokenizer.from_pretrained(
         model_specified, model_max_length=max_pos)
     config = model.config
 
