@@ -73,17 +73,14 @@ with open('params.yaml', 'r') as f:
 PRETRAINED_LONGFORMER = params['model_name']
 
 
-logger.info(
-    f"loading {PRETRAINED_LONGFORMER} tokenizer, model (for seq. class.), and config...")
-
-longformer_tokenizer = LongformerTokenizer.from_pretrained(
-    PRETRAINED_LONGFORMER, gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
-longformer_model = LongformerModel.from_pretrained(
-    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
-longformer_config = LongformerConfig.from_pretrained(
-    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
-longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
-    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
+# longformer_tokenizer = LongformerTokenizer.from_pretrained(
+#     PRETRAINED_LONGFORMER, gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+# longformer_model = LongformerModel.from_pretrained(
+#     PRETRAINED_LONGFORMER, gradient_checkpointing=True)
+# longformer_config = LongformerConfig.from_pretrained(
+#     PRETRAINED_LONGFORMER, gradient_checkpointing=True)
+# longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
+#     PRETRAINED_LONGFORMER, gradient_checkpointing=True)
 
 # global variable within the module
 
@@ -95,12 +92,21 @@ logger.info('building model class:\n ( \
     longformer_tokenizer)...')
 
 
+
+
 MODEL_CLASSES = {
     "longformer": (
-        longformer_config,
-        longformer_for_xmlc,
-        longformer_tokenizer),
+        LongformerConfig,
+        LongformerForSequenceClassification,
+        LongformerTokenizer),
 }
+
+# MODEL_CLASSES = {
+#     "longformer": (
+#         longformer_config,
+#         longformer_for_xmlc,
+#         longformer_tokenizer),
+# }
 
 
 logger = None
@@ -350,24 +356,23 @@ class TransformerMatcher(object):
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        config = config_class
-
-        # .from_pretrained(
-        #     args.config_name if args.config_name else args.model_name_or_path,
-        #     hidden_dropout_prob=args.hidden_dropout_prob,
-        #     num_labels=self.num_clusters,
-        #     finetuning_task=None,
-        #     cache_dir=args.cache_dir if args.cache_dir else None,
-        #     gradient_checkpointing=True, #essential for memory usage
-        # )
+        logger.info(
+            f"loading {PRETRAINED_LONGFORMER} tokenizer, model (for seq. class.), and config...")
+        config = config_class.from_pretrained(
+            args.config_name if args.config_name else args.model_name_or_path,
+            hidden_dropout_prob=args.hidden_dropout_prob,
+            num_labels=self.num_clusters,
+            finetuning_task=None,
+            cache_dir=args.cache_dir if args.cache_dir else None,
+            gradient_checkpointing=True, #essential for memory usage
+        )
         
-        model = model_class
-        # .from_pretrained(
-        #     args.model_name_or_path,
-        #     from_tf=bool(".ckpt" in args.model_name_or_path),
-        #     config=config,
-        #     cache_dir=args.cache_dir if args.cache_dir else None,
-        # )
+        model = model_class.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+            cache_dir=args.cache_dir if args.cache_dir else None,
+        )
 
         if args.local_rank == 0:
             # Make sure only the first process in distributed training will download model & vocab
@@ -744,7 +749,7 @@ def main():
 
         config.num_labels = num_labels
         matcher.config = config
-        matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES?
+        # matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)
         model.to(args.device)
