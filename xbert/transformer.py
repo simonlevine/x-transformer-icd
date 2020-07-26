@@ -365,6 +365,7 @@ class TransformerMatcher(object):
             finetuning_task=None,
             cache_dir=args.cache_dir if args.cache_dir else None,
             gradient_checkpointing=True, #essential for memory usage
+            output_hidden_states=True,
         )
         
         model = model_class.from_pretrained(
