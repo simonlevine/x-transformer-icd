@@ -78,13 +78,13 @@ longformer_tokenizer = AutoTokenizer.from_pretrained(
 
 # PARAMETERIZE
 longformer_model = AutoModel.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_config = AutoModel.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
 
 # global variable within the module
 
