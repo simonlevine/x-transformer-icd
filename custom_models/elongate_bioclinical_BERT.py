@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from transformers import BertModel, BertTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
+import yaml
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
