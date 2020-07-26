@@ -19,6 +19,9 @@ longformer_model = LongformerModel.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+#PARAMETERIZE
+
+
 #ensure these are actuallly used below...
 
 from transformers.modeling_utils import SequenceSummary

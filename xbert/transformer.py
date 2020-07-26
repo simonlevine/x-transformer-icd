@@ -70,23 +70,22 @@ from transformers import LongformerTokenizer, LongformerModel, LongformerConfig,
 logger.info(
     "loading Longformer tokenizer, model, and config. ...")
 
-
 #PARAMETERIZE
 longformer_tokenizer = LongformerTokenizer.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
 #PARAMETERIZE
 longformer_model = LongformerModel.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_config = LongformerConfig.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 
 # global variable within the module
 
-ALL_MODELS = ('custom_models/biomed_roberta_base-4096')
+ALL_MODELS = ('simonlevine/Bio_ClinicalBERT-2048')
 
 logger.info('building model class:\n ( \
     longformer_config, \
@@ -94,7 +93,6 @@ logger.info('building model class:\n ( \
     longformer_tokenizer)...')
 
 
-#"model_type" below is set to 'longformer', similar to longformer.
 MODEL_CLASSES = {
     "longformer": (
         longformer_config,
