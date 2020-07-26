@@ -36,7 +36,7 @@ MODEL_CLASSES = {
     "longformer": (
     LongformerConfig,
     LongformerForSequenceClassification,
-    LongformerTokenizer),
+    BertTokenizer),
 }
 
 logging.basicConfig(
