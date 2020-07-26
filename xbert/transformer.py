@@ -63,26 +63,29 @@ from loguru import logger
 # from xbert.modeling import LongformerForXMLC
 
 from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f.read())
+
+
+PRETRAINED_LONGFORMER = params['model_name']
+
+
 logger.info(
-    "loading tokenizer, model, and config. ...")
+    f"loading {PRETRAINED_LONGFORMER} tokenizer, model (for seq. class.), and config...")
 
-#PARAMETERIZE
 longformer_tokenizer = LongformerTokenizer.from_pretrained(
-    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
-
-# PARAMETERIZE
+    PRETRAINED_LONGFORMER, gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
 longformer_model = LongformerModel.from_pretrained(
-    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
-#PARAMETERIZE
+    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
-    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
-#PARAMETERIZE
+    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
-    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
+    PRETRAINED_LONGFORMER, gradient_checkpointing=True)
 
 # global variable within the module
 
-ALL_MODELS = ('simonlevine/biomed_roberta_base-2048')
+ALL_MODELS = (params['model_name'])
 
 logger.info('building model class:\n ( \
     longformer_config, \
@@ -93,10 +96,10 @@ logger.info('building model class:\n ( \
 MODEL_CLASSES = {
     "longformer": (
         longformer_config,
-        # LongformerForXMLC, replaced with huggingface version.
         longformer_for_xmlc,
         longformer_tokenizer),
 }
+
 
 logger = None
 
@@ -345,21 +348,24 @@ class TransformerMatcher(object):
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        config = config_class.from_pretrained(
-            args.config_name if args.config_name else args.model_name_or_path,
-            hidden_dropout_prob=args.hidden_dropout_prob,
-            num_labels=self.num_clusters,
-            finetuning_task=None,
-            cache_dir=args.cache_dir if args.cache_dir else None,
-            gradient_checkpointing=True, #essential for memory usage
-        )
+        config = config_class
+
+        # .from_pretrained(
+        #     args.config_name if args.config_name else args.model_name_or_path,
+        #     hidden_dropout_prob=args.hidden_dropout_prob,
+        #     num_labels=self.num_clusters,
+        #     finetuning_task=None,
+        #     cache_dir=args.cache_dir if args.cache_dir else None,
+        #     gradient_checkpointing=True, #essential for memory usage
+        # )
         
-        model = model_class.from_pretrained(
-            args.model_name_or_path,
-            from_tf=bool(".ckpt" in args.model_name_or_path),
-            config=config,
-            cache_dir=args.cache_dir if args.cache_dir else None,
-        )
+        model = model_class
+        # .from_pretrained(
+        #     args.model_name_or_path,
+        #     from_tf=bool(".ckpt" in args.model_name_or_path),
+        #     config=config,
+        #     cache_dir=args.cache_dir if args.cache_dir else None,
+        # )
 
         if args.local_rank == 0:
             # Make sure only the first process in distributed training will download model & vocab
@@ -731,7 +737,9 @@ def main():
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        config = config_class.from_pretrained(args.output_dir, gradient_checkpointing=True) #config fix
+        config = config_class.from_pretrained(args.output_dir, gradient_checkpointing=True)
+        #pulls in X-transformer trained model, NOT huggingface original.
+
         config.num_labels = num_labels
         matcher.config = config
         matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES?

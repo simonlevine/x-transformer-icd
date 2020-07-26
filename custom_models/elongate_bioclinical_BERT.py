@@ -9,9 +9,12 @@ from transformers.modeling_longformer import LongformerSelfAttention
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f.read())
+
 MODEL_OUT_DIR = 'custom_models'
-LOCAL_ATTN_WINDOW = 512
-GLOBAL_MAX_POS = 2048
+LOCAL_ATTN_WINDOW = params['local_attention_window']
+GLOBAL_MAX_POS = params['global_attention_window']
 
 def main():
     base_model_name_HF = 'emilyalsentzer/Bio_ClinicalBERT'

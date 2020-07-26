@@ -7,20 +7,25 @@ from transformers import RobertaModel, RobertaTokenizer, TextDataset, DataCollat
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
 
+
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f.read())
+
+
 MODEL_OUT_DIR = 'custom_models'
-LOCAL_ATTN_WINDOW = 512
-GLOBAL_MAX_POS = 2048
+LOCAL_ATTN_WINDOW = params['local_attention_window']
+GLOBAL_MAX_POS = params['global_attention_window']
 
 def main():
-    base_model_name_HF = 'allenai/biomed_roberta_base'
-    base_model_name = 'biomed_roberta_base'
-    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-4096'
+    base_model_name_HF = params['base_model_name']
+    base_model_name = base_model_name_HF.split('/')[-1]
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{GLOBAL_MAX_POS}'
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
 
     logger.info(
-        f'Converting roberta-biomed-base into {base_model_name}-4096')
+        f'Converting roberta-biomed-base into {base_model_name}-{GLOBAL_MAX_POS}')
 
     model, tokenizer, config = create_long_model(
         model_specified=base_model_name_HF, attention_window=LOCAL_ATTN_WINDOW, max_pos=GLOBAL_MAX_POS)
