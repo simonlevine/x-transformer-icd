@@ -63,24 +63,24 @@ from loguru import logger
 # from xbert.modeling import LongformerForXMLC
 
 
-# from transformers import AutoTokenizer, AutoModel, AutoConfig
+from transformers import AutoTokenizer, AutoModel, AutoConfig
 # ---- substitute with local copy eventually...
 
 from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
 logger.info(
-    "loading Longformer tokenizer, model, and config. ...")
+    "loading tokenizer, model, and config. ...")
 
 #PARAMETERIZE
-longformer_tokenizer = BertTokenizer.from_pretrained(
+longformer_tokenizer = AutoTokenizer.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
 # LongformerTokenizer.from_pretrained(
     # 'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
-    
+
 # PARAMETERIZE
-longformer_model = LongformerModel.from_pretrained(
+longformer_model = AutoModel.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #PARAMETERIZE
-longformer_config = LongformerConfig.from_pretrained(
+longformer_config = AutoModel.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
