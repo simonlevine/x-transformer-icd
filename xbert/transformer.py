@@ -71,9 +71,12 @@ logger.info(
     "loading Longformer tokenizer, model, and config. ...")
 
 #PARAMETERIZE
-longformer_tokenizer = LongformerTokenizer.from_pretrained(
+longformer_tokenizer = BertTokenizer.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
-#PARAMETERIZE
+# LongformerTokenizer.from_pretrained(
+    # 'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+    
+# PARAMETERIZE
 longformer_model = LongformerModel.from_pretrained(
     'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #PARAMETERIZE
