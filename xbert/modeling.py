@@ -14,10 +14,11 @@ from transformers import(
     LongformerConfig,
     )
 
+#PARAMETERIZE
 longformer_model = LongformerModel.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
-    'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
 #ensure these are actuallly used below...
 
 from transformers.modeling_utils import SequenceSummary

@@ -70,12 +70,17 @@ from transformers import LongformerTokenizer, LongformerModel, LongformerConfig,
 logger.info(
     "loading Longformer tokenizer, model, and config. ...")
 
+
+#PARAMETERIZE
 longformer_tokenizer = LongformerTokenizer.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+#PARAMETERIZE
 longformer_model = LongformerModel.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+#PARAMETERIZE
 longformer_config = LongformerConfig.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
+#PARAMETERIZE
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
     'custom_models/biomed_roberta_base-4096', gradient_checkpointing=True)
 

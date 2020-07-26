@@ -24,7 +24,6 @@ from transformers import LongformerTokenizer, LongformerModel, LongformerConfig,
 logger.info(
     "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
 
-# ---- can substitute with local copy eventually...
 
 from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
