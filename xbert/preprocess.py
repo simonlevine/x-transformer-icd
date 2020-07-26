@@ -164,7 +164,7 @@ def main(args):
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        tokenizer = BertTokenizer.from_pretrained(
+        tokenizer = LongformerTokenizer.from_pretrained(
             'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)
 
         # tokenizer = tokenizer_class.from_pretrained(
