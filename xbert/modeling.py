@@ -16,9 +16,9 @@ from transformers import(
 
 #PARAMETERIZE
 longformer_model = LongformerModel.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
 longformer_config = LongformerConfig.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True)
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
 #PARAMETERIZE
 
 

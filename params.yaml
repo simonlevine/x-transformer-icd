@@ -1,6 +1,6 @@
 # max_seq_len: 4096
 max_seq_len: 2048
-model_name: 'simonlevine/Bio_ClinicalBERT-2048'
+model_name: 'simonlevine/biomed_roberta_base-2048'
 #model_name: 'allenai/longformer-base-4096'
 prepare_for_xbert:
   subsampling: true

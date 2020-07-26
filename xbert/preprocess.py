@@ -20,7 +20,7 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, BertTokenizer #LongformerTokenizer
+from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer #LongformerTokenizer
 
 logger.info(
     "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
@@ -36,7 +36,7 @@ MODEL_CLASSES = {
     "longformer": (
     LongformerConfig,
     LongformerForSequenceClassification,
-    BertTokenizer),
+    LongformerTokenizer),
 }
 
 logging.basicConfig(
@@ -164,14 +164,11 @@ def main(args):
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        tokenizer = BertTokenizer.from_pretrained(
-            'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)
-
-        # tokenizer = tokenizer_class.from_pretrained(
-        #     args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
-        #     do_lower_case=args.do_lower_case,
-        #     cache_dir=args.cache_dir if args.cache_dir else None, return_token_type_ids=True
-        # )
+        tokenizer = tokenizer_class.from_pretrained(
+            args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
+            do_lower_case=args.do_lower_case,
+            cache_dir=args.cache_dir if args.cache_dir else None, return_token_type_ids=True
+        )
 
         # process train features
         inp_trn_feat_path = os.path.join(args.input_data_dir, 'train_raw_texts.txt')

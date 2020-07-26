@@ -62,33 +62,27 @@ from loguru import logger
 
 # from xbert.modeling import LongformerForXMLC
 
-
-from transformers import AutoTokenizer, AutoModel, AutoConfig
-# ---- substitute with local copy eventually...
-
 from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
 logger.info(
     "loading tokenizer, model, and config. ...")
 
 #PARAMETERIZE
-longformer_tokenizer = AutoTokenizer.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
-# LongformerTokenizer.from_pretrained(
-    # 'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
+longformer_tokenizer = LongformerTokenizer.from_pretrained(
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True, return_token_type_ids=True)  # must return token ids to avert error
 
 # PARAMETERIZE
-longformer_model = AutoModel.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
+longformer_model = LongformerModel.from_pretrained(
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
 #PARAMETERIZE
-longformer_config = AutoModel.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
+longformer_config = LongformerConfig.from_pretrained(
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
 #PARAMETERIZE
 longformer_for_xmlc = LongformerForSequenceClassification.from_pretrained(
-    'simonlevine/Bio_ClinicalBERT-2048') #, gradient_checkpointing=True)
+    'simonlevine/biomed_roberta_base-2048', gradient_checkpointing=True)
 
 # global variable within the module
 
-ALL_MODELS = ('simonlevine/Bio_ClinicalBERT-2048')
+ALL_MODELS = ('simonlevine/biomed_roberta_base-2048')
 
 logger.info('building model class:\n ( \
     longformer_config, \
