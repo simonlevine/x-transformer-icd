@@ -20,7 +20,8 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification, BertTokenizer
+
 logger.info(
     "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
 
@@ -163,9 +164,9 @@ def main(args):
         args.model_type = args.model_type.lower()
         config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
 
-        tokenizer = LongformerTokenizer.from_pretrained(
+        tokenizer = BertTokenizer.from_pretrained(
             'simonlevine/Bio_ClinicalBERT-2048', gradient_checkpointing=True, return_token_type_ids=True)
-            
+
         # tokenizer = tokenizer_class.from_pretrained(
         #     args.tokenizer_name if args.tokenizer_name else args.model_name_or_path,
         #     do_lower_case=args.do_lower_case,
