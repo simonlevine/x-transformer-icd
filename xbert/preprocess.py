@@ -17,6 +17,7 @@ import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 from loguru import logger
+import yaml
 
 
 from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer

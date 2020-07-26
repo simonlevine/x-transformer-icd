@@ -39,6 +39,8 @@ import tempfile
 import scipy as sp
 import scipy.sparse as smat
 import sys
+import yaml
+
 
 import time
 from os import path

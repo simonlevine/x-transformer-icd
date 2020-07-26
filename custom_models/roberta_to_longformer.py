@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from transformers import RobertaModel, RobertaTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 from transformers.modeling_longformer import LongformerSelfAttention
+import yaml
 
 
 with open('params.yaml', 'r') as f:
