@@ -60,7 +60,7 @@ import xbert.rf_util as rf_util
 from loguru import logger
 
 
-from xbert.modeling import LongformerForXMLC
+# from xbert.modeling import LongformerForXMLC
 
 
 # from transformers import AutoTokenizer, AutoModel, AutoConfig

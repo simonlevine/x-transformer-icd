@@ -20,7 +20,7 @@ from loguru import logger
 
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification, BertTokenizer
+from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
 
 logger.info(
     "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
