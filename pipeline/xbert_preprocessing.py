@@ -52,6 +52,7 @@ except ImportError:
 
 # input filepaths.
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv.gz"
 ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
@@ -71,13 +72,15 @@ with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
 def main():
-    subsampling_enabled = params['prepare_for_xbert']['subsampling']
+    subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
+
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
     logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
+
     df_train, df_test = \
-        format_data_for_training.construct_datasets(subsampling_enabled)
+        format_data_for_training.construct_datasets(subsampling_enabled_param)
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
@@ -154,7 +157,7 @@ def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version):
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
     for idx, row in tqdm(df.iterrows(), unit="HADM id"):
         if icd_version == '10':
-            Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+            Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1 #sets 1 to array where ICD code(s) are matched.
         elif icd_version == '9':
             Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
     return Y_.fillna(0)
