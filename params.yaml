@@ -8,7 +8,10 @@ base_model_name: 'allenai/biomed_roberta_base'
 model_name: 'simonlevine/biomed_roberta_base-4096'
 prepare_for_xbert:
   subsampling: true
-  icd_version: 9
+  icd_version: '9'
+  diag_or_proc: 'diag'
+  icd_seq_num: 'all' #load in all ICDs, otherwise an int (i.e., 1 for just primary).
+  note_category: 'all' #load in all categories, otherwise a string (i.e., 'Discharge summary').
 xbert_model_training:
   # max_steps: 1000
   # warmup_steps: 100
