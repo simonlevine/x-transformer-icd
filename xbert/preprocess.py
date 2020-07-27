@@ -310,7 +310,7 @@ if __name__ == "__main__":
         "than this will be padded.",
     )
     parser.add_argument(
-        "--max_trunc_char",
+        "--max_trunc_char", #ISSUE
         default=4096,
         type=int,
         help="The maximum total number of character extracted from input raw text for fast processing.\n"
