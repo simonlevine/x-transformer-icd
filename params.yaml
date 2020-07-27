@@ -1,3 +1,4 @@
+
 max_seq_len: 4096 #Max number of words to consider per example when xbert/preprocessing.
 #Default is 128. MIMIC mean/std/max = 1358/792/7711
 max_char_len: # Max number of characters to consider per example when xbert/preprocessing.
