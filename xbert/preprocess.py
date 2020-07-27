@@ -17,20 +17,22 @@ import scipy as sp
 import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 from loguru import logger
+import yaml
 
-from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForSequenceClassification
 
-from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer
+
+with open('params.yaml', 'r') as f:
+    params = yaml.safe_load(f.read())
+
 logger.info(
     "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
-
-# ---- can substitute with local copy eventually...
 
 from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
 )
 
-ALL_MODELS = 'longformer'
+ALL_MODELS = params['model_name']
 
 MODEL_CLASSES = {
     "longformer": (
@@ -66,7 +68,8 @@ def run_label_embedding(args):
         Y_avg = normalize(Y, axis=1, norm="l2")
         label_embedding = smat.csr_matrix(Y_avg.T.dot(X))
         label_embedding = normalize(label_embedding, axis=1, norm="l2")
-    #cut out alternative embedding process...
+
+    #OMISSION: alternative embedding process
 
     # save label embedding
     logger.info("label_embedding {} {}".format(type(label_embedding), label_embedding.shape))
@@ -307,7 +310,7 @@ if __name__ == "__main__":
         "than this will be padded.",
     )
     parser.add_argument(
-        "--max_trunc_char",
+        "--max_trunc_char", #ISSUE
         default=4096,
         type=int,
         help="The maximum total number of character extracted from input raw text for fast processing.\n"

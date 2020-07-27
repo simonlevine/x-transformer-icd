@@ -34,9 +34,9 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 # GRAD_ACCU_STEPS=4
 
 # # Nvidia V100 (16Gb), fp32
-PER_DEVICE_TRN_BSZ=16
-PER_DEVICE_VAL_BSZ=16
-GRAD_ACCU_STEPS=2
+PER_DEVICE_TRN_BSZ=16 #PARAMETERIZE
+PER_DEVICE_VAL_BSZ=16 #PARAMETERIZE
+GRAD_ACCU_STEPS=2 #PARAMETERIZE
 
 #sample / testing
 
@@ -48,14 +48,6 @@ LOGGING_STEPS=$(params "['xbert_model_training']['logging_steps']")
 LEARNING_RATE=$(params "['xbert_model_training']['learning_rate']")
 
 MODEL_DIR=${OUTPUT_DIR}/${INDEXER_NAME}/matcher
-$PY_CONDA xbert/transformer.py \
-    -m ${MODEL_TYPE} -n ${MODEL_NAME} \
-    --do_eval -o ${MODEL_DIR} \
-    -x_trn ${PROC_DATA_DIR}/X.trn.tomodel.pkl \
-    -c_trn ${PROC_DATA_DIR}/C.trn.${INDEXER_NAME}.npz \
-    -x_tst ${PROC_DATA_DIR}/X.tst.tomodel.pkl \
-    -c_tst ${PROC_DATA_DIR}/C.tst.${INDEXER_NAME}.npz \
-    --per_device_eval_batch_size ${PER_DEVICE_VAL_BSZ}
 
 # predict - single GPU
 CUDA_VISIBLE_DEVICES=0 $PY_CONDA xbert/transformer.py \

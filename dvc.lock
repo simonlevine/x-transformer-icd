@@ -49,10 +49,12 @@ prepare_for_xbert:
     md5: 1a59f28ffa2d484df2d34f92eb8b47cd
   - path: data/intermediary-data/xbert_inputs/train_raw_texts.txt
     md5: 90c05d486086fcaaba2e8918cbcfa9ca
+
 xbert_label_embedding:
   cmd: ./run_preprocess_label.sh
   deps:
   - path: data/intermediary-data/xbert_inputs/X.trn.npz
+
     md5: bce791226498eca76160b8668e219be2
   - path: data/intermediary-data/xbert_inputs/X.tst.npz
     md5: b42163ed7475ed8a123d5ba5783c3ebf
@@ -89,6 +91,7 @@ xbert_label_embedding:
     md5: e0fcd8fe470aacf5d3a50a1b8c0a1846
   - path: data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
     md5: c79978d9099ff7fd03e6fe8c05e6e73f
+
 xbert_feat_embedding:
   cmd: ./run_preprocess_feat.sh
   deps:
@@ -116,6 +119,7 @@ xbert_feat_embedding:
     md5: 89c3e67eabc2f3f72845cbdbe464ad70
   - path: data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
     md5: c3bf0abdc755b5341debf9987c71826d
+ 
 xbert_model_training:
   cmd: ./run_transformer_train.sh
   deps:
@@ -139,10 +143,12 @@ xbert_model_training:
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
     md5: 29fcaeacc7979f1cdeb3caa9a9bcbc1c
+
 xbert_trained_model_prediction:
   cmd: ./run_transformer_training_prediction.sh
   deps:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
+
     md5: 29fcaeacc7979f1cdeb3caa9a9bcbc1c
   - path: data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
     md5: dc6f710fe905027fa8baa2e43152e22d
@@ -168,6 +174,7 @@ xbert_trained_model_prediction:
     md5: 14081458691f106182a6b00e8a9cfd3c
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
     md5: 11af11d47af29a29ab94511aff6e9a4c
+
 xbert_ranker_and_eval:
   cmd: ./run_transformer_predict.sh
   deps:
