@@ -750,7 +750,8 @@ def main():
 
         config.num_labels = num_labels
         matcher.config = config
-        # matcher.config.output_hidden_states = True #FOR BERTVIZ PURPOSES
+        # matcher.config.output_hidden_states = True #FOR VISUALIZATION PURPOSES
+
         model = model_class.from_pretrained(
             args.output_dir, config=matcher.config)
         model.to(args.device)

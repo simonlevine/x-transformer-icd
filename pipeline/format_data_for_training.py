@@ -41,6 +41,9 @@ def load_mimic_dataset():
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY == "Discharge summary"]
     note_events_df = note_events_df.drop_duplicates(["TEXT"])
+    #filtering out dates, etc.
+    note_events_df.text = note_events_df.text.str.replace('\[.*?\]', '', regex=True)
+
     full_df = note_events_df.merge(diagnosis_df.merge(icd9_long_description_df)).drop_duplicates(["HADM_ID"])
     full_df = full_df[["HADM_ID", "TEXT", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
     return full_df, (diagnosis_df, icd9_long_description_df, note_events_df)
