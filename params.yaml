@@ -10,6 +10,7 @@ prepare_for_xbert:
   subsampling: true
   icd_version: '9'
   diag_or_proc: 'diag'
+  icd_seq_num: 'all' #load in all ICDs, otherwise an int (i.e., 1 for just primary).
 xbert_model_training:
   # max_steps: 1000
   # warmup_steps: 100
