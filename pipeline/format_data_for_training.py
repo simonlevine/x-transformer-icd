@@ -11,12 +11,13 @@ ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
+
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
 diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
-
+CATEGORY_PARAM = params['prepare_for_xbert']['note_category']
 
 def load_and_serialize_dataset():
     df_train, df_test = construct_datasets()
@@ -53,10 +54,9 @@ def load_mimic_dataset():
         ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
     icd9_proc_long_description_df = pd.read_csv(
         ICD9_PROC_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
-
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
-
+    note_events_df = note_events_df[note_events_df.CATEGORY == CATEGORY_PARAM]
     full_diag_df = note_events_df.merge(diag_df.merge(
         icd9_long_description_df))
     full_diag_df = full_df[["HADM_ID", "TEXT",
