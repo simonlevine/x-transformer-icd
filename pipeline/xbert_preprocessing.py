@@ -80,7 +80,7 @@ def main():
     assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
     note_category_param = params['prepare_for_xbert']['note_category']
     icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
-    subsampling_param = params['prepare_for_xbert']['one_or_all_icds']
+    subsampling_param = params['prepare_for_xbert']['subsampling']
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'

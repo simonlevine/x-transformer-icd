@@ -19,7 +19,7 @@ diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
 note_category_param = params['prepare_for_xbert']['note_category']
 icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
-subsampling_param = params['prepare_for_xbert']['one_or_all_icds']
+subsampling_param = params['prepare_for_xbert']['subsampling']
 
 def load_and_serialize_dataset():
     df_train, df_test = construct_datasets(

@@ -22,7 +22,7 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
-stupid-tier
+# stupid-tier
 PER_DEVICE_TRN_BSZ=1
 PER_DEVICE_VAL_BSZ=2
 GRAD_ACCU_STEPS=8
