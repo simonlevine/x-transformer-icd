@@ -111,8 +111,8 @@ def proc_feat(
 
         # truncate long text by 4096 chars as they will exceed max_seq_len anyway REMOVED
         inputs = tokenizer.encode_plus(
-            # text=xseq[:args.max_trunc_char],
-            text=xseq[:],
+            text=xseq[:args.max_trunc_char],
+            # text=xseq[:],
             text_pair=None,
             add_special_tokens=True,
             max_length=args.max_xseq_len,
