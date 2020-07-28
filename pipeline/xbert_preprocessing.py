@@ -76,7 +76,6 @@ def main():
         params = yaml.safe_load(f.read())
     subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
-    icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
     diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 
     logger.info(f'Using ICD version {icd_version_specified}...')
@@ -85,10 +84,6 @@ def main():
 
     df_train, df_test = \
         format_data_for_training.construct_datasets(subsampling_enabled_param)
-
-    if icd_seq_num_param!='all':
-        df_train = df_train[df_test.SEQ_NUM == icd_seq_num_param]
-        df_test = df_test[df_test.SEQ_NUM == icd_seq_num_param]
 
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')

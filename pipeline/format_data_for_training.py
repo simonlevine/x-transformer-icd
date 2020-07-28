@@ -18,6 +18,7 @@ icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
 diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
 note_category_param = params['prepare_for_xbert']['note_category']
+icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
 
 def load_and_serialize_dataset():
     df_train, df_test = construct_datasets()
@@ -44,9 +45,9 @@ def construct_datasets(diag_or_proc_param='diag', note_category_param='Discharge
     return df_train, df_test
 
 
-def load_mimic_dataset(diag_or_proc_param, note_category_param):
+def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_param):
 
-    logger.info(f'Loading notes with from {note_category_param} category...')
+    logger.info(f'Loading notes from {note_category_param} category...')
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY ==
@@ -58,23 +59,23 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param):
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
         icd9_diag_long_description_df = pd.read_csv(
             ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
-        full_diag_df = note_events_df.merge(diag_df.merge(
+        full_df = note_events_df.merge(diag_df.merge(
             icd9_long_description_df))
-        full_diag_df = full_diag_df[["HADM_ID", "TEXT",
+        full_df = full_diag_df[["HADM_ID", "TEXT",
                             "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
-        full_df = full_diag_df
-
     elif diag_or_proc_param == 'proc':
         logger.info('Loading procedure outcome data...')
         proc_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
         icd9_proc_long_description_df = pd.read_csv(
             ICD9_PROC_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
-        full_proc_df = note_events_df.merge(proc_df.merge(
+        full_df = note_events_df.merge(proc_df.merge(
             icd9_long_description_df))
-        full_proc_df = full_proc_df[["HADM_ID", "TEXT",
+        full_df = full_df[["HADM_ID", "TEXT",
                                  "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
-        full_df = full_proc_df
+                                 
+        if icd_seq_num_param != 'all':
+            full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
 
     return full_df, (icd9_long_description_df, note_events_df)
 
