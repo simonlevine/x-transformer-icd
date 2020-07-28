@@ -67,10 +67,6 @@ XBERT_Y_TST_FP = './data/intermediary-data/xbert_inputs/Y.tst.npz'
 DF_TRAIN_FP ='./data/intermediary-data/df_train.pkl'
 DF_TEST_FP = './data/intermediary-data/df_test.pkl'
 
-vectorizer = TfidfVectorizer(
-    ngram_range=(1, n_gram_range_upper),
-    min_df=min_doc_freq
-)
 
 def main():
     with open('params.yaml', 'r') as f:
@@ -188,6 +184,7 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     """
 
     logger.info('Creating TF_IDF inputs...')
+
     vectorizer = TfidfVectorizer(
         ngram_range=(1, n_gram_range_upper),
         min_df=min_doc_freq)
