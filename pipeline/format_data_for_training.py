@@ -17,7 +17,7 @@ with open('params.yaml', 'r') as f:
 icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
 diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
-CATEGORY_PARAM = params['prepare_for_xbert']['note_category']
+note_category_param = params['prepare_for_xbert']['note_category']
 
 def load_and_serialize_dataset():
     df_train, df_test = construct_datasets()
@@ -44,10 +44,11 @@ def construct_datasets(diag_or_proc_param='diag',subsampling=False):
     return df_train, df_test
 
 
-def load_mimic_dataset(diag_or_proc_param):
+def load_mimic_dataset(diag_or_proc_param, note_category_param='Discharge summary'):
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
-    note_events_df = note_events_df[note_events_df.CATEGORY == CATEGORY_PARAM]
+    note_events_df = note_events_df[note_events_df.CATEGORY ==
+                                    note_category_param]
 
     if diag_or_proc_param == 'diag':
         diag_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
