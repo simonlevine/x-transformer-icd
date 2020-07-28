@@ -44,13 +44,16 @@ def construct_datasets(diag_or_proc_param='diag',subsampling=False):
     return df_train, df_test
 
 
-def load_mimic_dataset(diag_or_proc_param, note_category_param='Discharge summary'):
+def load_mimic_dataset(diag_or_proc_param, note_category_param):
+
+    logger.info(f'Loading notes with from {note_category_param} category...')
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY ==
                                     note_category_param]
 
     if diag_or_proc_param == 'diag':
+        logger.info('Loading diagnosis outcome data...')
         diag_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
         icd9_diag_long_description_df = pd.read_csv(
@@ -62,6 +65,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param='Discharge summar
         full_df = full_diag_df
 
     elif diag_or_proc_param == 'proc':
+        logger.info('Loading procedure outcome data...')
         proc_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
         icd9_proc_long_description_df = pd.read_csv(
