@@ -30,7 +30,7 @@ def load_and_serialize_dataset():
 
 
 def construct_datasets(diag_or_proc_param='diag',subsampling=False):
-    dataset, _ = load_mimic_datasets(diag_or_proc_param)
+    dataset, _ = load_mimic_dataset(diag_or_proc_param)
 
     if icd_version_specified == '10':
         dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
