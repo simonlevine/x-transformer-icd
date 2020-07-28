@@ -210,7 +210,7 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
     logger.info('TF-IDF Vectorizing testing text samples...')
     X_tst_tfidf = vectorizer.transform(corpus_tst)
-    return vectorizer, X_trn_tfidf, X_tst_tfidf
+    return X_trn_tfidf, X_tst_tfidf
 
 def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
     """Creates X_trn/X_tst TF-IDF vectors, (csr/npz files),
