@@ -53,7 +53,8 @@ except ImportError:
 # input filepaths.
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv.gz"
-ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 # output filepaths
@@ -71,10 +72,10 @@ DF_TEST_FP = './data/intermediary-data/df_test.pkl'
 def main():
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f.read())
-    subsampling_enabled = params['prepare_for_xbert']['subsampling']
     subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
     icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
+    diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
@@ -91,7 +92,8 @@ def main():
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
-    icd_labels, desc_labels = xbert_create_label_map(icd_version_specified)
+    icd_labels, desc_labels = xbert_create_label_map(
+        icd_version_specified, diag_or_proc_param)
     desc_labels = desc_labels.apply(xbert_clean_label)
 
     Y_trn_map = xbert_prepare_Y_maps(
@@ -115,8 +117,8 @@ def xbert_clean_label(label):
     return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
 
 
-def xbert_create_label_map(icd_version):
-    """creates a dataframe of all ICD9 or ICD10 labels and corresponding
+def xbert_create_label_map(icd_version, diag_or_proc_param):
+    """creates a dataframe of all ICD9 or ICD10 labels (CM or PCS) and corresponding
     descriptions in 2018 ICD code set (if 10).
     Note that this is inclusive of, but not limited to,
     the set of codes appearing in cases of MIMIC-iii."""
@@ -126,7 +128,10 @@ def xbert_create_label_map(icd_version):
 
     ##TODO: this block should be imported from format data
 
-    if icd_version == '10': #use general equivalnce mapping to create label map.
+    # use general equivalnce mapping to create label map.
+    if icd_version == '10':
+        assert diag_or_proc_param == 'diag', 'Cannot currently process ICD10-PCS labels.'
+
         icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
             (1, 2), ('ICD10_CODE', 'LONG_TITLE')))).drop(0, axis=1).drop_duplicates().reset_index(drop=True).dropna()
         desc_labels = icd_equivalence_df['LONG_TITLE']
@@ -135,7 +140,10 @@ def xbert_create_label_map(icd_version):
         assert icd_labels.shape == icd_labels.dropna().shape
 
     elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
-        icd9_df = pd.read_csv(ICD9_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+        if diag_or_proc_param == 'diag':
+            icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+        elif diag_or_proc_param == 'proc':
+            icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
         desc_labels = icd9_df['LONG_TITLE']
         assert desc_labels.shape == desc_labels.dropna().shape
         icd_labels = icd9_df['ICD9_CODE']
