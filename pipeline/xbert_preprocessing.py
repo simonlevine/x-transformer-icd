@@ -76,7 +76,7 @@ def main():
         params = yaml.safe_load(f.read())
     subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
-    diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
+    diag_or_proc_param = str(params['prepare_for_xbert']['diag_or_proc'])
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
