@@ -59,21 +59,21 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
         logger.info('Loading diagnosis outcome data...')
         diag_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-        icd9_diag_long_description_df = pd.read_csv(
+        icd9_long_description_df = pd.read_csv(
             ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
         full_df = note_events_df.merge(diag_df.merge(
-            icd9_diag_long_description_df))
+            icd9_long_description_df))
         full_df = full_df[["HADM_ID", "TEXT",
                             "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
-                            
+
     elif diag_or_proc_param == 'proc':
         logger.info('Loading procedure outcome data...')
         proc_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
             "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-        icd9_proc_long_description_df = pd.read_csv(
+        icd9_long_description_df = pd.read_csv(
             ICD9_PROC_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
         full_df = note_events_df.merge(proc_df.merge(
-            icd9_proc_long_description_df))
+            icd9_long_description_df))
         full_df = full_df[["HADM_ID", "TEXT",
                                  "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
                                  
