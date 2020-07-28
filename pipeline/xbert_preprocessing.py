@@ -36,6 +36,7 @@ Given the input files, the XBERT pipeline (Indexer, Matcher, and Ranker) can the
 
 import typing as t
 import re
+import pickle
 import numpy as np
 import pandas as pd
 import scipy
@@ -66,6 +67,7 @@ XBERT_Y_TRN_FP = './data/intermediary-data/xbert_inputs/Y.trn.npz'
 XBERT_Y_TST_FP = './data/intermediary-data/xbert_inputs/Y.tst.npz'
 DF_TRAIN_FP ='./data/intermediary-data/df_train.pkl'
 DF_TEST_FP = './data/intermediary-data/df_test.pkl'
+TF_IDF_VECTORIZER_PICKLE_FP = './data/model-artifacts/tf-idf-vectorizor.pkl'
 
 
 def main():
@@ -90,14 +92,19 @@ def main():
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
-    X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
+    vectorizer = TfidfVectorizer(
+        ngram_range=(1, 1),
+        min_df=1
+    )
+    X_trn_tfidf = vectorizer.fit_transform(list(X_trn.values.flatten()))
+    X_tst_tfidf = vectorizer.transform(list(X_tst.values.flatten()))
     icd_labels, desc_labels = xbert_create_label_map(icd_version_specified)
     desc_labels = desc_labels.apply(xbert_clean_label)
 
     Y_trn_map = xbert_prepare_Y_maps(
-        df_train, 'training', icd_labels.tolist(), icd_version_specified)
+        df_train, icd_labels.tolist(), icd_version_specified)
     Y_tst_map = xbert_prepare_Y_maps(
-        df_test, 'testing', icd_labels.tolist(), icd_version_specified)
+        df_test, icd_labels.tolist(), icd_version_specified)
 
     xbert_write_preproc_data_to_file(
         desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
@@ -107,8 +114,9 @@ def main():
     )
     df_train.to_pickle(DF_TRAIN_FP)
     df_test.to_pickle(DF_TEST_FP)
+    with open(TF_IDF_VECTORIZER_PICKLE_FP, "wb") as f:
+        pickle.dump(vectorizer, f)
     logger.info('Done.')
-
 
 
 def xbert_clean_label(label):
@@ -144,7 +152,7 @@ def xbert_create_label_map(icd_version):
     return icd_labels, desc_labels
 
 
-def xbert_prepare_Y_maps(df, df_subset, icd_labels, icd_version):
+def xbert_prepare_Y_maps(df, icd_labels, icd_version):
     """Creates a binary mapping of
     icd labels to appearance in a patient account
     (icd to hadm_id)
@@ -178,6 +186,7 @@ def xbert_prepare_txt_inputs(df, df_subset):
     raw_texts = df[['TEXT']].replace(r'\n', ' ', regex=True)  # train stage expects each example to fit on a single line
     return raw_texts
 
+
 def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     """
     Creates tf-idf vectors of instances in preparation for xbert training.
@@ -199,7 +208,6 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     logger.info('TF-IDF Vectorizing testing text samples...')
     X_tst_tfidf = vectorizer.transform(corpus_tst)
     return X_trn_tfidf, X_tst_tfidf
-
 
 def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
     """Creates X_trn/X_tst TF-IDF vectors, (csr/npz files),
