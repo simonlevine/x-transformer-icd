@@ -81,7 +81,7 @@ def main():
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
-    logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
+    logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled_param else 'disabled')
 
     df_train, df_test = \
         format_data_for_training.construct_datasets(subsampling_enabled_param)
