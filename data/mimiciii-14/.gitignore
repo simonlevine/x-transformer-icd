@@ -8,7 +8,7 @@
 /DRGCODES.csv.gz
 /D_CPT.csv.gz
 /D_ICD_DIAGNOSES.csv.gz
-/D_ICD_PROCEDURES.csv.gz
+/D_ICD_PROCEDURES.csv
 /D_ITEMS.csv.gz
 /D_LABITEMS.csv.gz
 /ICUSTAYS.csv.gz

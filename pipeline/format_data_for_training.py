@@ -8,7 +8,7 @@ DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 NOTE_EVENTS_CSV_FP = "./data/mimiciii-14/NOTEEVENTS.csv.gz"
 ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv.gz"
+ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 
