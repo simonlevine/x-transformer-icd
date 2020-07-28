@@ -10,8 +10,8 @@ prepare_for_xbert:
   subsampling: true
   icd_version: '9'
   diag_or_proc: 'diag'
-  one_or_all_icds: 'all' #load in all ICDs, otherwise an int (i.e., 1 for just primary).
-  note_category: 'all' #load in all categories, otherwise a string (i.e., 'Discharge summary').
+  one_or_all_icds: 1 #load in 'all' ICDs, otherwise an int (i.e., 1 for just primary).
+  note_category: 'Discharge summary' #load in all categories, otherwise a string (i.e., 'Discharge summary').
 xbert_model_training:
   # max_steps: 1000
   # warmup_steps: 100
