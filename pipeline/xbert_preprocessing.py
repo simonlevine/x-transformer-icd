@@ -74,17 +74,20 @@ TF_IDF_VECTORIZER_PICKLE_FP = './data/model-artifacts/tf-idf-vectorizor.pkl'
 def main():
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f.read())
-    subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
-    diag_or_proc_param = str(params['prepare_for_xbert']['diag_or_proc'])
+    diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
+    assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
+    note_category_param = params['prepare_for_xbert']['note_category']
+    icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
+    subsampling_param = params['prepare_for_xbert']['one_or_all_icds']
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
     logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled_param else 'disabled')
 
     df_train, df_test = \
-        format_data_for_training.construct_datasets(subsampling_enabled_param)
-
+        format_data_for_training.construct_datasets(
+            diag_or_proc_param, note_category_param, subsampling_param)
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
