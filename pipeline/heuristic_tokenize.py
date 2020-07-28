@@ -1,16 +1,12 @@
-# NOTE: this code is taken directly from Willie Boag's mimic-tokenize github repository 
-# https://github.com/wboag/mimic-tokenize/blob/master/heuristic-tokenize.py commit e953d271bbb4c53aee5cc9a7b8be870a6b007604
-# The code was modified in two ways:
-# (1) to make the script compatible with Python 3
-# (2) to remove the main and discharge_tokenize methods which we don't directly use
-
-# There are two known issues with this code. We have not yet fixed them because we want to maintain the reproducibility of 
-# our code for the work that was published. However, anyone wanting to extend this work should make the following changes:
-# (1) fix a bug on line #168 where . should be replaced with \. i.e. should be `while re.search('\n\s*%d\.'%n,segment):`
-# (2) add else statement (`else: new_segments.append(segments[i])`) to the if statement at line 287  
-#     `if (i == N-1) or is_title(segments[i+1]):`
-
-
+""" This code is adapted directly from Willie Boag's mimic-tokenize github repository
+https://github.com/wboag/mimic-tokenize/blob/master/heuristic-tokenize.py, commit e953d271bbb4c53aee5cc9a7b8be870a6b007604
+The code was modified in the following ways:
+(1) to make the script compatible with Python 3
+(2) to remove the main and discharge_tokenize methods which we don't directly use
+(3) to fix a bug on line #168 where . should be replaced with \. i.e. should be `while re.search('\n\s*%d\.'%n,segment):`
+(2) add else statement (`else: new_segments.append(segments[i])`) to the if statement:
+    `if (i == N-1) or is_title(segments[i+1]):`
+"""
 
 import sys
 import re, nltk
@@ -178,7 +174,6 @@ def sent_tokenize_rules(text):
         print '------------START------------'
         print segment
         print '-------------END-------------'
-
         print start,n
         print 
         '''
@@ -200,25 +195,18 @@ def sent_tokenize_rules(text):
 
     '''
         TODO: Big Challenge
-
         There is so much variation in what makes a list. Intuitively, I can tell it's a
         list because it shows repeated structure (often following a header)
-
         Examples of some lists (with numbers & symptoms changed around to noise)
-
             Past Medical History:
             -- Hyperlipidemia
             -- lactose intolerance
             -- Hypertension
-
-
             Physical Exam:
             Vitals - T 82.2 BP 123/23 HR 73 R 21 75% on 2L NC
             General - well appearing male, sitting up in chair in NAD
             Neck - supple, JVP elevated to angle of jaw 
             CV - distant heart sounds, RRR, faint __PHI_43__ murmur at
-
-
             Labs:
             __PHI_10__ 12:00PM BLOOD WBC-8.8 RBC-8.88* Hgb-88.8* Hct-88.8*
             MCV-88 MCH-88.8 MCHC-88.8 RDW-88.8* Plt Ct-888
@@ -234,8 +222,6 @@ def sent_tokenize_rules(text):
             MCV-88 MCH-88.8 MCHC-88.8 RDW-88.8* Plt Ct-888
             __PHI_301__ 05:30AM BLOOD WBC-8.8 RBC-8.88* Hgb-88.8* Hct-88.8*
             MCV-88 MCH-88.8 MCHC-88.8 RDW-88.8* Plt Ct-888
-
-
             Medications on Admission:
             Allopurinol 100 mg DAILY
             Aspirin 250 mg DAILY
@@ -299,11 +285,9 @@ def sent_tokenize_rules(text):
 
     '''
         Should do some kind of regex to find "TEST: value" in segments?
-
             Indication: Source of embolism.
             BP (mm Hg): 145/89
             HR (bpm): 80
-
         Note: I made a temporary hack that fixes this particular problem. 
               We'll see how it shakes out
     '''
@@ -317,7 +301,4 @@ def sent_tokenize_rules(text):
 
 
     return segments
-
-
-
 

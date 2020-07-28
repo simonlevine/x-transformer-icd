@@ -53,6 +53,7 @@ except ImportError:
 
 # input filepaths.
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
+PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv.gz"
 ICD9_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
@@ -70,17 +71,24 @@ TF_IDF_VECTORIZER_PICKLE_FP = './data/model-artifacts/tf-idf-vectorizor.pkl'
 
 
 def main():
-
     with open('params.yaml', 'r') as f:
         params = yaml.safe_load(f.read())
     subsampling_enabled = params['prepare_for_xbert']['subsampling']
+    subsampling_enabled_param = params['prepare_for_xbert']['subsampling']
     icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
+    icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
     logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_enabled else 'disabled')
+
     df_train, df_test = \
-        format_data_for_training.construct_datasets(subsampling_enabled)
+        format_data_for_training.construct_datasets(subsampling_enabled_param)
+
+    if icd_seq_num_param!='all':
+        df_train = df_train[df_test.SEQ_NUM == icd_seq_num_param]
+        df_test = df_test[df_test.SEQ_NUM == icd_seq_num_param]
+
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
@@ -168,6 +176,7 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
             elif icd_version == '9':
                 Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
             pbar.update(1)
+
     return Y_.fillna(0)
 
 
@@ -177,6 +186,28 @@ def xbert_prepare_txt_inputs(df, df_subset):
     raw_texts = df[['TEXT']].replace(r'\n', ' ', regex=True)  # train stage expects each example to fit on a single line
     return raw_texts
 
+
+def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
+    """
+    Creates tf-idf vectors of instances in preparation for xbert training.
+    """
+
+    logger.info('Creating TF_IDF inputs...')
+
+    vectorizer = TfidfVectorizer(
+        ngram_range=(1, n_gram_range_upper),
+        min_df=min_doc_freq)
+
+    logger.info('Fitting vectorizers to corpora...')
+
+    corpus_trn = list(X_trn.values.flatten())
+    corpus_tst = list(X_tst.values.flatten())
+
+    logger.info('TF-IDF Vectorizing training text samples...')
+    X_trn_tfidf = vectorizer.fit_transform(corpus_trn)
+    logger.info('TF-IDF Vectorizing testing text samples...')
+    X_tst_tfidf = vectorizer.transform(corpus_tst)
+    return X_trn_tfidf, X_tst_tfidf
 
 def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
     """Creates X_trn/X_tst TF-IDF vectors, (csr/npz files),
