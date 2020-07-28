@@ -75,8 +75,9 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
         full_df = full_df[["HADM_ID", "TEXT",
                                  "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
                                  
-        if icd_seq_num_param != 'all':
-            full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
+    logger.info(f'Setting included ICD sequence number to {icd_seq_num_param}')
+    if icd_seq_num_param != 'all':
+        full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
 
     return full_df, (icd9_long_description_df, note_events_df)
 
