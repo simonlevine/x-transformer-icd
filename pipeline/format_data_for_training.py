@@ -39,7 +39,7 @@ def construct_datasets(diag_or_proc_param, note_category_param, subsampling_para
         dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
 
     df_train, df_test = test_train_validation_split(dataset)
-    if subsampling == True:
+    if subsampling_param == True:
         logger.info('Subsampling 80 training rows, 20 testing rows of data.')
         df_train = df_train.sample(n=80)
         df_test = df_test.sample(n=20)
