@@ -57,7 +57,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param='Discharge summar
             ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
         full_diag_df = note_events_df.merge(diag_df.merge(
             icd9_long_description_df))
-        full_diag_df = full_df[["HADM_ID", "TEXT",
+        full_diag_df = full_diag_df[["HADM_ID", "TEXT",
                             "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
         full_df = full_diag_df
 
