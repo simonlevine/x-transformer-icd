@@ -30,7 +30,7 @@ def load_and_serialize_dataset():
 
 
 def construct_datasets(diag_or_proc_param='diag',subsampling=False):
-    dataset, _ = load_mimic_dataset(diag_or_proc_param)
+    dataset, _ = load_mimic_datasets(diag_or_proc_param)
 
     if icd_version_specified == '10':
         dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
@@ -44,30 +44,34 @@ def construct_datasets(diag_or_proc_param='diag',subsampling=False):
     return df_train, df_test
 
 
-def load_mimic_dataset():
-    proc_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
-        "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-    diag_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
-        "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-
-    icd9_diag_long_description_df = pd.read_csv(
-        ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
-    icd9_proc_long_description_df = pd.read_csv(
-        ICD9_PROC_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
+def load_mimic_dataset(diag_or_proc_param):
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY", "ISERROR", "CHARTDATE"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY == CATEGORY_PARAM]
-    full_diag_df = note_events_df.merge(diag_df.merge(
-        icd9_long_description_df))
-    full_diag_df = full_df[["HADM_ID", "TEXT",
+
+    if diag_or_proc_param == 'diag':
+        diag_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
+            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+        icd9_diag_long_description_df = pd.read_csv(
+            ICD9_DIAG_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
+        full_diag_df = note_events_df.merge(diag_df.merge(
+            icd9_long_description_df))
+        full_diag_df = full_df[["HADM_ID", "TEXT",
                             "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
+        full_df = full_diag_df
 
-    full_proc_df = note_events_df.merge(proc_df.merge(
-        icd9_long_description_df))
-    full_proc_df = full_proc_df[["HADM_ID", "TEXT",
+    elif diag_or_proc_param == 'proc':
+        proc_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
+            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+        icd9_proc_long_description_df = pd.read_csv(
+            ICD9_PROC_KEY_FP, usecols=["ICD9_CODE", "LONG_TITLE"])
+        full_proc_df = note_events_df.merge(proc_df.merge(
+            icd9_long_description_df))
+        full_proc_df = full_proc_df[["HADM_ID", "TEXT",
                                  "CATEGORY", "SEQ_NUM", "ICD9_CODE", "LONG_TITLE"]]
+        full_df = full_proc_df
 
-    return diag_df, proc_df, (icd9_long_description_df, note_events_df)
+    return full_df, (icd9_long_description_df, note_events_df)
 
 
 def preprocess_and_clean_note(note):
