@@ -97,9 +97,12 @@ def main():
             diag_or_proc_param, note_category_param, subsampling_param)
 
     logger.info('Filtering training text...')
-    df_train['TEXT'] = df_train['TEXT'].apply(preprocess_and_clean_note)
+    tqdm.pandas(desc='Training data filtering progress:')
+    df_train['TEXT'] = df_train['TEXT'].progress_apply(preprocess_and_clean_note)
+
     logger.info('Filtering test text...')
-    df_test['TEXT'] = df_test['TEXT'].apply(preprocess_and_clean_note)
+    tqdm.pandas(desc='Testing data filtering progress:')
+    df_test['TEXT'] = df_test['TEXT'].progress_apply(preprocess_and_clean_note)
 
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
