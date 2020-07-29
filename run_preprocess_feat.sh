@@ -20,6 +20,6 @@ $PY_CONDA xbert/preprocess.py \
     -o ${PROC_DATA_DIR} \
     -m ${MODEL_TYPE} \
     -n ${MODEL_NAME} \
-    --max_xseq_len ${MAX_XSEQ_LEN} \
-    --max_trunc_char ${MAX_XCHAR_LEN}
+    --max_xseq_len ${MAX_XSEQ_LEN} #\
+    # --max_trunc_char ${MAX_XCHAR_LEN}
     # |& tee ${PROC_DATA_DIR}/log.${MODEL_TYPE}.${MAX_XSEQ_LEN}.txt

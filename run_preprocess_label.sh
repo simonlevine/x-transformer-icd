@@ -26,7 +26,6 @@ $PY_CONDA xbert/preprocess.py \
     -l ${LABEL_EMB} \
     -x ${label_emb_inst_path} \
     --max_xseq_len ${MAX_XSEQ_LEN} \
-    --max_trunc_char 4096 \
     --model_name_or_path ${MODEL_NAME} \
     -m ${MODEL_TYPE}
 
