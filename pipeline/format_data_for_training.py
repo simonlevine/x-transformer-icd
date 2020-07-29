@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from loguru import logger
 from tqdm import tqdm
+import re
 import nltk
 nltk.download('popular')
 from nltk.corpus import stopwords
