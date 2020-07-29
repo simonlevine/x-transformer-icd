@@ -14,7 +14,8 @@ conda env create -f environment.yml \
                 botocore chardet click docutils \
                 idna jmespath pathspec python-dateutil \
                 regex requests s3transfer sacremoses \
-                sentencepiece toml torch tqdm transformers \
+                sentencepiece toml torch tqdm \
                 typed-ast urllib3 loguru \
+                #transformers
 && python setup.py install --force \
 && conda install --yes pytorch torchvision cudatoolkit=10.1 -c pytorch

@@ -83,7 +83,7 @@ dependencies:
     - toml
     - torch
     - tqdm
-    - transformers
+    # - transformers
     - typed-ast
     - urllib3
     - loguru
