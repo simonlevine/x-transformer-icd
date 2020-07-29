@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from loguru import logger
 from tqdm import tqdm
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
