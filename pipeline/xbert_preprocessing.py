@@ -49,7 +49,8 @@ from tqdm import tqdm
 import re
 import nltk
 import string
-
+nltk.download('punkt')
+nltk.download('stopwords')
 
 try:
     import format_data_for_training #script from auto-icd
@@ -149,8 +150,6 @@ def preprocess_and_clean_note(note):
 
 
 def remove_stopwords(text):
-    nltk.download('punkt')
-    nltk.download('stopwords')
     stop_words = set(stopwords.words("english"))
     word_tokens = word_tokenize(text)
     filtered_text = [
