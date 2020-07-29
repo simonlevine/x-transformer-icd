@@ -84,7 +84,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
 
     full_df_filt = full_df
     tqdm.pandas()
-    full_df_filt = full_df.apply(preprocess_and_clean_note)
+    full_df_filt.TEXT = full_df.TEXT.apply(preprocess_and_clean_note)
     return full_df_filt, (icd9_long_description_df, note_events_df)
 
 
