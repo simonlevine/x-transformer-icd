@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from loguru import logger
 from tqdm import tqdm
+import nltk
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
