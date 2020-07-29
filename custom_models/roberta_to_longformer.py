@@ -13,14 +13,14 @@ with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
 
-MODEL_OUT_DIR = 'custom_models'
+MODEL_OUT_DIR = ''
 LOCAL_ATTN_WINDOW = params['local_attention_window']
 GLOBAL_MAX_POS = params['global_attention_window']
 
 def main():
     base_model_name_HF = params['base_model_name']
     base_model_name = base_model_name_HF.split('/')[-1]
-    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{GLOBAL_MAX_POS}'
+    model_path = f'{MODEL_OUT_DIR}/{base_model_name}-{GLOBAL_MAX_POS}-speedfix'
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
@@ -35,6 +35,8 @@ def main():
     tokenizer.save_pretrained(model_path)
     config.save_pretrained(model_path)
 
+
+
 class RobertaLongSelfAttention(LongformerSelfAttention):
     def forward(
         self,
@@ -44,6 +46,7 @@ class RobertaLongSelfAttention(LongformerSelfAttention):
         encoder_hidden_states=None,
         encoder_attention_mask=None,
         output_attentions=False,
+        is_global_attn=is_index_global_attn.flatten().any().item() #temporary fix.
     ):
         return super().forward(hidden_states, attention_mask=attention_mask, output_attentions=output_attentions)
 

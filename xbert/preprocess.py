@@ -22,6 +22,7 @@ import yaml
 
 from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer
 
+
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
