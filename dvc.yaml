@@ -16,9 +16,9 @@ stages:
       - pipeline/format_data_for_training.py
       - data/ICD_general_equivalence_mapping.csv
       - data/mimiciii-14/DIAGNOSES_ICD.csv.gz
-      - data/mimiciii-14/PROCEDURES_ICD.csv.gz
+      - data/mimiciii-14/PROCEDURES_ICD.csv
       - data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
-      - data/mimiciii-14/D_ICD_PROCEDURES.csv.gz
+      - data/mimiciii-14/D_ICD_PROCEDURES.csv
       - data/mimiciii-14/NOTEEVENTS.csv.gz
     params:
       - prepare_for_xbert.subsampling
