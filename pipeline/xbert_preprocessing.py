@@ -34,6 +34,8 @@ Next, these files should be places in the proper {DATASET} folder for xbert.
 Given the input files, the XBERT pipeline (Indexer, Matcher, and Ranker) can then be run downstream.
 """
 
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 import typing as t
 import re
 import pickle
@@ -44,6 +46,10 @@ import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
+import re
+import nltk
+import string
+nltk.download('popular')
 
 try:
     import format_data_for_training #script from auto-icd
@@ -90,6 +96,12 @@ def main():
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
 
+    logger.info('Filtering training text...')
+    df_train['TEXT'] = df_train['TEXT'].apply(preprocess_and_clean_note)
+    logger.info('Filtering test text...')
+    df_test['TEXT'] = df_test['TEXT'].apply(preprocess_and_clean_note)
+
+
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
@@ -114,6 +126,45 @@ def main():
     # with open(TF_IDF_VECTORIZER_PICKLE_FP, "wb") as f:
     #     pickle.dump(vectorizer, f)
     # logger.info('Done.')
+
+
+def preprocess_and_clean_note(note):
+    note = note.lower()  # make lowercase
+    note = note.replace(r"\[.*?\]", "")  # remove de-id token
+    note = " ".join(note.split())
+    note = remove_stopwords(note)  # remove stopwords
+    note = " ".join(note)
+    note = remove_admin_language(note)
+    note = note.replace('\n', ' ')
+    note = note.replace('w/', 'with')
+    note = note.replace("_", "")
+    note = note.replace("#", "")
+    note = re.sub(r'\d+', '', note)  # remove numbers
+    note = note.translate(str.maketrans(
+        '', '', string.punctuation))  # remove punctuation
+    return note
+
+
+def remove_stopwords(text):
+    stop_words = set(stopwords.words("english"))
+    word_tokens = word_tokenize(text)
+    filtered_text = [
+        word for word in word_tokens if word not in stop_words]
+    return filtered_text
+
+
+def remove_admin_language(text):
+    other_words = {'Admission Date', 'Discharge Date', 'Date of Birth', 'Phone', 'Date/Time', 'ID',
+                   'Completed by', 'Dictated By', 'Attending', 'Provider: ', 'Provider', 'Primary', 'Secondary',
+                   ' MD Phone', ' M.D. Phone', ' MD', ' PHD',
+                   ' X', ' IV', ' VI', ' III', ' II', ' VIII',
+                   'JOB#', 'JOB#: cc', '# Code',
+                   'Metoprolol Tartrate 25 mg Tablet Sig', ')', '000 unit/mL Suspension Sig', '0.5 % Drops ', '   Status: Inpatient DOB', 'Levothyroxine 50 mcg Tablet Sig', '0.5 % Drops Sig', 'Lidocaine 5 %(700 mg/patch) Adhesive Patch', 'Clopidogrel Bisulfate 75 mg Tablet Sig', 'Levofloxacin 500 mg Tablet Sig', 'Albuterol 90 mcg/Actuation Aerosol ', 'None Tech Quality: Adequate Tape #', '000 unit/mL Solution Sig', 'x'
+                   }
+    for i in other_words:
+        text = text.replace(i.lower(), '')
+    return text
+
 
 
 def xbert_clean_label(label):

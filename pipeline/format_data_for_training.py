@@ -3,12 +3,7 @@ import yaml
 import pandas as pd
 import numpy as np
 from loguru import logger
-import re
-import nltk
-import string
-nltk.download('popular')
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+
 
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
@@ -87,48 +82,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
     if icd_seq_num_param != 'all':
         full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
 
-    full_df_filt = full_df
-    logger.info('Filtering text...')
-    full_df_filt['TEXT'] = full_df['TEXT'].apply(preprocess_and_clean_note)
-    return full_df_filt, (icd9_long_description_df, note_events_df)
-
-
-def preprocess_and_clean_note(note):
-    note = note.lower()  # make lowercase
-    note = note.replace(r"\[.*?\]", "")  # remove de-id token
-    note = " ".join(note.split())
-    note = remove_stopwords(note)  # remove stopwords
-    note = " ".join(note)
-    note = remove_admin_language(note)
-    note = note.replace('\n', ' ')
-    note = note.replace('w/', 'with')
-    note = note.replace("_", "")
-    note = note.replace("#", "")
-    note = re.sub(r'\d+', '', note)  # remove numbers
-    note = note.translate(str.maketrans(
-        '', '', string.punctuation))  # remove punctuation
-    return note
-
-
-def remove_stopwords(text):
-    stop_words = set(stopwords.words("english"))
-    word_tokens = word_tokenize(text)
-    filtered_text = [
-        word for word in word_tokens if word not in stop_words]
-    return filtered_text
-
-
-def remove_admin_language(text):
-    other_words = {'Admission Date', 'Discharge Date', 'Date of Birth', 'Phone', 'Date/Time', 'ID',
-                   'Completed by', 'Dictated By', 'Attending', 'Provider: ', 'Provider', 'Primary', 'Secondary',
-                   ' MD Phone', ' M.D. Phone', ' MD', ' PHD',
-                   ' X', ' IV', ' VI', ' III', ' II', ' VIII',
-                   'JOB#', 'JOB#: cc', '# Code',
-                   'Metoprolol Tartrate 25 mg Tablet Sig', ')', '000 unit/mL Suspension Sig', '0.5 % Drops ', '   Status: Inpatient DOB', 'Levothyroxine 50 mcg Tablet Sig', '0.5 % Drops Sig', 'Lidocaine 5 %(700 mg/patch) Adhesive Patch', 'Clopidogrel Bisulfate 75 mg Tablet Sig', 'Levofloxacin 500 mg Tablet Sig', 'Albuterol 90 mcg/Actuation Aerosol ', 'None Tech Quality: Adequate Tape #', '000 unit/mL Solution Sig', 'x'
-                   }
-    for i in other_words:
-        text = text.replace(i.lower(), '')
-    return text
+    return full_df, (icd9_long_description_df, note_events_df)
 
 
 def load_icd_general_equivalence_mapping():
