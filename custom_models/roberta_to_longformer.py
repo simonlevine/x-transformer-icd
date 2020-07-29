@@ -56,8 +56,7 @@ class RobertaLongSelfAttention(LongformerSelfAttention):
         encoder_hidden_states=None,
         encoder_attention_mask=None,
         output_attentions=False,
-        is_global_attn=is_index_global_attn.flatten().any().item() #temporary fix.
-    ):
+        ):
         return super().forward(hidden_states, attention_mask=attention_mask, output_attentions=output_attentions)
 
 class RobertaLongModel(RobertaModel):
