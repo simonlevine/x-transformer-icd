@@ -13,7 +13,7 @@ with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
 
-MODEL_OUT_DIR = ''
+MODEL_OUT_DIR = './custom_models'
 LOCAL_ATTN_WINDOW = params['local_attention_window']
 GLOBAL_MAX_POS = params['global_attention_window']
 
