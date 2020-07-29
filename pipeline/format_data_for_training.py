@@ -3,7 +3,7 @@ import yaml
 import pandas as pd
 import numpy as np
 from loguru import logger
-import tqdm
+from tqdm import tqdm
 
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
