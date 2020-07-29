@@ -5,7 +5,7 @@ import math
 from dataclasses import dataclass, field
 from transformers import RobertaModel, RobertaTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
-# from transformers.modeling_longformer import LongformerSelfAttention
+# from transformers.modeling_longformer import LongformerSelfAttention UNCOMMMENT AND REMOVE AFTER HF>3.02 RELEASES, RERUN
 
 import yaml
 

@@ -3,6 +3,7 @@ import yaml
 import pandas as pd
 import numpy as np
 from loguru import logger
+import tqdm
 
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
@@ -81,7 +82,10 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
     if icd_seq_num_param != 'all':
         full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
 
-    return full_df, (icd9_long_description_df, note_events_df)
+    full_df_filt = full_df
+    tqdm.pandas()
+    full_df_filt = full_df.apply(preprocess_and_clean_note)
+    return full_df_filt, (icd9_long_description_df, note_events_df)
 
 
 def preprocess_and_clean_note(note):
