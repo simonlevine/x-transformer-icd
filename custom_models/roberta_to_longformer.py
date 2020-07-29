@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from transformers import RobertaModel, RobertaTokenizer, TextDataset, DataCollatorForLanguageModeling, Trainer
 from transformers import TrainingArguments, HfArgumentParser
 # from transformers.modeling_longformer import LongformerSelfAttention
+
 import yaml
 
 import logging
@@ -15,8 +16,6 @@ import torch
 import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
 from torch.nn import functional as F
-
-
 
 
 with open('params.yaml', 'r') as f:

@@ -110,15 +110,15 @@ def proc_feat(
         if inst_idx % 1000 == 0:
             logger.info(f"Writing example {inst_idx} of {n_examples}")
 
-        # truncate long text by 4096 chars as they will exceed max_seq_len anyway REMOVED
+        # truncate long text by 4096 chars as they will exceed max_seq_len anyway
         inputs = tokenizer.encode_plus(
-            text=xseq[:args.max_trunc_char],
-            # text=xseq[:],
+            # text=xseq[:args.max_trunc_char],
+            text=xseq[:],
             text_pair=None,
             add_special_tokens=True,
-            max_length=args.max_xseq_len,
+            max_length=None,#args.max_xseq_len, #CHANGED
             return_token_type_ids=True, #CHANGED
-            truncation=True, #CHANGED
+            truncation=False, #CHANGED
         )
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
         xseq_lens.append(len(input_ids))
