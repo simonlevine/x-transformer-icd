@@ -6,6 +6,7 @@ from loguru import logger
 from tqdm import tqdm
 import re
 import nltk
+import string
 nltk.download('popular')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
