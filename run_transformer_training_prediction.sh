@@ -24,9 +24,9 @@ MAX_XSEQ_LEN=$(params "['max_seq_len']")
 #SHOULD ADD SOMETHING HERE FOR A 2070?
 
 # Stupid-tier
-PER_DEVICE_TRN_BSZ=1
-PER_DEVICE_VAL_BSZ=2
-GRAD_ACCU_STEPS=8
+PER_DEVICE_TRN_BSZ=$(params "['xbert_model_training']['per_device_training_batchsize']")
+PER_DEVICE_VAL_BSZ=$(params "['xbert_model_training']['per_device_validation_batchsize']")
+GRAD_ACCU_STEPS=$(params "['xbert_model_training']['grad_accu_steps']")
 
 # Nvidia 2080Ti (11Gb), fp32
 # PER_DEVICE_TRN_BSZ=8
@@ -34,9 +34,9 @@ GRAD_ACCU_STEPS=8
 # GRAD_ACCU_STEPS=4
 
 # # # Nvidia V100 (16Gb), fp32
-# PER_DEVICE_TRN_BSZ=16 #PARAMETERIZE
-# PER_DEVICE_VAL_BSZ=16 #PARAMETERIZE
-# GRAD_ACCU_STEPS=2 #PARAMETERIZE
+# PER_DEVICE_TRN_BSZ=16 
+# PER_DEVICE_VAL_BSZ=16 
+# GRAD_ACCU_STEPS=2 
 
 #sample / testing
 
