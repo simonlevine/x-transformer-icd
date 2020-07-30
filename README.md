@@ -12,7 +12,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/autoicd-gcp-credentials.json"
 
 This is performed automatically if [`direnv`](https://direnv.net/) is installed and enabled (`direnv allow .`).
 
-The base dependencies are [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) and [pipx](https://github.com/pipxproject/pipx) and [direnv](https://github.com/direnv/direnv) are also recommended for quickly setting up a development enviornment.
+The base dependencies is [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/); [pipx](https://github.com/pipxproject/pipx) and [direnv](https://github.com/direnv/direnv) are also recommended for quickly setting up a development enviornment.
 
 On a GCP VM, this can be installed like so:
 
@@ -21,6 +21,7 @@ python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 pipx install "dvc[all]"
 sudo apt install direnv
+eval "$(direnv hook bash)"
 source ~/.bashrc
 ```
 

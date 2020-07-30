@@ -34,12 +34,8 @@ Next, these files should be places in the proper {DATASET} folder for xbert.
 Given the input files, the XBERT pipeline (Indexer, Matcher, and Ranker) can then be run downstream.
 """
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 import typing as t
 import re
-import pickle
-import numpy as np
 import pandas as pd
 import scipy
 import yaml
@@ -47,11 +43,7 @@ from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
-import re
-import nltk
-import string
-nltk.download('punkt')
-nltk.download('stopwords')
+
 
 try:
     import format_data_for_training #script from auto-icd
@@ -77,8 +69,6 @@ XBERT_Y_TST_FP = './data/intermediary-data/xbert_inputs/Y.tst.npz'
 DF_TRAIN_FP ='./data/intermediary-data/df_train.pkl'
 DF_TEST_FP = './data/intermediary-data/df_test.pkl'
 
-# TF_IDF_VECTORIZER_PICKLE_FP = './data/model-artifacts/tf-idf-vectorizor.pkl'
-
 
 def main():
     with open('params.yaml', 'r') as f:
@@ -97,7 +87,6 @@ def main():
     df_train, df_test = \
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
-
 
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
@@ -141,7 +130,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
     logger.info(
         f'Creating ICD {icd_version} and long title lists for xbert...')
 
-    ##TODO: this block should be imported from format data
+    ##TODO: this block should be imported from format data  # IS THIS STILL RELEVANT? - Jeremy
 
     # use general equivalnce mapping to create label map.
     if icd_version == '10':
