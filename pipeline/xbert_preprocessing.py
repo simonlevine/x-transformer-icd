@@ -130,64 +130,6 @@ def main():
     df_test.to_pickle(DF_TEST_FP)
 
 
-def load_icd_df(diag_or_proc_param):
-    logger.info(f'Loading {diag_or_proc_param} outcome data...')
-    if diag_or_proc_param == 'diag':
-        icd_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
-            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-    elif diag_or_proc_param == 'proc':
-        icd_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
-            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
-    return icd_df
-
-def preprocess_and_clean_notes(notes_df):
-    notes_df['TEXT'] = notes_df['TEXT'].str.lower()  # make lowercase
-    notes_df['TEXT'] = notes_df['TEXT'].replace(r"\[.*?\]", "")  # remove de-id token
-
-    # remove stopwords + admin language
-    tqdm.pandas(desc='Removing Stopwords')
-    notes_df['TEXT'] = notes_df['TEXT'].progress_apply(remove_stopwords)
-
-    tqdm.pandas(desc='Removing Admin Language')
-    notes_df['TEXT'] = notes_df['TEXT'].progress_apply(remove_admin_language)
-
-    repl_dict = {'\n':' ',
-                 'w/':'with',
-                 '_':'',
-                 '#':'',
-                 '\d+':''}
-
-    for old,new in repl_dict.items():
-        notes_df['TEXT'] = notes_df['TEXT'].str.replace(old,new)
-    
-    notes_df['TEXT'] = notes_df['TEXT'].str.replace(
-        '[{}]'.format(string.punctuation), '') # remove punctuation
-    return notes_df
-
-
-def remove_stopwords(text):
-    text = " ".join(text.split())
-    stop_words = set(stopwords.words("english"))
-    word_tokens = word_tokenize(text)
-    filtered_text = [
-        word for word in word_tokens if word not in stop_words]
-    filtered_text = " ".join(filtered_text)
-    return filtered_text
-
-
-def remove_admin_language(notes_df):
-    other_words = {'Admission Date', 'Discharge Date', 'Date of Birth', 'Phone', 'Date/Time', 'ID',
-                   'Completed by', 'Dictated By', 'Attending', 'Provider: ', 'Provider', 'Primary', 'Secondary',
-                   ' MD Phone', ' M.D. Phone', ' MD', ' PHD',
-                   ' X', ' IV', ' VI', ' III', ' II', ' VIII',
-                   'JOB#', 'JOB#: cc', '# Code',
-                   'Metoprolol Tartrate 25 mg Tablet Sig', ')', '000 unit/mL Suspension Sig', '0.5 % Drops ', '   Status: Inpatient DOB', 'Levothyroxine 50 mcg Tablet Sig', '0.5 % Drops Sig', 'Lidocaine 5 %(700 mg/patch) Adhesive Patch', 'Clopidogrel Bisulfate 75 mg Tablet Sig', 'Levofloxacin 500 mg Tablet Sig', 'Albuterol 90 mcg/Actuation Aerosol ', 'None Tech Quality: Adequate Tape #', '000 unit/mL Solution Sig', 'x'
-                   }
-    for i in other_words:
-        notes_df['TEXT'] = notes_df['TEXT'].str.replace(i.lower(), '')
-    return text
-
-
 
 def xbert_clean_label(label):
     return re.sub(r"[,.:;\\''/@#?!\[\]&$_*]+", ' ', label).strip()
