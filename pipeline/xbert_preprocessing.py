@@ -185,16 +185,21 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
             N is the number of samples (HADM_IDs) in the
             train or test dataframe, and K is the number
             of potential ICD labels."""
-    hadm_ids = df.HADM_ID.unique().tolist()
+
+
+    hadm_ids = df.index.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
     with tqdm(total=len(df), unit="HADM id") as pbar:
         for idx, row in df.iterrows():
+            hadm_id = row.name
             if icd_version == '10':
-                Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+                icd_codes = row.ICD10_CODE.split(',')
             elif icd_version == '9':
-                Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
-            pbar.update(1)
-
+                icd_codes = row.ICD9_CODE.split(',')
+            for icd in icd_codes:
+                Y_.loc[hadm_id, icd] = 1
+        pbar.update(1)
+        
     return Y_.fillna(0)
 
 
