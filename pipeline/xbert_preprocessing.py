@@ -98,11 +98,6 @@ def main():
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
 
-    logger.info('Filtering training text...')
-    df_train=preprocess_and_clean_notes(df_train)
-
-    logger.info('Filtering test text...')
-    df_test = preprocess_and_clean_notes(df_test)
 
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
@@ -110,7 +105,9 @@ def main():
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(
         icd_version_specified, diag_or_proc_param)
-    desc_labels = desc_labels.apply(xbert_clean_label)
+
+    tqdm.pandas(desc='Filtering LABEL text...')
+    desc_labels = desc_labels.progress_apply(xbert_clean_label)
 
 
     icd_df = load_icd_df(diag_or_proc_param)
