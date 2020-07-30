@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 from loguru import logger
 
-
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 NOTE_EVENTS_CSV_FP = "./data/mimiciii-14/NOTEEVENTS.csv.gz"
@@ -55,6 +54,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df[note_events_df.CATEGORY ==
                                     note_category_param]
+
 
     if diag_or_proc_param == 'diag':
         logger.info('Loading diagnosis outcome data...')
