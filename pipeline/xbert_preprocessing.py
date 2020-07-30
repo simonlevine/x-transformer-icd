@@ -46,7 +46,8 @@ import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
-from multiprocessing import Pool, cpu_count
+
+import re
 import nltk
 import string
 nltk.download('punkt')
@@ -97,12 +98,10 @@ def main():
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
 
-    
-    logger.info(f'Filtering training text using {cpu_count} processors...')
-    df_train = parallelize_dataframe(df_train, preprocess_and_clean_notes)
+    logger.info('Filtering training text...')
     df_train['TEXT'] = preprocess_and_clean_notes(df_train['TEXT'])
 
-    logger.info(f'Filtering testing text using {cpu_count} processors...')
+    logger.info('Filtering test text...')
     df_test['TEXT'] = preprocess_and_clean_notes(df_test['TEXT'])
 
 
@@ -126,16 +125,6 @@ def main():
     )
     df_train.to_pickle(DF_TRAIN_FP)
     df_test.to_pickle(DF_TEST_FP)
-
-
-def parallelize_dataframe(df, func, n_cores=cpu_count):
-    df_split = np.array_split(df, n_cores)
-    pool = Pool(n_cores)
-    df = pd.concat(pool.map(func, df_split))
-    pool.close()
-    pool.join()
-    return df
-
 
 
 def preprocess_and_clean_notes(notes_df):
