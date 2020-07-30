@@ -112,9 +112,9 @@ def main():
 
     icd_df = load_icd_df(diag_or_proc_param)
     
-    Y_trn_map = xbert_prepare_Y_maps(icd_df,
+    Y_trn_map = xbert_prepare_Y_maps(
         df_train, icd_labels.tolist(), icd_version_specified)
-    Y_tst_map = xbert_prepare_Y_maps(icd_df,
+    Y_tst_map = xbert_prepare_Y_maps(
         df_test, icd_labels.tolist(), icd_version_specified)
 
     xbert_write_preproc_data_to_file(
