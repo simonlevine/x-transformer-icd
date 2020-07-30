@@ -99,10 +99,10 @@ def main():
             diag_or_proc_param, note_category_param, subsampling_param)
 
     logger.info('Filtering training text...')
-    df_train['TEXT'] = preprocess_and_clean_notes(df_train['TEXT'])
+    df_train=preprocess_and_clean_notes(df_train)
 
     logger.info('Filtering test text...')
-    df_test['TEXT'] = preprocess_and_clean_notes(df_test['TEXT'])
+    df_test = preprocess_and_clean_notes(df_test)
 
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
