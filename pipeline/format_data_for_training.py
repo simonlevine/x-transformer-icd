@@ -33,7 +33,7 @@ def load_and_serialize_dataset():
 
 
 def construct_datasets(diag_or_proc_param, note_category_param, subsampling_param):
-    dataset, _ = load_mimic_dataset(
+    dataset = load_mimic_dataset(
         diag_or_proc_param, note_category_param, icd_seq_num_param)
     if icd_seq_num_param == '10':
         dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
