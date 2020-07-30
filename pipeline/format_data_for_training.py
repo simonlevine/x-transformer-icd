@@ -84,12 +84,6 @@ def load_icd_general_equivalence_mapping():
     return icd_equiv_map_df.groupby("ICD9_CODE").agg(set)
 
 
-# def convert_icd9_to_icd10(dataset: pd.DataFrame, equivalence_mapping: pd.DataFrame):
-#     return dataset \
-#         .merge(equivalence_mapping, left_on=["ICD9_CODE"], right_index=True) \
-#         .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"})
-
-
 def test_train_validation_split(dataset):
     df_train = dataset.sample(frac=0.66, random_state=42)
     df_test = dataset.drop(df_train.index)

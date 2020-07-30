@@ -267,5 +267,10 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     logger.info('Done.')
 
 
+def convert_icd9_to_icd10(dataset: pd.DataFrame, equivalence_mapping: pd.DataFrame):
+    return dataset \
+        .merge(equivalence_mapping, left_on=["ICD9_CODE"], right_index=True) \
+        .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"})
+
 if __name__ == "__main__":
     main()
