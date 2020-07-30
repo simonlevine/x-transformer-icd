@@ -21,6 +21,7 @@ python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 pipx install "dvc[all]"
 sudo apt install direnv
+eval "$(direnv hook bash)"
 source ~/.bashrc
 ```
 
