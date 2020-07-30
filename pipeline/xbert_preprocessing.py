@@ -112,9 +112,12 @@ def main():
         icd_version_specified, diag_or_proc_param)
     desc_labels = desc_labels.apply(xbert_clean_label)
 
-    Y_trn_map = xbert_prepare_Y_maps(
+
+    icd_df = load_icd_df(diag_or_proc_param)
+    
+    Y_trn_map = xbert_prepare_Y_maps(icd_df,
         df_train, icd_labels.tolist(), icd_version_specified)
-    Y_tst_map = xbert_prepare_Y_maps(
+    Y_tst_map = xbert_prepare_Y_maps(icd_df,
         df_test, icd_labels.tolist(), icd_version_specified)
 
     xbert_write_preproc_data_to_file(
@@ -126,6 +129,16 @@ def main():
     df_train.to_pickle(DF_TRAIN_FP)
     df_test.to_pickle(DF_TEST_FP)
 
+
+def load_icd_df(diag_or_proc_param):
+    logger.info(f'Loading {diag_or_proc_param} outcome data...')
+    if diag_or_proc_param == 'diag':
+        icd_df = pd.read_csv(DIAGNOSIS_CSV_FP, usecols=[
+            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+    elif diag_or_proc_param == 'proc':
+        icd_df = pd.read_csv(PROCEDURE_CSV_FP, usecols=[
+            "HADM_ID", "ICD9_CODE", "SEQ_NUM"])
+    return icd_df
 
 def preprocess_and_clean_notes(notes_df):
     notes_df['TEXT'] = notes_df['TEXT'].str.lower()  # make lowercase

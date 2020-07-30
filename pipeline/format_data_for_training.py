@@ -35,7 +35,7 @@ def load_and_serialize_dataset():
 def construct_datasets(diag_or_proc_param, note_category_param, subsampling_param):
     dataset, _ = load_mimic_dataset(
         diag_or_proc_param, note_category_param, icd_seq_num_param)
-    if icd_version_specified == '10':
+    if icd_seq_num_param == '10':
         dataset = convert_icd9_to_icd10(dataset, load_icd_general_equivalence_mapping())
 
     df_train, df_test = test_train_validation_split(dataset)
@@ -81,7 +81,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
     logger.info(f'Setting included ICD sequence number to {icd_seq_num_param}')
     if icd_seq_num_param != 'all':
         full_df = full_df[full_df.SEQ_NUM == icd_seq_num_param]
-
+    
     return full_df, (icd9_long_description_df, note_events_df)
 
 
