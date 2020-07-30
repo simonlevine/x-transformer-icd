@@ -30,7 +30,7 @@ def load_and_serialize_dataset():
         fp_out = basedir_outpath/f"notes2diagnosis-icd-{type_}.json.gz"
         logger.info(f"Serializing {type_} dataframe to {fp_out}...")
         df_.to_json(fp_out, orient="split")
-
+    
 
 def construct_datasets(diag_or_proc_param, note_category_param, subsampling_param):
     dataset = load_mimic_dataset(
