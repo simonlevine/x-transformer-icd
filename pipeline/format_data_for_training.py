@@ -45,7 +45,7 @@ def load_and_serialize_dataset():
 def construct_datasets(diag_or_proc_param, note_category_param, subsampling_param):
     dataset = load_mimic_dataset(
         diag_or_proc_param, note_category_param, icd_seq_num_param)
-    
+
     df_train, df_test = test_train_validation_split(dataset)
     if subsampling_param == True:
         logger.info('Subsampling 80 training rows, 20 testing rows of data.')

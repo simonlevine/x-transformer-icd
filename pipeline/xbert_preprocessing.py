@@ -148,9 +148,9 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
             icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
         elif diag_or_proc_param == 'proc':
             icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
-        desc_labels = icd9_df['LONG_TITLE'].astype(str)
+        desc_labels = icd9_df['LONG_TITLE']
         assert desc_labels.shape == desc_labels.dropna().shape
-        icd_labels = icd9_df['ICD9_CODE'].astype(str)
+        icd_labels = icd9_df['ICD9_CODE']
         assert icd_labels.shape == icd_labels.dropna().shape
 
     return icd_labels, desc_labels
@@ -171,23 +171,19 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
             N is the number of samples (HADM_IDs) in the
             train or test dataframe, and K is the number
             of potential ICD labels."""
-
-
+    if icd_version == '10':
+        ICD_CODE = 'ICD10_CODE'
+    elif icd_version == '9':
+        ICD_CODE = 'ICD9_CODE'
     hadm_ids = df.index.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
-    with tqdm(total=len(df), unit="HADM id") as pbar:
-        for idx, row in df.iterrows():
-            hadm_id = row.name
-            if icd_version == '10':
-                icd_codes = row.ICD10_CODE.split(',')
-            elif icd_version == '9':
-                icd_codes = row.ICD9_CODE.split(',')
-            for icd in icd_codes:
-                # FIXED: ensure we actually look for a real ICD code instead of making new rows...
-                if icd in icd_labels:
-                    Y_.loc[hadm_id, icd] = 1
-        pbar.update(1)
-
+    tqdm.pandas(desc='Building binary array')
+    for idx, icds in enumerate(df[ICD_CODE]):
+        icd_codes = icds.split(',')
+        for icd in icd_codes:
+            #ensure we actually look for a real ICD code instead of making new rows...
+            if icd in icd_labels:
+                Y_.iloc[idx].loc[icd] = 1
     return Y_.fillna(0)
 
 
