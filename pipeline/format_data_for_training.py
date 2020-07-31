@@ -30,6 +30,8 @@ assert note_category_param in ['Case Management', 'Consult', 'Discharge summary'
 
 icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
 subsampling_param = params['prepare_for_xbert']['subsampling']
+ICD_VERSION = icd_version_specified
+
 
 def load_and_serialize_dataset():
     df_train, df_test = construct_datasets(
@@ -101,9 +103,13 @@ def load_diag_procs(icd_seq_num_param='all'):
     procedures_icd = pd.read_csv(
         PROCEDURES_CSV_FP)  # , compression='gzip')
 
+    if ICD_VERSION=='9':
+        procedures_icd.ICD9_CODE = procedures_icd.ICD9_CODE.astype(str)
+        diagnoses_icd.ICD9_CODE = diagnoses_icd.ICD9_CODE.astype(str)
+    elif ICD_VERSION == '10':
+        procedures_icd.ICD10_CODE = procedures_icd.ICD10_CODE.astype(str)
+        diagnoses_icd.ICD10_CODE = diagnoses_icd.ICD10_CODE.astype(str)
 
-    procedures_icd.ICD9_CODE = procedures_icd.ICD9_CODE.astype(str)
-    diagnoses_icd.ICD9_CODE = diagnoses_icd.ICD9_CODE.astype(str)
     logger.info(f'Setting included ICD sequence number to {icd_seq_num_param}')
     if icd_seq_num_param != 'all':
         procedures_icd = procedures_icd[procedures_icd.SEQ_NUM ==
