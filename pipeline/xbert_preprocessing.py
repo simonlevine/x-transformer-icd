@@ -179,7 +179,9 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
             elif icd_version == '9':
                 icd_codes = row.ICD9_CODE.split(',')
             for icd in icd_codes:
-                Y_.loc[hadm_id, icd] = 1
+                # FIXED: ensure we actually look for a real ICD code instead of making new rows...
+                if icd in icd_labels:
+                    Y_.loc[hadm_id, icd] = 1
         pbar.update(1)
 
     return Y_.fillna(0)
