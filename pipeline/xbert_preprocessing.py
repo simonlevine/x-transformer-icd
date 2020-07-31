@@ -177,8 +177,7 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
         ICD_CODE = 'ICD9_CODE'
     hadm_ids = df.index.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
-    tqdm.pandas(desc='Building binary array')
-    for idx, icds in enumerate(df[ICD_CODE]):
+    for idx, icds in enumerate(tqdm(df[ICD_CODE])):
         icd_codes = icds.split(',')
         for icd in icd_codes:
             #ensure we actually look for a real ICD code instead of making new rows...
