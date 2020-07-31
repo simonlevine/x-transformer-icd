@@ -55,7 +55,7 @@ except ImportError:
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv.gz"
+ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 # output filepaths
