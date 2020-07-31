@@ -108,6 +108,10 @@ def main():
     logger.info(
         'Done preprocessing. Saving pickled dataframes to file for later postprocessing.'
     )
+
+    assert df_train.shape[0] == Y_trn_map.shape[0], 'Training DF and Y_Map have different row dimensions!'
+    assert df_test.shape[0] == Y_tst_map.shape[0], 'Training DF and Y_Map have different row dimensions!'
+
     df_train.to_pickle(DF_TRAIN_FP)
     df_test.to_pickle(DF_TEST_FP)
 
