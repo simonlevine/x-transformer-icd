@@ -109,7 +109,7 @@ def load_diag_procs(icd_seq_num_param='all'):
 def generate_notes_df(note_category_param):
     note_event_cols = ["HADM_ID", "CATEGORY", "TEXT"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
-    note_events_df=note_events_df.dropna('HADM_ID')
+    note_events_df = note_events_df.dropna(subset=['HADM_ID'])
     if icd_seq_num_param != 'all':
         note_events_df = note_events_df[note_events_df.CATEGORY ==
                                         note_category_param]
