@@ -18,6 +18,16 @@ icd_version_specified = str(params['prepare_for_xbert']['icd_version'])
 diag_or_proc_param = params['prepare_for_xbert']['diag_or_proc']
 assert diag_or_proc_param == 'proc' or diag_or_proc_param == 'diag', 'Must specify either \'proc\' or \'diag\'.'
 note_category_param = params['prepare_for_xbert']['note_category']
+assert note_category_param in ['Case Management', 'Consult', 'Discharge summary', 'ECG', 'Echo',
+                               'General', 'Nursing', 'Nursing/other', 'Nutrition', 'Pharmacy',
+                               'Physician', 'Radiology', 'Rehab Services', 'Respiratory',
+                               'Social Work'],\
+                                """Must specify one of:
+                                'Case Management ', 'Consult', 'Discharge summary', 'ECG', 'Echo',
+                                'General', 'Nursing', 'Nursing/other', 'Nutrition', 'Pharmacy',
+                                'Physician ', 'Radiology', 'Rehab Services', 'Respiratory ',
+                                'Social Work' """
+
 icd_seq_num_param = params['prepare_for_xbert']['one_or_all_icds']
 subsampling_param = params['prepare_for_xbert']['subsampling']
 
@@ -59,6 +69,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
     logger.info(f'Loading notes from {note_category_param} category...')
     note_event_cols = ["HADM_ID", "TEXT", "CATEGORY"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
+    note_events_df['CATEGORY'] = note_events_df['CATEGORY'].str.strip()
     note_events_df = note_events_df[note_events_df.CATEGORY ==
                                     note_category_param]
     if diag_or_proc_param == 'diag':
