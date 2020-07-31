@@ -55,7 +55,7 @@ except ImportError:
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
 PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
-ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
+ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv.gz"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
 
 # output filepaths
@@ -87,7 +87,6 @@ def main():
     df_train, df_test = \
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
-
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
