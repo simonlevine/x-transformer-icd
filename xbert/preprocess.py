@@ -116,9 +116,9 @@ def proc_feat(
             text=xseq[:],
             text_pair=None,
             add_special_tokens=True,
-            max_length=None,#args.max_xseq_len, #CHANGED
+            max_length=4096,#args.max_xseq_len, #CHANGED
             return_token_type_ids=True, #CHANGED
-            truncation=False, #CHANGED. Now defaults to max allowed by model.
+            truncation=True, #CHANGED. Now defaults to max allowed by model.
         )
         
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
