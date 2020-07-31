@@ -9,13 +9,13 @@ stages:
   #     - xbert/
   # convert_longformer:
   #   cmd: $PY_CONDA custom_models/roberta_to_longformer.py
-  filter_text_notes:
-    cmd: $PY_CONDA pipeline/filter_notes.py
-    deps:
-      # - pipeline/filter_notes.py
-      - data/mimiciii-14/NOTEEVENTS.csv.gz
-    outs:
-      - data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
+  # filter_text_notes:
+  #   cmd: $PY_CONDA pipeline/filter_notes.py
+  #   deps:
+  #     - pipeline/filter_notes.py
+  #     - data/mimiciii-14/NOTEEVENTS.csv.gz
+  #   outs:
+  #     - data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
   prepare_for_xbert:
     cmd: $PY_CONDA pipeline/xbert_preprocessing.py
     deps:
