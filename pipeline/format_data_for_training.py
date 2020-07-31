@@ -5,7 +5,7 @@ import numpy as np
 from loguru import logger
 
 DIAGNOSIS_CSV_FP = "./data/mimiciii-14/DIAGNOSES_ICD.csv.gz"
-PROCEDURE_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
+PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv"
 NOTE_EVENTS_CSV_FP = "./data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz"
@@ -99,8 +99,11 @@ def load_diag_procs(icd_seq_num_param='all'):
     diagnoses_icd = pd.read_csv(
         DIAGNOSIS_CSV_FP)  # , compression='gzip')
     procedures_icd = pd.read_csv(
-        PROCEDURE_CSV_FP)  # , compression='gzip')
+        PROCEDURES_CSV_FP)  # , compression='gzip')
 
+
+procedures_icd.ICD9_CODE = procedures_icd.ICD9_CODE.astype(str)
+diagnoses_icd.ICD9_CODE = diagnoses_icd.ICD9_CODE.astype(str)
     logger.info(f'Setting included ICD sequence number to {icd_seq_num_param}')
     if icd_seq_num_param != 'all':
         procedures_icd = procedures_icd[procedures_icd.SEQ_NUM ==
