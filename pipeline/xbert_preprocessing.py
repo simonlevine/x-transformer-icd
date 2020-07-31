@@ -226,8 +226,8 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     .txt files for free text labels (label_map.txt) and train/test inputs (train/test_raw_texts)
     in preparation for XBERT training."""
 
-    assert X_trn.shape == Y_trn.shape, 'X_trn and Y_trn need to be of the same dimensions.'
-    assert X_tst.shape == Y_tst.shape, 'X_tst and Y_tst need to be of the same dimensions.'
+    assert X_trn.shape[0] == Y_trn.shape[0], 'X_trn and Y_trn need to be of the same row dimensions.'
+    assert X_tst.shape[0] == Y_tst.shape[0], 'X_tst and Y_tst need to be of the same row dimensions.'
 
     #writing label map (icd descriptions) to txt
     logger.info('Writing icd LONG_TITLE (label map) to txt.')
