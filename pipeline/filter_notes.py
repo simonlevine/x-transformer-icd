@@ -15,7 +15,8 @@ nltk.download('stopwords')
 
 MIMIC_DIR = Path("data/mimiciii-14/")
 NOTE_EVENTS_CSV_FP = MIMIC_DIR / "NOTEEVENTS.csv.gz"
-(OUTDIR := Path("./data/intermediary-data/filtered_notes/")).mkdir(exist_ok=True)
+OUTDIR = Path("./data/intermediary-data/filtered_notes/")
+(OUTDIR).mkdir(exist_ok=True)
 FILTERED_NOTE_EVENTS_CSV_FP = OUTDIR / "NOTEEVENTS.FILTERED.csv.gz"
 
 ADMIN_LANGUAGE = [
