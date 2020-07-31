@@ -145,9 +145,12 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
     elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
         if diag_or_proc_param == 'diag':
-            icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+            icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=[
+                                  'ICD9_CODE', 'LONG_TITLE']).astype(str)
         elif diag_or_proc_param == 'proc':
-            icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=['ICD9_CODE', 'LONG_TITLE'])
+            icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=[
+                                  'ICD9_CODE', 'LONG_TITLE']).astype(str)
+
         desc_labels = icd9_df['LONG_TITLE']
         assert desc_labels.shape == desc_labels.dropna().shape
         icd_labels = icd9_df['ICD9_CODE']
