@@ -102,8 +102,8 @@ def load_diag_procs(icd_seq_num_param='all'):
         PROCEDURES_CSV_FP)  # , compression='gzip')
 
 
-procedures_icd.ICD9_CODE = procedures_icd.ICD9_CODE.astype(str)
-diagnoses_icd.ICD9_CODE = diagnoses_icd.ICD9_CODE.astype(str)
+    procedures_icd.ICD9_CODE = procedures_icd.ICD9_CODE.astype(str)
+    diagnoses_icd.ICD9_CODE = diagnoses_icd.ICD9_CODE.astype(str)
     logger.info(f'Setting included ICD sequence number to {icd_seq_num_param}')
     if icd_seq_num_param != 'all':
         procedures_icd = procedures_icd[procedures_icd.SEQ_NUM ==
