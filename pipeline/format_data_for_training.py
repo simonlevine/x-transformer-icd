@@ -71,8 +71,8 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
         merged_df=merged_df.rename(columns={'DIAG_CODES':'ICD9_CODE'})
 
     elif diag_or_proc_param == 'proc':
-        merged_df = merged_df.drop('PROC_CODES', axis=1)
-        merged_df = merged_df.rename(columns={'DIAG_CODES': 'ICD9_CODE'})
+        merged_df = merged_df.drop('DIAG_CODES', axis=1)
+        merged_df = merged_df.rename(columns={'PROC_CODES': 'ICD9_CODE'})
     return merged_df
 
 
