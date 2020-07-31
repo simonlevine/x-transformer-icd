@@ -12,7 +12,7 @@ stages:
   filter_text_notes:
     cmd: $PY_CONDA pipeline/filter_notes.py
     deps:
-      - pipeline/filter_notes.py
+      # - pipeline/filter_notes.py
       - data/mimiciii-14/NOTEEVENTS.csv.gz
     outs:
       - data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
