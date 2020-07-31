@@ -44,6 +44,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
 
+
 try:
     import format_data_for_training #script from auto-icd
 except ImportError:
@@ -81,19 +82,22 @@ def main():
 
     logger.info(f'Using ICD version {icd_version_specified}...')
     assert icd_version_specified == '9' or icd_version_specified == '10', 'Must specify one of ICD9 or ICD10.'
-    logger.info('reformatting raw data with subsampling {}', 'enabled' if subsampling_param else 'disabled')
+    logger.info('Reformatting raw data with subsampling {}', 'enabled' if subsampling_param else 'disabled')
 
     df_train, df_test = \
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
+
 
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
     X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
     icd_labels, desc_labels = xbert_create_label_map(
         icd_version_specified, diag_or_proc_param)
-    desc_labels = desc_labels.apply(xbert_clean_label)
 
+    tqdm.pandas(desc='Filtering LABEL text...')
+    desc_labels = desc_labels.progress_apply(xbert_clean_label)
+    
     Y_trn_map = xbert_prepare_Y_maps(
         df_train, icd_labels.tolist(), icd_version_specified)
     Y_tst_map = xbert_prepare_Y_maps(
@@ -107,6 +111,7 @@ def main():
     )
     df_train.to_pickle(DF_TRAIN_FP)
     df_test.to_pickle(DF_TEST_FP)
+
 
 
 def xbert_clean_label(label):
@@ -163,15 +168,20 @@ def xbert_prepare_Y_maps(df, icd_labels, icd_version):
             N is the number of samples (HADM_IDs) in the
             train or test dataframe, and K is the number
             of potential ICD labels."""
-    hadm_ids = df.HADM_ID.unique().tolist()
+
+
+    hadm_ids = df.index.unique().tolist()
     Y_ = pd.DataFrame(index=hadm_ids, columns=icd_labels)
     with tqdm(total=len(df), unit="HADM id") as pbar:
         for idx, row in df.iterrows():
+            hadm_id = row.name
             if icd_version == '10':
-                Y_.loc[row.HADM_ID, row.ICD10_CODE] = 1
+                icd_codes = row.ICD10_CODE.split(',')
             elif icd_version == '9':
-                Y_.loc[row.HADM_ID, row.ICD9_CODE] = 1
-            pbar.update(1)
+                icd_codes = row.ICD9_CODE.split(',')
+            for icd in icd_codes:
+                Y_.loc[hadm_id, icd] = 1
+        pbar.update(1)
 
     return Y_.fillna(0)
 
@@ -239,6 +249,11 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
 
     logger.info('Done.')
 
+
+def convert_icd9_to_icd10(dataset: pd.DataFrame, equivalence_mapping: pd.DataFrame):
+    return dataset \
+        .merge(equivalence_mapping, left_on=["ICD9_CODE"], right_index=True) \
+        .rename(columns={"LONG_TITLE": "LONG_TITLE_ICD9"})
 
 if __name__ == "__main__":
     main()
