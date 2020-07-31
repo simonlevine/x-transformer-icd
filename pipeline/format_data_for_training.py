@@ -65,13 +65,7 @@ def load_mimic_dataset(diag_or_proc_param, note_category_param, icd_seq_num_para
 
     merged_df = generate_merged_df(
         note_events_df, diagnoses_df, procedures_df, codes_df)
-        
-    logger.info(f'Loading notes from {note_category_param} category...')
-    note_event_cols = ["HADM_ID", "TEXT", "CATEGORY"]
-    note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
-    note_events_df['CATEGORY'] = note_events_df['CATEGORY'].str.strip()
-    note_events_df = note_events_df[note_events_df.CATEGORY ==
-                                    note_category_param]
+    
     if diag_or_proc_param == 'diag':
         merged_df=merged_df.drop('PROC_CODES', axis=1)
         merged_df=merged_df.rename(columns={'DIAG_CODES':'ICD9_CODE'})
@@ -121,10 +115,11 @@ def generate_notes_df(note_category_param):
     note_event_cols = ["HADM_ID", "CATEGORY", "TEXT"]
     note_events_df = pd.read_csv(NOTE_EVENTS_CSV_FP, usecols=note_event_cols)
     note_events_df = note_events_df.dropna(subset=['HADM_ID','TEXT'])
-    if icd_seq_num_param != 'all':
-        note_events_df = note_events_df[note_events_df.CATEGORY ==
-                                        note_category_param]
 
+    logger.info(f'Loading notes from {note_category_param} category...')
+    note_events_df['CATEGORY'] = note_events_df['CATEGORY'].str.strip()
+    note_events_df = note_events_df[note_events_df.CATEGORY ==
+                                    note_category_param]
     note_events_df = note_events_df.drop_duplicates(["TEXT"]).groupby(
         ['HADM_ID']).agg({'TEXT': ' '.join, 'CATEGORY': ' '.join})
     return note_events_df
