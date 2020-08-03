@@ -26,7 +26,7 @@ stages:
       - data/mimiciii-14/PROCEDURES_ICD.csv
       - data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
       - data/mimiciii-14/D_ICD_PROCEDURES.csv
-      - data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv
+      - data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
     params:
       - prepare_for_xbert.subsampling
       - prepare_for_xbert.icd_version
