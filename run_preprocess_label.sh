@@ -4,7 +4,7 @@ source params.sh
 DATASET=$'mimiciii-14'
 LABEL_EMB=$'pifa-tfidf'
 MODEL_NAME=$(params "['model_name']")
-MODEL_TYPE=$'longformer'
+MODEL_TYPE=$'roberta'
 
 # setup label embedding feature path
 #overwritten by Simon Levine for mimic.

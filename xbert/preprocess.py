@@ -20,14 +20,14 @@ from loguru import logger
 import yaml
 
 
-from transformers import LongformerModel, LongformerConfig, LongformerForSequenceClassification, LongformerTokenizer
+from transformers import RobertaModel, RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer
 
 
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
 
 logger.info(
-    "loading Longformer tokenizer, model, config, and model-for-seq-classification...")
+    "loading Roberta (elongated Longformer version) tokenizer, model, config, and model-for-seq-classification...")
 
 from transformers import (
     WEIGHTS_NAME, #not sure why we need this...
@@ -36,10 +36,10 @@ from transformers import (
 ALL_MODELS = params['model_name']
 
 MODEL_CLASSES = {
-    "longformer": (
-    LongformerConfig,
-    LongformerForSequenceClassification,
-    LongformerTokenizer),
+    "roberta": ( # --model_type
+    RobertaConfig,
+    RobertaForSequenceClassification,
+    RobertaTokenizer),
 }
 
 logging.basicConfig(

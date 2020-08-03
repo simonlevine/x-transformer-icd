@@ -64,7 +64,7 @@ from loguru import logger
 
 # from xbert.modeling import LongformerForXMLC
 
-from transformers import LongformerTokenizer, LongformerModel, LongformerConfig, LongformerForSequenceClassification
+from transformers import RobertaTokenizer, RobertaModel, RobertaConfig, RobertaForSequenceClassification
 
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
@@ -95,10 +95,10 @@ logger.info('building model class:\n ( \
 
 
 MODEL_CLASSES = {
-    "longformer": (
-        LongformerConfig,
-        LongformerForSequenceClassification,
-        LongformerTokenizer),
+    "Roberta": (
+        RobertaConfig,
+        RobertaForSequenceClassification,
+        RobertaTokenizer),
 }
 
 # MODEL_CLASSES = {

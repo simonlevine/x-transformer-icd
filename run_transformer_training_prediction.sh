@@ -12,8 +12,8 @@ DATASET=$'mimiciii-14'
 INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
 
 MODEL_NAME=$(params "['model_name']")
-MODEL_FOLDER_NAME='longformer'
-MODEL_TYPE=$'longformer'
+MODEL_FOLDER_NAME='roberta'
+MODEL_TYPE=$'roberta'
 
 OUTPUT_DIR=./data/intermediary-data/xbert_outputs
 PROC_DATA_DIR=./data/intermediary-data/xbert_outputs/proc_data

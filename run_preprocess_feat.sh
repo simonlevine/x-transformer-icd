@@ -6,7 +6,7 @@ DATASET=$'mimiciii-14'
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
 MAX_XCHAR_LEN=$(params "['max_char_len']")
-MODEL_TYPE=$'longformer'
+MODEL_TYPE=$'roberta'
 MODEL_NAME=$(params "['model_name']")
 
 DATA_DIR=./data/intermediary-data

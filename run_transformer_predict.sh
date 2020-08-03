@@ -7,7 +7,7 @@ DATA_DIR=./data/intermediary-data/xbert_inputs
 
 LABEL_NAME=$'pifa-tfidf-s0'
 MODEL_NAME=$(params "['model_name']")
-MODEL_FOLDER_NAME='longformer'
+MODEL_FOLDER_NAME='roberta'
 EXP_NAME=${DATASET}.final
 
 OUTPUT_DIR=./data/intermediary-data/xbert_outputs/${LABEL_NAME}
