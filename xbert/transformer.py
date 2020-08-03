@@ -95,7 +95,7 @@ logger.info('building model class:\n ( \
 
 
 MODEL_CLASSES = {
-    "Roberta": (
+    "roberta": (
         RobertaConfig,
         RobertaForSequenceClassification,
         RobertaTokenizer),
