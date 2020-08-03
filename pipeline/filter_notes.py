@@ -54,8 +54,8 @@ ADMIN_LANGUAGE = [
     "None Tech Quality: Adequate Tape #",
     "000 unit/mL Solution Sig",
     " x",
-    "am",
-    "pm",
+    " am",
+    " pm",
 ]
 
 
