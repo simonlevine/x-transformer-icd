@@ -59,6 +59,12 @@ ADMIN_LANGUAGE = [
 ]
 
 
+def main():
+    logger.info(f"loading {NOTE_EVENTS_CSV_FP.name} into memory")
+    notes_df = pd.read_csv(NOTE_EVENTS_CSV_FP, low_memory=False)
+    notes_filtered_df = preprocess_and_clean_notes(notes_df)
+    notes_filtered_df.to_csv(FILTERED_NOTE_EVENTS_CSV_FP)
+
 def preprocess_and_clean_notes(notes_df: pd.DataFrame) -> pd.DataFrame:
     """remove redundant information from the free text, which are discharge summaries,
     using both common NLP techniques and heuristic rules
@@ -73,9 +79,9 @@ def preprocess_and_clean_notes(notes_df: pd.DataFrame) -> pd.DataFrame:
     """
     logger.info(
         "Removing de-id token, punctuation, admin language and other cruft")
-    with tqdm(total=3+len(ADMIN_LANGUAGE)+6) as pbar:
-        notes_df["TEXT"] = notes_df["TEXT"].str.lower()
-        pbar.update(1)
+    with tqdm(total=2+len(ADMIN_LANGUAGE)+6) as pbar:
+        # notes_df["TEXT"] = notes_df["TEXT"].str.lower()
+        # pbar.update(1)
         notes_df["TEXT"] = notes_df["TEXT"].replace(r"\[.*?\]", "", regex=True)
         pbar.update(1)
         for admin_token in ADMIN_LANGUAGE:
