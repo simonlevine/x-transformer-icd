@@ -94,8 +94,8 @@ def main():
     icd_labels, desc_labels = xbert_create_label_map(
         icd_version_specified, diag_or_proc_param)
 
-    tqdm.pandas(desc='Filtering LABEL text...')
-    desc_labels = desc_labels.progress_apply(xbert_clean_label)
+    # tqdm.pandas(desc='Filtering LABEL text...')
+    # desc_labels = desc_labels.progress_apply(xbert_clean_label)
     
     Y_trn_map = xbert_prepare_Y_maps(
         df_train, icd_labels.tolist(), icd_version_specified)
