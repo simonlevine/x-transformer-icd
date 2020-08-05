@@ -76,7 +76,6 @@ class RobertaForXMLC(BertPreTrainedModel):
     def __init__(self, config):
         super(RobertaForXMLC, self).__init__(config)
         self.num_labels = config.num_labels
-
         self.longformer = LongformerModel(config)
         self.classifier = LongformerClassificationHead(config)
 
