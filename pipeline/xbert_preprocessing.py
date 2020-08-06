@@ -42,6 +42,7 @@ import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
+from icd9 import ICD9
 
 
 
@@ -57,6 +58,7 @@ PROCEDURES_CSV_FP = "./data/mimiciii-14/PROCEDURES_ICD.csv"
 ICD9_DIAG_KEY_FP = "./data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz"
 ICD9_PROC_KEY_FP = "./data/mimiciii-14/D_ICD_PROCEDURES.csv"
 ICD_GEM_FP = "./data/ICD_general_equivalence_mapping.csv"
+
 
 # output filepaths
 XBERT_LABEL_MAP_FP = './data/intermediary-data/xbert_inputs/label_map.txt'
@@ -134,6 +136,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
     # use general equivalnce mapping to create label map.
     if icd_version == '10':
+        logger.info('NOTE: ICD10 categorical labels not currenlty implemented.')
         assert diag_or_proc_param == 'diag', 'Cannot currently process ICD10-PCS labels.'
 
         icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
@@ -144,6 +147,9 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
         assert icd_labels.shape == icd_labels.dropna().shape
 
     elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
+        
+        icd9_hierarch_tree = ICD9('codes.json')
+
         if diag_or_proc_param == 'diag':
             icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=[
                                   'ICD9_CODE', 'LONG_TITLE']).astype(str)
@@ -151,7 +157,36 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
             icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=[
                                   'ICD9_CODE', 'LONG_TITLE']).astype(str)
 
-        desc_labels = icd9_df['LONG_TITLE']
+        def shorten_mimic_codes(row):
+            row = row[:3]
+            return row
+
+
+        tqdm.pandas('Getting categories...')
+        icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
+        icd9_df.dropna()
+
+        unique_icds = icds['cat_num'].unique()
+
+        logger.info(
+            f'Loading {len(unique_icds)} unique icd catagories and descriptions...')
+        icd_cat_dict = {}
+        null_count = 0
+        for icd_cat in tqdm(unique_icds):
+            desc = get_icd9_cat_desc(icd_cat)
+            icd_cat_dict[icd_cat] = desc
+            if desc == '':
+                null_count += 1
+
+        logger.info(
+            f'{null_count} of {len(icd_cat_dict)} MIMIC categories couldn\'t be assigned.')
+
+        logger.info('Assigning category descriptions...')
+        icd9_df['cat_desc'] = [icd_cat_dict[i] for i in icd9_df['cat_num']]
+
+        icd9_df['combined_title'] = icd9_df['cat_desc'] + ' ' + icds['LONG_TITLE']
+
+        desc_labels = icd9_df['combined_title']
         assert desc_labels.shape == desc_labels.dropna().shape
         icd_labels = icd9_df['ICD9_CODE']
         assert icd_labels.shape == icd_labels.dropna().shape
