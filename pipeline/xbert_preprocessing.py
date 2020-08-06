@@ -132,11 +132,9 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
     logger.info(
         f'Creating ICD {icd_version} and long title lists for xbert...')
 
-    ##TODO: this block should be imported from format data  # IS THIS STILL RELEVANT? - Jeremy
-
-    # use general equivalnce mapping to create label map.
+    # use general equivalence mapping to create label map.
     if icd_version == '10':
-        logger.info('NOTE: ICD10 categorical labels not currenlty implemented.')
+        logger.info('NOTE: ICD10 categorical labels not currently implemented.')
         assert diag_or_proc_param == 'diag', 'Cannot currently process ICD10-PCS labels.'
 
         icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
