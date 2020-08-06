@@ -79,7 +79,7 @@ def preprocess_and_clean_notes(notes_df: pd.DataFrame) -> pd.DataFrame:
     """
     logger.info(
         "Removing de-id token, punctuation, admin language and other cruft")
-    with tqdm(total=2+len(ADMIN_LANGUAGE)+6) as pbar:
+    with tqdm(total=3+len(ADMIN_LANGUAGE)+6) as pbar:
         # notes_df["TEXT"] = notes_df["TEXT"].str.lower()
         # pbar.update(1)
         notes_df["TEXT"] = notes_df["TEXT"].replace(r"\[.*?\]", "", regex=True)
