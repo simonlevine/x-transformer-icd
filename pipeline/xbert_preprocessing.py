@@ -42,7 +42,7 @@ import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
-from icd9 import ICD9
+from icd9 import *
 
 
 
@@ -148,7 +148,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
     elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
         
-        icd9_hierarch_tree = ICD9('codes.json')
+        icd9_hierarch_tree = ICD9('icd9_codes.json')
 
         if diag_or_proc_param == 'diag':
             icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=[
