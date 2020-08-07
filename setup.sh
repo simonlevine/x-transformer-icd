@@ -5,7 +5,7 @@ eval "$(conda shell.bash hook)"
 python -m venv .venv \
 && ./.venv/bin/pip install -r requirements-app.txt
 
-pipx install "dvc[all]"
+# pipx install "dvc[all]"
 
 conda env create -f environment.yml \
 && conda activate $CONDA_ENV_NAME \
