@@ -9,15 +9,15 @@ model_name: 'simonlevine/biomed_roberta_base-4096-speedfix'
 prepare_for_xbert:
   subsampling: false
   icd_version: '9' #if 10, only diag codes currently implemented, so will error out.
-  diag_or_proc: 'diag'
+  diag_or_proc: 'proc'
   one_or_all_icds: 'all' #'all' #'all' #load in 'all' ICDs, otherwise an int (i.e., 1 for just primary).
-  note_category: 'Discharge summary' #'Discharge summary' #load in 'all' categories, otherwise a string (i.e., 'Discharge summary').
+  note_category: 'Radiology' #'Discharge summary' #load in 'all' categories, otherwise a string (i.e., 'Discharge summary').
 xbert_model_training:
   # per_device_training_batchsize: 8
   # per_device_validation_batchsize: 8
   # grad_accu_steps: 1
   per_device_training_batchsize: 4
-  per_device_validation_batchsize: 10
+  per_device_validation_batchsize: 4
   grad_accu_steps: 2
   max_steps: 1000
   warmup_steps: 100
