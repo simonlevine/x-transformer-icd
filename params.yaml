@@ -16,9 +16,9 @@ xbert_model_training:
   # per_device_training_batchsize: 8
   # per_device_validation_batchsize: 8
   # grad_accu_steps: 1
-  per_device_training_batchsize: 4
+  per_device_training_batchsize: 2
   per_device_validation_batchsize: 4
-  grad_accu_steps: 2
+  grad_accu_steps: 4
   max_steps: 1000
   warmup_steps: 100
   logging_steps: 50
