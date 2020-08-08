@@ -158,7 +158,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
                                   'ICD9_CODE', 'LONG_TITLE']).astype(str)
 
         icd9_df = add_icd9_category_to_desc(icd9_df)
-        
+
         desc_labels = icd9_df['combined_title']
         assert desc_labels.shape == desc_labels.dropna().shape
         icd_labels = icd9_df['ICD9_CODE']
@@ -176,7 +176,7 @@ def add_icd9_category_to_desc(icd9_df):
     tqdm.pandas('Getting categories...')
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
     icd9_df.dropna()
-    unique_icds = icds['cat_num'].unique()
+    unique_icds = icd9_df['cat_num'].unique()
 
     logger.info(
         f'Loading {len(unique_icds)} unique icd catagories and descriptions...')
@@ -184,14 +184,14 @@ def add_icd9_category_to_desc(icd9_df):
     null_count = 0
     for icd_cat in tqdm(unique_icds):
         desc = get_icd9_cat_desc(icd_cat)
-        icd_cat_dict[icd_cat] = desc
+        category2icd_code[icd_cat] = desc
         if desc == '':
             null_count += 1
 
     logger.info(
-        f'{null_count} of {len(icd_cat_dict)} MIMIC categories couldn\'t be assigned.')
+        f'{null_count} of {len(category2icd_code)} MIMIC categories couldn\'t be assigned.')
     logger.info('Assigning category descriptions...')
-    icd9_df['cat_desc'] = [icd_cat_dict[i] for i in icd9_df['cat_num']]
+    icd9_df['cat_desc'] = [category2icd_code[i] for i in icd9_df['cat_num']]
     icd9_df['combined_title'] = icd9_df['cat_desc'] + \
         ' ' + icds['LONG_TITLE']
 
