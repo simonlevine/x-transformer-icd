@@ -1,6 +1,6 @@
 import csv
 import json
-from collections import *
+from collections import defaultdict, Counter
 
 class Node(object):
   def __init__(self, depth, code, descr=None):
