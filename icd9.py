@@ -113,5 +113,4 @@ class ICD9(Node):
 if __name__ == '__main__':
   tree = ICD9('codes.json')
   counter = Counter(map(str, tree.leaves))
-  import pdb
-  pdb.set_trace()
+  breakpoint()
