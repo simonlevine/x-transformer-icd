@@ -173,7 +173,7 @@ def shorten_mimic_codes(row):
     return row
 
 def add_icd9_category_to_desc(icd9_df):
-    tqdm.pandas('Getting categories...')
+    tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
     icd9_df.dropna()
     unique_icds = icds['cat_num'].unique()
