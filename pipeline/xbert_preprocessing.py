@@ -148,7 +148,6 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
     elif icd_version == '9':  # use icd9 labels directly from mimic dataset.
         
-        icd9_hierarch_tree = ICD9('icd9_codes.json')
 
         if diag_or_proc_param == 'diag':
             icd9_df = pd.read_csv(ICD9_DIAG_KEY_FP, usecols=[
@@ -156,8 +155,9 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
         elif diag_or_proc_param == 'proc':
             icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=[
                                   'ICD9_CODE', 'LONG_TITLE']).astype(str)
-
-        icd9_df = add_icd9_category_to_desc(icd9_df)
+                                  
+        icd9_hierarch_tree = ICD9('icd9_codes.json')
+        icd9_df = add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree)
 
         desc_labels = icd9_df['combined_title']
         assert desc_labels.shape == desc_labels.dropna().shape
@@ -173,13 +173,14 @@ def shorten_mimic_codes(row):
     return row
 
 
-def get_icd9_cat_desc(category):
-    node = tree.find(category)
+def get_icd9_cat_desc(category, icd9_hierarch_tree):
+    node = icd9_hierarch_tree.find(category)
     # some ICD codes missing from icd9 package
     desc = node.description if node != None else ''
     return desc
 
-def add_icd9_category_to_desc(icd9_df):
+
+def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree):
     tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
     icd9_df.dropna()
@@ -190,7 +191,7 @@ def add_icd9_category_to_desc(icd9_df):
     category2icd_code: Dict[str, str] = {}
     null_count = 0
     for icd_cat in tqdm(unique_icds):
-        desc = get_icd9_cat_desc(icd_cat)
+        desc = get_icd9_cat_desc(icd_cat, icd9_hierarch_tree)
         category2icd_code[icd_cat] = desc
         if desc == '':
             null_count += 1
