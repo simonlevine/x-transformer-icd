@@ -78,7 +78,7 @@ def preprocess_and_clean_notes(notes_df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: notes_df, filtered of redundant text
     """
     logger.info(
-        "Removing de-id token, punctuation, admin language and other cruft")
+        "Removing de-id token, admin language and other cruft...")
     with tqdm(total=3+len(ADMIN_LANGUAGE)+6) as pbar:
         # notes_df["TEXT"] = notes_df["TEXT"].str.lower()
         # pbar.update(1)
