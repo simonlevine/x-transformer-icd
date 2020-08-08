@@ -17,7 +17,7 @@ prepare_for_xbert:
   - path: data/ICD_general_equivalence_mapping.csv
     md5: d053c2a2933f5665aff5aa64c9b941cb
   - path: data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
-    md5: 11af42631fb26a6b46c61433452fbc91
+    md5: 74036a5a0bbdc0b30d60cff3eb6d3ecb
   - path: data/mimiciii-14/DIAGNOSES_ICD.csv.gz
     md5: 1d8007cc3115fd87a95321df33e1de86
   - path: data/mimiciii-14/D_ICD_DIAGNOSES.csv.gz
@@ -27,182 +27,182 @@ prepare_for_xbert:
   - path: data/mimiciii-14/PROCEDURES_ICD.csv
     md5: ed7e6f1efa7e334404f6fb26e4c3c7d2
   - path: pipeline/format_data_for_training.py
-    md5: ac1bbd834b1ebd2dbdfaada6c8383de6
+    md5: db0d19a03e89865e58262e63ee2d2251
   - path: pipeline/xbert_preprocessing.py
-    md5: b27015d4ecf56f78276adf5a954a5cad
+    md5: ae5147f6ae1fdecf7236dc43a212b03f
   params:
     params.yaml:
       prepare_for_xbert.diag_or_proc: diag
       prepare_for_xbert.icd_version: '9'
-      prepare_for_xbert.subsampling: true
+      prepare_for_xbert.subsampling: false
   outs:
   - path: data/intermediary-data/df_test.pkl
-    md5: a6ccd5a0a7cd68d0ec51a5f50e5b8bc0
+    md5: b137323aea9b1f4cb439cc9369ddd14f
   - path: data/intermediary-data/df_train.pkl
-    md5: bca4afcdfe18c24dba1a2d0ebc0bc78d
+    md5: 6dd0e968792655765abaa2dda06b6f2d
   - path: data/intermediary-data/xbert_inputs/X.trn.npz
-    md5: 85a53b7954afc99f88d3ad0976ef647b
+    md5: 963b307e36c5c7a597dd2d33cc57e392
   - path: data/intermediary-data/xbert_inputs/X.tst.npz
-    md5: 19ebf2851285c4fc49747a2c70e4c3de
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: 4eb79a03e20ea3f442a1ae0c572ec7fc
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: 4e4508efc84dc28b04299becb8233890
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_inputs/label_map.txt
-    md5: d1c43b5896b66d5f54b120de7b535ff1
+    md5: ebd9deb52ffd940906a494e994b35142
   - path: data/intermediary-data/xbert_inputs/test_raw_texts.txt
-    md5: 0f286c2ef5898110d726679225748585
+    md5: 47b8e431c51d0b807715a895b025eef8
   - path: data/intermediary-data/xbert_inputs/train_raw_texts.txt
-    md5: 457318522eef692fded2103e3274afb0
+    md5: 1391297165aed064fbcb66c6d8f3ea51
 xbert_label_embedding:
   cmd: ./run_preprocess_label.sh
   deps:
   - path: data/intermediary-data/xbert_inputs/X.trn.npz
-    md5: bce791226498eca76160b8668e219be2
+    md5: 963b307e36c5c7a597dd2d33cc57e392
   - path: data/intermediary-data/xbert_inputs/X.tst.npz
-    md5: b42163ed7475ed8a123d5ba5783c3ebf
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: 09175655630dd8f639904df0b26f9270
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: f6e756d9723bd502e66c0b7610658329
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_inputs/label_map.txt
-    md5: d1c43b5896b66d5f54b120de7b535ff1
+    md5: ebd9deb52ffd940906a494e994b35142
   - path: data/intermediary-data/xbert_inputs/test_raw_texts.txt
-    md5: 1a59f28ffa2d484df2d34f92eb8b47cd
+    md5: 47b8e431c51d0b807715a895b025eef8
   - path: data/intermediary-data/xbert_inputs/train_raw_texts.txt
-    md5: 90c05d486086fcaaba2e8918cbcfa9ca
+    md5: 1391297165aed064fbcb66c6d8f3ea51
   - path: run_preprocess_label.sh
-    md5: 1f6e330b582b38ae82bc70059ea93173
+    md5: 62209926b140e6733324b00efeb79821
   - path: xbert/preprocess.py
-    md5: e29025f48ff2ebb4b3646528da2a7ce8
+    md5: b22b8f7ee6241d0bba7cfe9d3b65c6ab
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
-    md5: 85a5a0b55d7b3a045d7241b20cf55d18
+    md5: 950fc93619722cd351281fb606ea3d78
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/config.json
     md5: cb14f4a89207cc03790c97efd087fba9
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/code.npz
-    md5: 67f98c192c2a3380289ab4b5d4bd8873
+    md5: 0edcd56012959d9fa2c72faa5a66bf63
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/config.json
     md5: da9fd0d2d3758562dd40321c926990cc
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/code.npz
-    md5: 45f0906d1517133d6f4694045e5698ce
+    md5: dd62e0b39f870244a3d40269d4dd2c1e
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/config.json
     md5: 9446390933ab8ea0c01994a519f1556c
   - path: data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
-    md5: dc6f710fe905027fa8baa2e43152e22d
+    md5: f6ed7388e862dcbeb213a8d04e168d49
   - path: data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
-    md5: e0fcd8fe470aacf5d3a50a1b8c0a1846
+    md5: 7a4137032dd9402df198a85d353fcd72
   - path: data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
-    md5: c79978d9099ff7fd03e6fe8c05e6e73f
+    md5: 947b2374c79abd941805bc05edf88fad
 xbert_feat_embedding:
   cmd: ./run_preprocess_feat.sh
   deps:
   - path: data/intermediary-data/xbert_inputs/X.trn.npz
-    md5: bce791226498eca76160b8668e219be2
+    md5: 963b307e36c5c7a597dd2d33cc57e392
   - path: data/intermediary-data/xbert_inputs/X.tst.npz
-    md5: b42163ed7475ed8a123d5ba5783c3ebf
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: 09175655630dd8f639904df0b26f9270
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: f6e756d9723bd502e66c0b7610658329
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_inputs/test_raw_texts.txt
-    md5: 1a59f28ffa2d484df2d34f92eb8b47cd
+    md5: 47b8e431c51d0b807715a895b025eef8
   - path: data/intermediary-data/xbert_inputs/train_raw_texts.txt
-    md5: 90c05d486086fcaaba2e8918cbcfa9ca
+    md5: 1391297165aed064fbcb66c6d8f3ea51
   - path: run_preprocess_feat.sh
-    md5: a3c239b802cc82ff5a69df9b47a66b5e
+    md5: 9d53c29d3be4814a9a79e520e610ff72
   - path: xbert/preprocess.py
-    md5: e29025f48ff2ebb4b3646528da2a7ce8
+    md5: b22b8f7ee6241d0bba7cfe9d3b65c6ab
   params:
     params.yaml:
-      max_seq_len: 512
+      max_seq_len: 4096
   outs:
   - path: data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
-    md5: 89c3e67eabc2f3f72845cbdbe464ad70
+    md5: c4243c9536d36c4a0aa7582dd488458d
   - path: data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
-    md5: c3bf0abdc755b5341debf9987c71826d
+    md5: 8f61786f5262fc3dfce90b3a25ab0ba8
 xbert_model_training:
   cmd: ./run_transformer_train.sh
   deps:
   - path: data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
-    md5: dc6f710fe905027fa8baa2e43152e22d
+    md5: f6ed7388e862dcbeb213a8d04e168d49
   - path: data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
-    md5: e0fcd8fe470aacf5d3a50a1b8c0a1846
+    md5: 7a4137032dd9402df198a85d353fcd72
   - path: data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
-    md5: c79978d9099ff7fd03e6fe8c05e6e73f
+    md5: 947b2374c79abd941805bc05edf88fad
   - path: data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
-    md5: 89c3e67eabc2f3f72845cbdbe464ad70
+    md5: c4243c9536d36c4a0aa7582dd488458d
   - path: data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
-    md5: c3bf0abdc755b5341debf9987c71826d
+    md5: 8f61786f5262fc3dfce90b3a25ab0ba8
   - path: run_transformer_train.sh
-    md5: 59dcac2483bafeb35e8f5d8b680a939c
+    md5: f104832cb7e2fb2214e72f113881b545
   - path: xbert/transformer.py
-    md5: 42e5fd6159e2d10e6e6a764c216ccd4d
+    md5: bd8930a71ac25196cdc384599e68a8e1
   params:
     params.yaml:
-      max_seq_len: 512
+      max_seq_len: 4096
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
-    md5: 29fcaeacc7979f1cdeb3caa9a9bcbc1c
+    md5: 7d0a6646d2be314c4250bfac6181614f
 xbert_trained_model_prediction:
   cmd: ./run_transformer_training_prediction.sh
   deps:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
-    md5: 29fcaeacc7979f1cdeb3caa9a9bcbc1c
+    md5: 7d0a6646d2be314c4250bfac6181614f
   - path: data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
-    md5: dc6f710fe905027fa8baa2e43152e22d
+    md5: f6ed7388e862dcbeb213a8d04e168d49
   - path: data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
-    md5: e0fcd8fe470aacf5d3a50a1b8c0a1846
+    md5: 7a4137032dd9402df198a85d353fcd72
   - path: data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
-    md5: c79978d9099ff7fd03e6fe8c05e6e73f
+    md5: 947b2374c79abd941805bc05edf88fad
   - path: data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
-    md5: 89c3e67eabc2f3f72845cbdbe464ad70
+    md5: c4243c9536d36c4a0aa7582dd488458d
   - path: data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
-    md5: c3bf0abdc755b5341debf9987c71826d
+    md5: 8f61786f5262fc3dfce90b3a25ab0ba8
   - path: run_transformer_training_prediction.sh
-    md5: a433791374c42fb1c87c63f3f81931ba
+    md5: fd32dab5847ddc8d55cc1acf8e33606d
   params:
     params.yaml:
-      max_seq_len: 512
+      max_seq_len: 4096
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
-    md5: 2664e5822ac530d8164e35d7be707821
+    md5: abea9e83a58376f47ef1409bb2a9d5db
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
-    md5: 9746443d387442d408748bc497e9b3b8
+    md5: eedc7d0a46d21d827af6f8743349468b
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
-    md5: 14081458691f106182a6b00e8a9cfd3c
+    md5: 9e7ba5bcd0ca19d3c4b6e95b9e83191d
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
-    md5: 11af11d47af29a29ab94511aff6e9a4c
+    md5: 03cbd79843d02e0b41a4041e435fadbf
 xbert_ranker_and_eval:
   cmd: ./run_transformer_predict.sh
   deps:
   - path: data/intermediary-data/xbert_inputs/X.trn.npz
-    md5: bce791226498eca76160b8668e219be2
+    md5: 963b307e36c5c7a597dd2d33cc57e392
   - path: data/intermediary-data/xbert_inputs/X.tst.npz
-    md5: b42163ed7475ed8a123d5ba5783c3ebf
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: 09175655630dd8f639904df0b26f9270
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: f6e756d9723bd502e66c0b7610658329
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
-    md5: 85a5a0b55d7b3a045d7241b20cf55d18
+    md5: 950fc93619722cd351281fb606ea3d78
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
-    md5: 2664e5822ac530d8164e35d7be707821
+    md5: abea9e83a58376f47ef1409bb2a9d5db
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
-    md5: 9746443d387442d408748bc497e9b3b8
+    md5: eedc7d0a46d21d827af6f8743349468b
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
-    md5: 14081458691f106182a6b00e8a9cfd3c
+    md5: 9e7ba5bcd0ca19d3c4b6e95b9e83191d
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
-    md5: 11af11d47af29a29ab94511aff6e9a4c
+    md5: 03cbd79843d02e0b41a4041e435fadbf
   - path: run_transformer_predict.sh
-    md5: f886c6d321d4d89bf2f75c009b044bf2
+    md5: 6d74f0fff2e7f90d0fe8493616ea7702
   - path: xbert/evaluator.py
     md5: db7fc81df488eff294e7f9738c7c1162
   - path: xbert/ranker.py
     md5: 594009ea20d82965f0f35371a0902f05
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
-    md5: 34c91da7c3a87ba136b3ed889f564baa
+    md5: 94d233bb64c6a8027dbeb44b603f2e96
 convert_longformer:
   cmd: $PY_CONDA custom_models/elongate_bioclinical_BERT.py
 filter_text_notes:
@@ -211,7 +211,7 @@ filter_text_notes:
   - path: data/mimiciii-14/NOTEEVENTS.csv.gz
     md5: d0345c072f1e3107c56cfa76c83b48a9
   - path: pipeline/filter_notes.py
-    md5: 8a7a4dc15ac3e73aa357a1ad7cb40ef2
+    md5: dfbf63a5d8c7e163e7d90d8d95650071
   outs:
   - path: data/intermediary-data/filtered_notes/NOTEEVENTS.FILTERED.csv.gz
-    md5: 11af42631fb26a6b46c61433452fbc91
+    md5: 74036a5a0bbdc0b30d60cff3eb6d3ecb

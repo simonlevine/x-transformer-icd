@@ -93,6 +93,8 @@ stages:
       - max_seq_len
     outs:
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/pytorch_model.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/config.json
   xbert_trained_model_prediction:
     cmd: ./run_transformer_training_prediction.sh
     deps:
@@ -127,3 +129,5 @@ stages:
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     outs:
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model

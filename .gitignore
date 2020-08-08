@@ -159,3 +159,9 @@ data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
 data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
 data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
 *.gz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/config.json
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/pytorch_model.bin
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/C.npz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/param.json
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/W.npz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
