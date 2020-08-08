@@ -136,7 +136,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
     # use general equivalence mapping to create label map.
     if icd_version == '10':
-        logger.info('NOTE: ICD10 categorical labels not currently implemented.')
+        logger.warning('NOTE: ICD10 categorical labels not currently implemented.')
         assert diag_or_proc_param == 'diag', 'Cannot currently process ICD10-PCS labels.'
 
         icd_equivalence_df = pd.read_csv(ICD_GEM_FP, sep='|', header=None).rename(columns=dict(zip(
