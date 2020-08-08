@@ -155,7 +155,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
         elif diag_or_proc_param == 'proc':
             icd9_df = pd.read_csv(ICD9_PROC_KEY_FP, usecols=[
                                   'ICD9_CODE', 'LONG_TITLE']).astype(str)
-                                  
+
         icd9_hierarch_tree = ICD9('icd9_codes.json')
         icd9_df = add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree)
 
@@ -201,7 +201,7 @@ def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree):
     logger.info('Assigning category descriptions...')
     icd9_df['cat_desc'] = [category2icd_code[i] for i in icd9_df['cat_num']]
     icd9_df['combined_title'] = icd9_df['cat_desc'] + \
-        ' ' + icds['LONG_TITLE']
+        ' ' + icd9_df['LONG_TITLE']
 
     return icd9_df
 
