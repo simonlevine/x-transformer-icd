@@ -170,7 +170,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
 
         logger.info(
             f'Loading {len(unique_icds)} unique icd catagories and descriptions...')
-        icd_cat_dict = {}
+        category2icd_code: Dict[str, str] = {}
         null_count = 0
         for icd_cat in tqdm(unique_icds):
             desc = get_icd9_cat_desc(icd_cat)
