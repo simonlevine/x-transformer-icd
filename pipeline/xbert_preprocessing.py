@@ -42,8 +42,10 @@ import yaml
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
-from icd9 import *
 
+import sys
+sys.path.append(".")
+from icd9 import ICD9
 
 
 try:
