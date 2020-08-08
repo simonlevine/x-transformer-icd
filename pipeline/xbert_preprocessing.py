@@ -172,6 +172,13 @@ def shorten_mimic_codes(row):
     row = row[:3]
     return row
 
+
+def get_icd9_cat_desc(category):
+    node = tree.find(category)
+    # some ICD codes missing from icd9 package
+    desc = node.description if node != None else ''
+    return desc
+
 def add_icd9_category_to_desc(icd9_df):
     tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
