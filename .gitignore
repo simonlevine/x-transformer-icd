@@ -145,3 +145,17 @@ Temporary Items
 Miniconda3-latest-Linux-x86_64.sh
 save_models/mimiciii-14/proc_data/log.bert.128.txt
 testing.ipynb
+data/intermediary-data/xbert_inputs/label_map.txt
+data/intermediary-data/xbert_inputs/test_raw_texts.txt
+data/intermediary-data/xbert_inputs/train_raw_texts.txt
+data/intermediary-data/xbert_inputs/X.trn.npz
+data/intermediary-data/xbert_inputs/X.tst.npz
+data/intermediary-data/xbert_inputs/Y.trn.npz
+data/intermediary-data/xbert_inputs/Y.tst.npz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
+data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
+*.gz
