@@ -2,7 +2,7 @@
 source params.sh
 
 DATASET=$'mimiciii-14'
-LABEL_EMB=$'pifa-tfidf'
+LABEL_EMB=$(params "['label_emb']")
 MODEL_NAME=$(params "['model_name']")
 MODEL_TYPE=$'roberta'
 

@@ -16,7 +16,7 @@ TOPk = 10
 def embed_and_predict(discharge_summary,
                       model_class="longformer",
                       num_labels=128,
-                      matcher_dir="'./data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher',"):
+                      matcher_dir="'./data/intermediary-data/xbert_outputs/pifa-neural-s0/matcher',"):
 
     with tempfile.NamedTemporaryFile("wb") as f_X1:
         smat.save_npz(
@@ -42,9 +42,9 @@ def embed_and_predict(discharge_summary,
                 'model_name_or_path': 'custom_models/biomed_roberta_base-4096',
                 'trn_feat_path': './data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl',
                 'tst_feat_path': './data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl',
-                'trn_label_path': './data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz',
-                'tst_label_path': './data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz',
-                'output_dir': './data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher',
+                'trn_label_path': './data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-neural-s0.npz',
+                'tst_label_path': './data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-neural-s0.npz',
+                'output_dir': './data/intermediary-data/xbert_outputs/pifa-neural-s0/matcher',
                 'config_name': '',
                 'cache_dir': '',
                 'do_train': False,
