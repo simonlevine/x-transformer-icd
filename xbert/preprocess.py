@@ -19,6 +19,7 @@ from sklearn.preprocessing import normalize
 from loguru import logger
 import yaml
 from sentence_transformers import SentenceTransformer
+import torch
 
 
 from transformers import RobertaModel, RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer
