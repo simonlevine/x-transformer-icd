@@ -102,6 +102,8 @@ def main():
         X_trn_embedded, X_tst_embedded = xbert_get_tfidf_inputs(X_trn, X_tst)
     elif label_emb_param == 'pifa-neural': # create an npy of XLNET-embedded features.
         X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
+    elif label_emb_param == 'text-emb':
+        X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
 
 
     icd_labels, desc_labels = xbert_create_label_map(icd_version_specified, diag_or_proc_param)
@@ -246,10 +248,12 @@ def xbert_prepare_txt_inputs(df, df_subset):
     return raw_texts
 
 
-def xbert_get_neural_emb_inputs(X_trn, X_tst):
-    from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer('')
-    from transformers import XLNetModel
+# def xbert_get_neural_emb_inputs(X_trn, X_tst):
+#     """
+#     Get embedding of instances using NLI-trained transformer.
+#     """
+#     from sentence_transformers import SentenceTransformer
+#     model = SentenceTransformer('roberta-large-nli-stsb-mean-tokens')
 
 
 def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):

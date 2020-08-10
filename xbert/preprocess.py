@@ -18,6 +18,7 @@ import scipy.sparse as smat
 from sklearn.preprocessing import normalize
 from loguru import logger
 import yaml
+from sentence_transformers import SentenceTransformer
 
 
 from transformers import RobertaModel, RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer
@@ -59,9 +60,12 @@ def run_label_embedding(args):
 
     if args.label_emb_name.startswith('pifa'):
         if args.label_emb_name.startswith('pifa-tfidf'):
+            logger.info('Creating PIFA-TFIDF label embedding from TFIDF features...')
             assert args.inst_embedding.endswith(".npz")
             X = smat.load_npz("{}/X.trn.npz".format(args.input_data_dir))
         elif args.label_emb_name.startswith('pifa-neural'):
+            logger.info(
+                'Creating PIFA-neural label embedding from neural-embedded features...')
             assert args.inst_embedding.endswith(".npy")
             X = np.load(args.inst_embedding)
         else:
@@ -74,7 +78,35 @@ def run_label_embedding(args):
         label_embedding = smat.csr_matrix(Y_avg.T.dot(X))
         label_embedding = normalize(label_embedding, axis=1, norm="l2")
 
-    #OMISSION: alternative embedding process
+    elif args.label_emb_name == "text-emb":
+        logger.info('Creating text-embedded labels...')
+        # Use sentence-transformer to encode labels.
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        tokenizer = RobertaTokenizer.from_pretrained(
+            "sentence-transformers/roberta-large-nli-stsb-mean-tokens")
+        model = RobertaModel.from_pretrained(
+            "sentence-transformers/roberta-large-nli-stsb-mean-tokens")
+        model = model.to(device)
+        model.eval()
+
+        # get label embedding
+        label_embedding = []
+        for idx in tqdm(range(n_label)):
+            inputs = torch.tensor([tokenizer.encode(id2label[idx])])
+            inputs = inputs.to(device)
+            with torch.no_grad():
+                # [1, seq_len, hidden_dim]
+                last_hidden_states = model(inputs)[0]
+                seq_embedding = last_hidden_states.mean(dim=1)
+            label_embedding.append(seq_embedding)
+        label_embedding = torch.cat(label_embedding, dim=0)
+        label_embedding = label_embedding.cpu().numpy()
+        label_embedding = smat.csr_matrix(label_embedding)
+        label_embedding = normalize(label_embedding, axis=1, norm="l2")
+
+    else:
+        raise NotImplementedError(
+            "unknown embed_type {}".format(args.embed_type))
 
     # save label embedding
     logger.info("label_embedding {} {}".format(type(label_embedding), label_embedding.shape))

@@ -9,7 +9,7 @@ GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
-INDEXER_NAME=$'pifa-neural-s0' # or ||| pifa-tfidf-s0 ||| text-emb-s0
+INDEXER_NAME=$'text-emb-s0' #'pifa-neural-s0' # or ||| pifa-tfidf-s0 ||| text-emb-s0
 
 MODEL_NAME=$(params "['model_name']")
 MODEL_FOLDER_NAME='roberta'

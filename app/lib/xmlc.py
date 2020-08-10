@@ -14,9 +14,9 @@ from xbert.rf_linear import PostProcessor, HierarchicalMLModel
 TOPk = 10
 
 def embed_and_predict(discharge_summary,
-                      model_class="longformer",
+                      model_class="roberta",
                       num_labels=128,
-                      matcher_dir="'./data/intermediary-data/xbert_outputs/pifa-neural-s0/matcher',"):
+                      matcher_dir="'./data/intermediary-data/xbert_outputs/text-emb-s0/matcher',"):
 
     with tempfile.NamedTemporaryFile("wb") as f_X1:
         smat.save_npz(
