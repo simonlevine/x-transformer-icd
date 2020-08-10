@@ -81,6 +81,7 @@ dependencies:
     - s3transfer
     - sacremoses
     - sentencepiece
+    - sentence_transformers
     - toml
     - torch
     - tqdm
