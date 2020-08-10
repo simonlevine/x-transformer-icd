@@ -49,6 +49,10 @@ logger = logging.getLogger(__name__)
 
 
 def run_label_embedding(args):
+    """
+    This step performs PIFA (Positive Instance Feature Aggregation)
+    on embedded labels (TF-IDF/XLNET/text emb, etc.)
+    """
     label_map_path = "{}/label_map.txt".format(args.input_data_dir)
     id2label = [line.strip() for line in open(label_map_path, 'r', encoding='ISO-8859-1')]
     n_label = len(id2label)
