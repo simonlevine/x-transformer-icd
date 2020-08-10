@@ -103,8 +103,9 @@ def main():
     elif label_emb_param == 'pifa-neural': # create an npy of XLNET-embedded features.
         X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
     elif label_emb_param == 'text-emb':
-        X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
-
+        logger.info('Text-emb specified, so no instance embedding on label-side.')
+        X_trn_embedded = None
+        X_tst_embedded = None
 
     icd_labels, desc_labels = xbert_create_label_map(icd_version_specified, diag_or_proc_param)
     Y_trn_map = xbert_prepare_Y_maps(
@@ -300,17 +301,18 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_embedded, 
     X_tst.to_csv(path_or_buf=XBERT_TEST_RAW_TEXTS_FP,
                  header=None, index=None, sep='\t', mode='w')
 
-    if label_emb_param == 'pifa-tfidf':  # writing X.trn.npz, X.tst.npz files.
-        logger.info(
-            'Saving TFIDF of features (sparse compressed row matrices / .npz) to file...')
-        scipy.sparse.save_npz(XBERT_X_TRN_FP, X_tst_embedded)
-        scipy.sparse.save_npz(XBERT_X_TST_FP, X_tst_embedded)
+    if X_tst_embedded != None: #i.e., we want to do PIFA-...
+        if label_emb_param == 'pifa-tfidf':  # writing X.trn.npz, X.tst.npz files.
+            logger.info(
+                'Saving TFIDF of features (sparse compressed row matrices / .npz) to file...')
+            scipy.sparse.save_npz(XBERT_X_TRN_FP, X_tst_embedded)
+            scipy.sparse.save_npz(XBERT_X_TST_FP, X_tst_embedded)
 
-    elif label_emb_param == 'pifa-neural':
-        logger.info(
-            'Saving XL-NET embedding of features as .npy to file...')
-        np.save(XBERT_X_TRN_FP, X_tst_embedded)
-        np.save(XBERT_X_TST_FP, X_tst_embedded)
+        elif label_emb_param == 'pifa-neural':
+            logger.info(
+                'Saving neural embedding of features as .npy to file...')
+            np.save(XBERT_X_TRN_FP, X_tst_embedded)
+            np.save(XBERT_X_TST_FP, X_tst_embedded)
 
     #writing Y.trn.npz and Y.tst.npz to file.
     logger.info(
