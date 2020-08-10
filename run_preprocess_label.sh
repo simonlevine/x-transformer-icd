@@ -35,6 +35,7 @@ SEED_LIST=( 0 1 2 )
 for SEED in "${SEED_LIST[@]}"; do
     LABEL_EMB_NAME=${LABEL_EMB}-s${SEED}
 	INDEXER_DIR=${OUTPUT_DIR}/${LABEL_EMB_NAME}/indexer
+    mkdir -p ${INDEXER_DIR}
 	$PY_CONDA -u -m xbert.indexer \
 		-i ${PROC_DATA_DIR}/L.${LABEL_EMB}.npz \
 		-o ${INDEXER_DIR} --seed ${SEED}
