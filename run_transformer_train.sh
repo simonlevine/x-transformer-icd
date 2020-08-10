@@ -20,7 +20,6 @@ PROC_DATA_DIR=./data/intermediary-data/xbert_outputs/proc_data
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
-#SHOULD ADD SOMETHING HERE FOR A 2070?
 
 # stupid-tier
 # PER_DEVICE_TRN_BSZ=1
