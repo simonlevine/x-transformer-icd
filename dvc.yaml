@@ -111,7 +111,7 @@ stages:
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
-      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy      
   xbert_ranker_and_eval:
     cmd: ./run_transformer_predict.sh
     deps:
@@ -131,3 +131,5 @@ stages:
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model
+    metrics:
+      - eval.json

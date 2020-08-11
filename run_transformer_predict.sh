@@ -44,4 +44,3 @@ $PY_CONDA xbert/evaluator.py \
     -y ${DATA_DIR}/Y.tst.npz \
     -e -p ${PRED_NPZ_PATH} \
     |& tee ${EVAL_DIR}/${EXP_NAME}.txt
-

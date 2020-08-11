@@ -7,6 +7,7 @@ import pickle
 import scipy as sp
 import scipy.sparse as smat
 import xbert.rf_linear as rf_linear
+from loguru import logger
 
 
 def print_ens(Y_true, Y_pred_list):
@@ -29,11 +30,18 @@ def main(args):
         else:
             Y_pred = smat.load_npz(pred_path)
             Y_pred.data = rf_linear.Transform.sigmoid(Y_pred.data)
-
             Y_pred_list += [Y_pred]
-            print("==== Evaluation on {}".format(pred_path))
-            print(rf_linear.Metrics.generate(Y_true, Y_pred))
+            heading = "==== Evaluation on {}".format(pred_path)
+            metrics = rf_linear.Metrics.generate(Y_true, Y_pred)
+            print(heading)
+            print(metrics)
+            logger.info('Writing metrics to .txt, and JSON for DVC...')
+            eval_data = {"metrics":[metrics]}
+            with open('eval.json', 'w', encoding='utf-8') as f:
+                json.dumps(eval_data, f, ensure_ascii=False)
+
     if args.ensemble and len(Y_pred_list) > 1:
+        logger.warning('DVC metrics not yet set up for ensembled models.')
         print("==== Evaluations of Ensembles of All Predictions ====")
         for ens in [
             rf_linear.CsrEnsembler.average,
@@ -52,7 +60,7 @@ if __name__ == "__main__":
         "--input-inst-label",
         type=str,
         required=True,
-        help="path to the npz file of the truth label matrix (CSR) for computing metrics",
+        help="path to the npz (Y.tst.npz) file of the truth label matrix (CSR) for computing metrics",
     )
     parser.add_argument(
         "-e", "--ensemble", action="store_true", help="whether to perform ensemble evaluations as well",
