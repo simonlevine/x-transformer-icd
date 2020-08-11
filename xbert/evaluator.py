@@ -39,7 +39,7 @@ def main(args):
             logger.info('Writing metrics to .txt, and JSON for DVC...')
             eval_data = {"metrics":[metrics]}
             with open('eval.json', 'w', encoding='utf-8') as f:
-                json.dumps(eval_data, f, ensure_ascii=False)
+                json.dump(eval_data, f, ensure_ascii=False)
 
     if args.ensemble and len(Y_pred_list) > 1:
         logger.warning('DVC metrics not yet set up for ensembled models.')
