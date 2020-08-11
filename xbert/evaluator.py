@@ -33,9 +33,7 @@ def main(args):
             Y_pred_list += [Y_pred]
             heading = "==== Evaluation on {}".format(pred_path)
             metrics = rf_linear.Metrics.generate(Y_true, Y_pred)
-            print(heading)
-            print(metrics)
-            logger.info('Writing metrics to .txt, and JSON for DVC...')
+            logger.info('Writing metrics to JSON for DVC...')
             eval_data = {"Results:":heading,"precision":metrics[0].tolist(),"recall":metrics[1].tolist()}   
             with open('eval.json', 'w', encoding='utf-8') as f:
                 json.dump(eval_data, f, ensure_ascii=False)
