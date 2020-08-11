@@ -9,7 +9,7 @@ GPID=${0} #CUDA visible devices. 0 for just one 2070 GPU.
 # NPROC_PER_NODE='1'
 
 DATASET=$'mimiciii-14'
-INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-neural-s0 ||| text-emb-s0
+INDEXER_NAME=$'pifa-tfidf-s0' # or ||| pifa-tfidf-s0 ||| text-emb-s0
 
 MODEL_NAME=$(params "['model_name']")
 MODEL_FOLDER_NAME='roberta'
@@ -20,7 +20,6 @@ PROC_DATA_DIR=./data/intermediary-data/xbert_outputs/proc_data
 
 MAX_XSEQ_LEN=$(params "['max_seq_len']")
 
-#SHOULD ADD SOMETHING HERE FOR A 2070?
 
 # stupid-tier
 # PER_DEVICE_TRN_BSZ=1

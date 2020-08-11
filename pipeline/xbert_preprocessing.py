@@ -39,6 +39,7 @@ import re
 import pandas as pd
 import scipy
 import yaml
+import numpy as np
 from loguru import logger
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
@@ -92,22 +93,29 @@ def main():
         format_data_for_training.construct_datasets(
             diag_or_proc_param, note_category_param, subsampling_param)
 
+    label_emb_param = params['label_emb']
+
     X_trn = xbert_prepare_txt_inputs(df_train, 'training')
     X_tst = xbert_prepare_txt_inputs(df_test, 'testing')
-    X_trn_tfidf, X_tst_tfidf = xbert_get_tfidf_inputs(X_trn, X_tst)
-    icd_labels, desc_labels = xbert_create_label_map(
-        icd_version_specified, diag_or_proc_param)
-
-    # tqdm.pandas(desc='Filtering LABEL text...')
-    # desc_labels = desc_labels.progress_apply(xbert_clean_label)
     
+    if label_emb_param == 'pifa-tfidf': #create an npz of tfidf features.
+        X_trn_embedded, X_tst_embedded = xbert_get_tfidf_inputs(X_trn, X_tst)
+    elif label_emb_param == 'pifa-neural': # create an npy of XLNET-embedded features.
+        raise ValueError("PIFA-neural not currently implemented!")
+        # X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
+    elif label_emb_param == 'text-emb':
+        logger.info('Text-emb specified, so no instance embedding on label-side.')
+        X_trn_embedded = None
+        X_tst_embedded = None
+
+    icd_labels, desc_labels = xbert_create_label_map(icd_version_specified, diag_or_proc_param)
     Y_trn_map = xbert_prepare_Y_maps(
         df_train, icd_labels.tolist(), icd_version_specified)
     Y_tst_map = xbert_prepare_Y_maps(
         df_test, icd_labels.tolist(), icd_version_specified)
 
     xbert_write_preproc_data_to_file(
-        desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn_map, Y_tst_map)
+        desc_labels, X_trn, X_tst, X_trn_embedded, X_tst_embedded, Y_trn_map, Y_tst_map, label_emb_param)
 
     logger.info(
         'Done preprocessing. Saving pickled dataframes to file for later postprocessing.'
@@ -242,6 +250,14 @@ def xbert_prepare_txt_inputs(df, df_subset):
     return raw_texts
 
 
+# def xbert_get_neural_emb_inputs(X_trn, X_tst):
+#     """
+#     Get embedding of instances using NLI-trained transformer.
+#     """
+#     from sentence_transformers import SentenceTransformer
+#     model = SentenceTransformer('roberta-large-nli-stsb-mean-tokens')
+
+
 def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1):
     """
     Creates tf-idf vectors of instances in preparation for xbert training.
@@ -264,7 +280,8 @@ def xbert_get_tfidf_inputs(X_trn, X_tst, n_gram_range_upper=1, min_doc_freq = 1)
     X_tst_tfidf = vectorizer.transform(corpus_tst)
     return X_trn_tfidf, X_tst_tfidf
 
-def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_tst_tfidf, Y_trn, Y_tst):
+
+def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_embedded, X_tst_embedded, Y_trn, Y_tst, label_emb_param):
     """Creates X_trn/X_tst TF-IDF vectors, (csr/npz files),
     Y_trn/Y_tst (binary array; csr/npz files), as well as
     .txt files for free text labels (label_map.txt) and train/test inputs (train/test_raw_texts)
@@ -285,11 +302,18 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_tfidf, X_t
     X_tst.to_csv(path_or_buf=XBERT_TEST_RAW_TEXTS_FP,
                  header=None, index=None, sep='\t', mode='w')
 
-    #writing X.trn.npz, X.tst.npz files.
-    logger.info(
-        'Saving TFIDF of features (sparse compressed row matrices) to file...')
-    scipy.sparse.save_npz(XBERT_X_TRN_FP, X_trn_tfidf)
-    scipy.sparse.save_npz(XBERT_X_TST_FP, X_tst_tfidf)
+    if X_tst_embedded != None: #i.e., we want to do PIFA-...
+        if label_emb_param == 'pifa-tfidf':  # writing X.trn.npz, X.tst.npz files.
+            logger.info(
+                'Saving TFIDF of features (sparse compressed row matrices / .npz) to file...')
+            scipy.sparse.save_npz(XBERT_X_TRN_FP, X_tst_embedded)
+            scipy.sparse.save_npz(XBERT_X_TST_FP, X_tst_embedded)
+
+        elif label_emb_param == 'pifa-neural':
+            logger.info(
+                'Saving neural embedding of features as .npy to file...')
+            np.save(XBERT_X_TRN_FP, X_tst_embedded)
+            np.save(XBERT_X_TST_FP, X_tst_embedded)
 
     #writing Y.trn.npz and Y.tst.npz to file.
     logger.info(
