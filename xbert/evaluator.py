@@ -36,7 +36,7 @@ def main(args):
             print(heading)
             print(metrics)
             logger.info('Writing metrics to .txt, and JSON for DVC...')
-            eval_data = {"precision":metrics[0].tolist(),"recall":metrics[1].tolist()}   
+            eval_data = {"Results:":heading,"precision":metrics[0].tolist(),"recall":metrics[1].tolist()}   
             with open('eval.json', 'w', encoding='utf-8') as f:
                 json.dump(eval_data, f, ensure_ascii=False)
             
