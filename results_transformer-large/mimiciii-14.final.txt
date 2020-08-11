@@ -1,4 +1,0 @@
-Namespace(ensemble=True, input_inst_label='./data/intermediary-data/xbert_inputs/Y.tst.npz', pred_path=['./data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz'])
-==== Evaluation on ./data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
-prec   = 79.79 73.41 67.76 62.94 58.46 54.43 50.85 47.67 44.87 42.33
-recall = 9.00 16.19 21.97 26.73 30.54 33.67 36.30 38.55 40.50 42.16

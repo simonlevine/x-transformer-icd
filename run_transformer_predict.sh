@@ -42,6 +42,5 @@ EVAL_DIR=results_transformer-large
 mkdir -p ${EVAL_DIR}
 $PY_CONDA xbert/evaluator.py \
     -y ${DATA_DIR}/Y.tst.npz \
-    -e -p ${PRED_NPZ_PATH} \
-    |& tee ${EVAL_DIR}/${EXP_NAME}.txt
-
+    -e -p ${PRED_NPZ_PATH} #\
+    # |& tee ${EVAL_DIR}/${EXP_NAME}.txt
