@@ -8,7 +8,7 @@ import scipy as sp
 import scipy.sparse as smat
 import xbert.rf_linear as rf_linear
 from loguru import logger
-
+import json
 
 def print_ens(Y_true, Y_pred_list):
     for ens in [
@@ -36,10 +36,10 @@ def main(args):
             print(heading)
             print(metrics)
             logger.info('Writing metrics to .txt, and JSON for DVC...')
-            eval_data = {"metrics":[metrics]}
+            eval_data = {"precision":metrics[0].tolist(),"recall":metrics[1].tolist()}   
             with open('eval.json', 'w', encoding='utf-8') as f:
-                json.dumps(eval_data, f, ensure_ascii=False)
-
+                json.dump(eval_data, f, ensure_ascii=False)
+            
     if args.ensemble and len(Y_pred_list) > 1:
         logger.warning('DVC metrics not yet set up for ensembled models.')
         print("==== Evaluations of Ensembles of All Predictions ====")
