@@ -101,7 +101,8 @@ def main():
     if label_emb_param == 'pifa-tfidf': #create an npz of tfidf features.
         X_trn_embedded, X_tst_embedded = xbert_get_tfidf_inputs(X_trn, X_tst)
     elif label_emb_param == 'pifa-neural': # create an npy of XLNET-embedded features.
-        X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
+        raise ValueError("PIFA-neural not currently implemented!")
+        # X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
     elif label_emb_param == 'text-emb':
         logger.info('Text-emb specified, so no instance embedding on label-side.')
         X_trn_embedded = None

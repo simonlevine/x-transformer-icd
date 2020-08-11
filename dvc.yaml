@@ -37,8 +37,8 @@ stages:
       - data/intermediary-data/xbert_inputs/label_map.txt
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      # - data/intermediary-data/xbert_inputs/X.trn.npz
-      # - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
   xbert_label_embedding:
@@ -49,20 +49,20 @@ stages:
       - data/intermediary-data/xbert_inputs/label_map.txt
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      # - data/intermediary-data/xbert_inputs/X.trn.npz
-      # - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
     outs:
-      - data/intermediary-data/xbert_outputs/proc_data/L.text-emb.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.trn.text-emb-s0.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.tst.text-emb-s0.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/indexer/code.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/indexer/config.json
-      - data/intermediary-data/xbert_outputs/text-emb-s1/indexer/code.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s1/indexer/config.json
-      - data/intermediary-data/xbert_outputs/text-emb-s2/indexer/code.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s2/indexer/config.json
+      - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/config.json
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/code.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s1/indexer/config.json
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/code.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s2/indexer/config.json
   xbert_feat_embedding:
     cmd: ./run_preprocess_feat.sh
     deps:
@@ -70,8 +70,8 @@ stages:
       - xbert/preprocess.py
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      # - data/intermediary-data/xbert_inputs/X.trn.npz
-      # - data/intermediary-data/xbert_inputs/X.tst.npz
+      - data/intermediary-data/xbert_inputs/X.trn.npz
+      - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
     params:
@@ -87,31 +87,31 @@ stages:
       - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.trn.text-emb-s0.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.tst.text-emb-s0.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/training_args.bin
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/pytorch_model.bin
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/config.json
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/pytorch_model.bin
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/config.json
   xbert_trained_model_prediction:
     cmd: ./run_transformer_training_prediction.sh
     deps:
       - run_transformer_training_prediction.sh
       - data/intermediary-data/xbert_outputs/proc_data/X.trn.tomodel.pkl
       - data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
-      - data/intermediary-data/xbert_outputs/proc_data/L.text-emb.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.trn.text-emb-s0.npz
-      - data/intermediary-data/xbert_outputs/proc_data/C.tst.text-emb-s0.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/training_args.bin
+      - data/intermediary-data/xbert_outputs/proc_data/L.pifa-tfidf.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz
+      - data/intermediary-data/xbert_outputs/proc_data/C.tst.pifa-tfidf-s0.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
     params:
       - max_seq_len
     outs:
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_trn_pred.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_tst_pred.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/trn_embeddings.npy
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/tst_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
   xbert_ranker_and_eval:
     cmd: ./run_transformer_predict.sh
     deps:
@@ -122,12 +122,12 @@ stages:
       - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_trn_pred.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_tst_pred.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/trn_embeddings.npy
-      - data/intermediary-data/xbert_outputs/text-emb-s0/matcher/tst_embeddings.npy
-      - data/intermediary-data/xbert_outputs/text-emb-s0/indexer/code.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     outs:
-      - data/intermediary-data/xbert_outputs/text-emb-s0/ranker/tst.pred.npz
-      - data/intermediary-data/xbert_outputs/text-emb-s0/ranker/param.json
-      - data/intermediary-data/xbert_outputs/text-emb-s0/ranker/0.model
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
+      - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model

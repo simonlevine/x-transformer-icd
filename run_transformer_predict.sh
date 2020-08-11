@@ -5,7 +5,7 @@ source params.sh
 DATASET=$'mimiciii-14'
 DATA_DIR=./data/intermediary-data/xbert_inputs
 
-LABEL_NAME=$'text-emb-s0' #'pifa-neural-s0'
+LABEL_NAME=$'pifa-neural-s0'
 MODEL_NAME=$(params "['model_name']")
 MODEL_FOLDER_NAME='roberta'
 EXP_NAME=${DATASET}.final
