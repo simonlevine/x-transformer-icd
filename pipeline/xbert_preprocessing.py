@@ -306,13 +306,13 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_embedded, 
         if label_emb_param == 'pifa-tfidf':  # writing X.trn.npz, X.tst.npz files.
             logger.info(
                 'Saving TFIDF of features (sparse compressed row matrices / .npz) to file...')
-            scipy.sparse.save_npz(XBERT_X_TRN_FP, X_tst_embedded)
+            scipy.sparse.save_npz(XBERT_X_TRN_FP, X_trn_embedded)
             scipy.sparse.save_npz(XBERT_X_TST_FP, X_tst_embedded)
 
         elif label_emb_param == 'pifa-neural':
             logger.info(
                 'Saving neural embedding of features as .npy to file...')
-            np.save(XBERT_X_TRN_FP, X_tst_embedded)
+            np.save(XBERT_X_TRN_FP, X_trn_embedded)
             np.save(XBERT_X_TST_FP, X_tst_embedded)
 
     #writing Y.trn.npz and Y.tst.npz to file.
