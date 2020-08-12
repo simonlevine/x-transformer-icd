@@ -165,3 +165,4 @@ data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/C.npz
 data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/param.json
 data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model/W.npz
 data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
+eval.json
