@@ -211,7 +211,8 @@ def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree, diag_or_proc_param):
     tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
     if diag_or_proc_param == 'proc':
-        icds['cat_num'] = icds['cat_num'].str.slice_replace(start=2, stop=2, repl='.') # match JSON
+        icd9_df['cat_num'] = icd9_df['cat_num'].str.slice_replace(
+            start=2, stop=2, repl='.')  # match JSON
     icd9_df.dropna()
     unique_icds = icd9_df['cat_num'].unique()
 
