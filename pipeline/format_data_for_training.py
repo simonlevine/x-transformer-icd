@@ -127,6 +127,8 @@ def generate_notes_df(note_category_param):
 
     logger.info(f'Loading notes from {note_category_param} category...')
     note_events_df['CATEGORY'] = note_events_df['CATEGORY'].str.strip()
+
+    # if note_category_param
     note_events_df = note_events_df[note_events_df.CATEGORY ==
                                     note_category_param]
     note_events_df = note_events_df.drop_duplicates(["TEXT"]).groupby(
