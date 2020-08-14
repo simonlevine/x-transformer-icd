@@ -191,24 +191,27 @@ def get_icd9_cat_desc(category, icd9_hierarch_tree):
     return desc
 
 
-def get_icd9_parent_cat_desc(category):
-    node = tree.find(category)
+def get_icd9_parent_cat_desc(category, icd9_hierarch_tree):
+    node = icd9_hierarch_tree.find(category)
     # some ICD codes may be missing from icd9 package
     desc = node.parent.description if node != None else ''
     if desc == 'ROOT':
         desc = ''
     return desc
 
-
-def get_icd9_grandparent_cat_desc(category):
-    node = tree.find(category)
+def get_icd9_grandparent_cat_desc(category, icd9_hierarch_tree):
+    node = icd9_hierarch_tree.find(category)
     # some ICD codes may be missing from icd9 package
     desc = node.parent.parent.description if node != None else ''
     return desc
 
-def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree):
+def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree, diag_or_proc_param):
+
+    icds['ICD9_CODE'] = icds['ICD9_CODE'].astype(str) #make code str
     tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
+    if diag_or_proc_param == 'proc':
+        icds['cat_num'] = icds['cat_num'].str.slice_replace(start=2, stop=2, repl='.') # match JSON
     icd9_df.dropna()
     unique_icds = icd9_df['cat_num'].unique()
 
@@ -216,6 +219,8 @@ def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree):
         f'Loading {len(unique_icds)} unique icd catagories and descriptions...')
     category2icd_code: Dict[str, str] = {}
     parent_category2icd_code: Dict[str,str] = {}
+    grandparent_category2icd_code: Dict[str,str] = {}
+
 
     null_count = 0
     for icd_cat in tqdm(unique_icds):
@@ -242,7 +247,9 @@ def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree):
     icd9_df['parent_cat_desc'] = [parent_category2icd_code[i] for i in icd9_df['cat_num']]
     icd9_df['grandparent_cat_desc'] = [grandparent_category2icd_code[i]
                                        for i in icd9_df['cat_num']]
-    icd9_df['combined_title'] = icd9_dficd9_df['parent_cat_desc'] + ' ' + icd9_df['cat_desc'] + \
+    icd9_df['combined_title'] = icd9_df['grandparent_cat_desc'] + ' ' \
+                                + icd9_df['parent_cat_desc'] + ' ' \
+                                + icd9_df['cat_desc'] + \
         ' ' + icd9_df['LONG_TITLE']
 
     return icd9_df
