@@ -207,7 +207,7 @@ def get_icd9_grandparent_cat_desc(category, icd9_hierarch_tree):
 
 def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree, diag_or_proc_param):
 
-    icds['ICD9_CODE'] = icds['ICD9_CODE'].astype(str) #make code str
+    icd9_df['ICD9_CODE'] = icd9_df['ICD9_CODE'].astype(str)  # make code str
     tqdm.pandas(desc="Getting categories...")
     icd9_df['cat_num'] = icd9_df.ICD9_CODE.apply(shorten_mimic_codes)
     if diag_or_proc_param == 'proc':
