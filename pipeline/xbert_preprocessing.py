@@ -168,7 +168,7 @@ def xbert_create_label_map(icd_version, diag_or_proc_param):
             icd9_hierarch_tree = ICD9('icd9_proc_codes.json')
 
 
-        icd9_df = add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree)
+        icd9_df = add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree, diag_or_proc_param)
 
         desc_labels = icd9_df['combined_title']
         assert desc_labels.shape == desc_labels.dropna().shape
