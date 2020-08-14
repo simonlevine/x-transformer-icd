@@ -27,6 +27,7 @@ from transformers import RobertaModel, RobertaConfig, RobertaForSequenceClassifi
 
 with open('params.yaml', 'r') as f:
     params = yaml.safe_load(f.read())
+TEXT_EMB_MODEL_PARAM = params['label_text_emb_model_name']
 
 logger.info(
     "loading Roberta (elongated Longformer version) tokenizer, model, config, and model-for-seq-classification...")
@@ -83,10 +84,10 @@ def run_label_embedding(args):
         logger.info('Creating text-embedded labels...')
         # Use sentence-transformer to encode labels.
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        tokenizer = RobertaTokenizer.from_pretrained(
-            "sentence-transformers/roberta-large-nli-stsb-mean-tokens")
-        model = RobertaModel.from_pretrained(
-            "sentence-transformers/roberta-large-nli-stsb-mean-tokens")
+        tokenizer = RobertaTokenizer.from_pretrained(TEXT_EMB_MODEL_PARAM)
+            #"sentence-transformers/roberta-large-nli-stsb-mean-tokens")
+        model = RobertaModel.from_pretrained(TEXT_EMB_MODEL_PARAM)
+            #"sentence-transformers/roberta-large-nli-stsb-mean-tokens")
         model = model.to(device)
         model.eval()
 
