@@ -194,7 +194,11 @@ def get_icd9_cat_desc(category, icd9_hierarch_tree):
 def get_icd9_parent_cat_desc(category, icd9_hierarch_tree):
     node = icd9_hierarch_tree.find(category)
     # some ICD codes may be missing from icd9 package
-    desc = node.parent.description if node.parent != None else ''
+    if node != None:
+        desc = node.parent.description if node.parent != None else ''
+    else:
+        desc = ''
+
     if desc == 'ROOT':
         desc = ''
     return desc
@@ -202,7 +206,10 @@ def get_icd9_parent_cat_desc(category, icd9_hierarch_tree):
 def get_icd9_grandparent_cat_desc(category, icd9_hierarch_tree):
     node = icd9_hierarch_tree.find(category)
     # some ICD codes may be missing from icd9 package
-    desc = node.parent.parent.description if node.parent.parent != None else ''
+    if node != None and node.parent != None: 
+        desc = node.parent.parent.description if node.parent.parent != None else ''
+    else:
+        desc = ''
     return desc
 
 def add_icd9_category_to_desc(icd9_df, icd9_hierarch_tree, diag_or_proc_param):
