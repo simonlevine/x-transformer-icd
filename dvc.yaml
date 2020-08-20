@@ -37,8 +37,8 @@ stages:
       - data/intermediary-data/xbert_inputs/label_map.txt
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/X.trn.npz
-      - data/intermediary-data/xbert_inputs/X.tst.npz
+      # - data/intermediary-data/xbert_inputs/X.trn.npz
+      # - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
   xbert_label_embedding:
@@ -49,8 +49,8 @@ stages:
       - data/intermediary-data/xbert_inputs/label_map.txt
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/X.trn.npz
-      - data/intermediary-data/xbert_inputs/X.tst.npz
+      # - data/intermediary-data/xbert_inputs/X.trn.npz
+      # - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
     outs:
@@ -70,8 +70,8 @@ stages:
       - xbert/preprocess.py
       - data/intermediary-data/xbert_inputs/train_raw_texts.txt
       - data/intermediary-data/xbert_inputs/test_raw_texts.txt
-      - data/intermediary-data/xbert_inputs/X.trn.npz
-      - data/intermediary-data/xbert_inputs/X.tst.npz
+      # - data/intermediary-data/xbert_inputs/X.trn.npz
+      # - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
     params:
@@ -118,8 +118,8 @@ stages:
       - xbert/ranker.py
       - xbert/evaluator.py
       - run_transformer_predict.sh
-      - data/intermediary-data/xbert_inputs/X.trn.npz
-      - data/intermediary-data/xbert_inputs/X.tst.npz
+      # - data/intermediary-data/xbert_inputs/X.trn.npz
+      # - data/intermediary-data/xbert_inputs/X.tst.npz
       - data/intermediary-data/xbert_inputs/Y.trn.npz
       - data/intermediary-data/xbert_inputs/Y.tst.npz
       - data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
