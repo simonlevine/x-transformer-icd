@@ -206,7 +206,7 @@ class TransformerMatcher(object):
             "-c_trn",
             "--trn_label_path",
             # ./save_models/Eurlex-4K/proc_data/X.trn.pifa-tfidf-s0.npz", #was X...?
-            default=":~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz",
+            # default=":~/auto-icd/data/intermediary-data/xbert_outputs/proc_data/C.trn.pifa-tfidf-s0.npz",
             type=str,
         )
         parser.add_argument(
