@@ -105,8 +105,7 @@ def main():
         # X_trn_embedded, X_tst_embedded = xbert_get_neural_emb_inputs(X_trn, X_tst)
     elif label_emb_param == 'text-emb':
         logger.info('Text-emb specified, so no instance embedding on label-side.')
-        X_trn_embedded = None
-        X_tst_embedded = None
+        X_trn_embedded, X_tst_embedded = xbert_get_tfidf_inputs(X_trn, X_tst)
 
     icd_labels, desc_labels = xbert_create_label_map(icd_version_specified, diag_or_proc_param)
     Y_trn_map = xbert_prepare_Y_maps(
@@ -340,7 +339,7 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_embedded, 
     assert X_tst.shape[0] == Y_tst.shape[0], 'X_tst and Y_tst need to be of the same row dimensions.'
 
     #writing label map (icd descriptions) to txt
-    logger.info('Writing icd LONG_TITLE (label map) to txt.')
+    logger.info('Writing icd descriptions map to txt.')
     desc_labels.to_csv(path_or_buf=XBERT_LABEL_MAP_FP,
                       header=None, index=None, sep='\t', mode='w')
 
@@ -352,7 +351,7 @@ def xbert_write_preproc_data_to_file(desc_labels, X_trn, X_tst, X_trn_embedded, 
                  header=None, index=None, sep='\t', mode='w')
 
     if X_tst_embedded != None: #i.e., we want to do PIFA-...
-        if label_emb_param == 'pifa-tfidf':  # writing X.trn.npz, X.tst.npz files.
+        if label_emb_param == 'pifa-tfidf' or label_emb_param == 'text-emb':  # writing X.trn.npz, X.tst.npz files.
             logger.info(
                 'Saving TFIDF of features (sparse compressed row matrices / .npz) to file...')
             scipy.sparse.save_npz(XBERT_X_TRN_FP, X_trn_embedded)
