@@ -180,15 +180,15 @@ xbert_ranker_and_eval:
     md5: ea923cb54a385ad07a1c528ec5859cf8
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
     md5: 06b09aebcd02cae1e29743572901138e
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/indexer/code.npz
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     md5: 63d83b7c783a0a84a9aa75465c371370
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_trn_pred.npz
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
     md5: 1cf1ea51eb25e688a4fd2175cb7d0e42
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/matcher/C_tst_pred.npz
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
     md5: 14c414a45b8058e59d3734c17b5d8722
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/matcher/trn_embeddings.npy
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
     md5: 704b6c30d09afe8cbbd211ee17f9c6d0
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/matcher/tst_embeddings.npy
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
     md5: 60d42acf309e8720e8787056cad159ba
   - path: run_transformer_predict.sh
     md5: 60bf9236837e4b5ab27a71fc785a4c28
@@ -197,11 +197,11 @@ xbert_ranker_and_eval:
   - path: xbert/ranker.py
     md5: 594009ea20d82965f0f35371a0902f05
   outs:
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/ranker/0.model
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model
     md5: eb4098040c595f25d933144a0bf13a2a.dir
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/ranker/param.json
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
     md5: 516bf6050bc29d51614cd98e5b0c5d1b
-  - path: data/intermediary-data/xbert_outputs/text-emb-s0/ranker/tst.pred.npz
+  - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
     md5: 20878bff3481fffc4fafbcf4815c6259
   - path: eval.json
     md5: a5843a9173835fa9723161bf81116f3a
