@@ -37,13 +37,17 @@ prepare_for_xbert:
       prepare_for_xbert.subsampling: false
   outs:
   - path: data/intermediary-data/df_test.pkl
-    md5: dd33bba3d0d2cb302571504e40050e90
+    md5: b137323aea9b1f4cb439cc9369ddd14f
   - path: data/intermediary-data/df_train.pkl
-    md5: 81e15bd13d159063b0e982294fc89993
+    md5: 6dd0e968792655765abaa2dda06b6f2d
+  - path: data/intermediary-data/xbert_inputs/X.trn.npz
+    md5: 963b307e36c5c7a597dd2d33cc57e392
+  - path: data/intermediary-data/xbert_inputs/X.tst.npz
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: ea923cb54a385ad07a1c528ec5859cf8
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: 06b09aebcd02cae1e29743572901138e
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_inputs/label_map.txt
     md5: 9f4eddfbb40451321bd25e2163cf5a17
   - path: data/intermediary-data/xbert_inputs/test_raw_texts.txt
@@ -62,7 +66,7 @@ xbert_label_embedding:
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
     md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_inputs/label_map.txt
-    md5: 6b823fb615a6e93ced840acbbc0e9629
+    md5: 9f4eddfbb40451321bd25e2163cf5a17
   - path: data/intermediary-data/xbert_inputs/test_raw_texts.txt
     md5: 47b8e431c51d0b807715a895b025eef8
   - path: data/intermediary-data/xbert_inputs/train_raw_texts.txt
@@ -70,7 +74,7 @@ xbert_label_embedding:
   - path: run_preprocess_label.sh
     md5: 0c7d5dd3ec9b26547443dc85e51511be
   - path: xbert/preprocess.py
-    md5: df29c6b451f892202542635dee6569c6
+    md5: 62cdaa91aa4713bb55be98c28315c29c
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
     md5: 950fc93619722cd351281fb606ea3d78
@@ -93,10 +97,6 @@ xbert_label_embedding:
 xbert_feat_embedding:
   cmd: ./run_preprocess_feat.sh
   deps:
-  - path: data/intermediary-data/xbert_inputs/X.trn.npz
-    md5: 963b307e36c5c7a597dd2d33cc57e392
-  - path: data/intermediary-data/xbert_inputs/X.tst.npz
-    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
     md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
@@ -108,7 +108,7 @@ xbert_feat_embedding:
   - path: run_preprocess_feat.sh
     md5: 9d53c29d3be4814a9a79e520e610ff72
   - path: xbert/preprocess.py
-    md5: df29c6b451f892202542635dee6569c6
+    md5: 62cdaa91aa4713bb55be98c28315c29c
   params:
     params.yaml:
       max_seq_len: 4096
@@ -133,7 +133,7 @@ xbert_model_training:
   - path: run_transformer_train.sh
     md5: 0f94954fcf5ad87ad9e2c69d78a8fc7a
   - path: xbert/transformer.py
-    md5: eb38a619498b7c7256f0735150f67750
+    md5: d8a8fbdc1312dc64c5236a449955e10e
   params:
     params.yaml:
       max_seq_len: 4096
@@ -141,7 +141,7 @@ xbert_model_training:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/config.json
     md5: 021d861db8e44fe092dd9c6983087e40
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/pytorch_model.bin
-    md5: 1905fb22172371a994caafe2eb37cb6a
+    md5: e8047be13a99addf061ca3c6de6c8a05
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/training_args.bin
     md5: a7663070b40bfbc3dac396823b359728
 xbert_trained_model_prediction:
@@ -160,7 +160,7 @@ xbert_trained_model_prediction:
   - path: data/intermediary-data/xbert_outputs/proc_data/X.tst.tomodel.pkl
     md5: 8f61786f5262fc3dfce90b3a25ab0ba8
   - path: run_transformer_training_prediction.sh
-    md5: fd32dab5847ddc8d55cc1acf8e33606d
+    md5: 362fc7ef38e5acc0046309706fadb0de
   params:
     params.yaml:
       max_seq_len: 4096
@@ -176,35 +176,39 @@ xbert_trained_model_prediction:
 xbert_ranker_and_eval:
   cmd: ./run_transformer_predict.sh
   deps:
+  - path: data/intermediary-data/xbert_inputs/X.trn.npz
+    md5: 963b307e36c5c7a597dd2d33cc57e392
+  - path: data/intermediary-data/xbert_inputs/X.tst.npz
+    md5: 13b5fd5890d40e15ef98dcefef897ee3
   - path: data/intermediary-data/xbert_inputs/Y.trn.npz
-    md5: ea923cb54a385ad07a1c528ec5859cf8
+    md5: 686e0a64f1cac16eed85c213c83d4201
   - path: data/intermediary-data/xbert_inputs/Y.tst.npz
-    md5: 06b09aebcd02cae1e29743572901138e
+    md5: a5b2d7f0f7ed2e2358ba930b7ace4023
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/indexer/code.npz
-    md5: 63d83b7c783a0a84a9aa75465c371370
+    md5: 950fc93619722cd351281fb606ea3d78
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_trn_pred.npz
-    md5: 1cf1ea51eb25e688a4fd2175cb7d0e42
+    md5: acae4263b59080d08c5ad864dea34bef
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/C_tst_pred.npz
-    md5: 14c414a45b8058e59d3734c17b5d8722
+    md5: 00f80121ac60d27b5fb05fe20fbe6c4a
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/trn_embeddings.npy
-    md5: 704b6c30d09afe8cbbd211ee17f9c6d0
+    md5: 53b286f60e07d557932c43441362cc18
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/matcher/tst_embeddings.npy
-    md5: 60d42acf309e8720e8787056cad159ba
+    md5: d0b1df89581b0a81bb7e86aadf883a6b
   - path: run_transformer_predict.sh
-    md5: 60bf9236837e4b5ab27a71fc785a4c28
+    md5: 9fc43d03bfccd281dbad44d9c3bcd144
   - path: xbert/evaluator.py
     md5: a6f51d96735b2d63f439a196e53c1a6f
   - path: xbert/ranker.py
     md5: 594009ea20d82965f0f35371a0902f05
   outs:
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/0.model
-    md5: eb4098040c595f25d933144a0bf13a2a.dir
+    md5: ad622068bf3dc1b2b6f9d08ea9af74b0.dir
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/param.json
     md5: 516bf6050bc29d51614cd98e5b0c5d1b
   - path: data/intermediary-data/xbert_outputs/pifa-tfidf-s0/ranker/tst.pred.npz
-    md5: 20878bff3481fffc4fafbcf4815c6259
+    md5: 6fed01e5878068afa1e348a2fd15518e
   - path: eval.json
-    md5: a5843a9173835fa9723161bf81116f3a
+    md5: 2764d88bf009b23582229e09c82a911f
 convert_longformer:
   cmd: $PY_CONDA custom_models/elongate_bioclinical_BERT.py
 filter_text_notes:
