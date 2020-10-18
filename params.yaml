@@ -24,7 +24,7 @@ xbert_model_training:
   max_steps: 1000
   warmup_steps: 100
   logging_steps: 50
-  learning_rate: 0.00005
+  learning_rate: 0.0001
   # max_steps: 4
   # warmup_steps: 2
   # logging_steps: 4
