@@ -61,9 +61,9 @@ CUDA_VISIBLE_DEVICES=0 $PY_CONDA xbert/transformer.py \
     --max_steps ${MAX_STEPS} \
     --warmup_steps ${WARMUP_STEPS} \
     --learning_rate ${LEARNING_RATE} \
-    --overwrite_output_dir #\
+    --overwrite_output_dir \
     # --fp16
-    # --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
+    --logging_steps ${LOGGING_STEPS}  |& tee ${MODEL_DIR}/log.txt
 
 
 # #train - multi-gpu
