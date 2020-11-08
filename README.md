@@ -7,7 +7,7 @@
 To get access to the MIMIC data, authenticate first:
 
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/autoicd-gcp-credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/YOUR_CREDENTIALS.json"
 ```
 
 This is performed automatically if [`direnv`](https://direnv.net/) is installed and enabled (`direnv allow .`).
