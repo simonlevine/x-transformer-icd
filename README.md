@@ -1,14 +1,17 @@
-# autoICD startup
+# Automated ICD Coding via (X-)Transformers
 
-<div style="text-align: center; padding: 10px; margin: 10px; border-outline: 1px solid darkgray; border-radius: 3px; background-color: #ff3333; color: white;">
-  <strong>WARNING</strong> Never, ever open source this repository!
-</div>
+
+# A fork of https://github.com/OctoberChang/X-Transformer
+
+- We default to PIFA-TFIDF embedding and the non-ensemble training using Simon's bioclinicalLongformer.
 
 To get access to the MIMIC data, authenticate first:
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/YOUR_CREDENTIALS.json"
 ```
+
+This repository assumes a GCP bucket contains the relevant files from PhysioNet's MIMIC-III.
 
 This is performed automatically if [`direnv`](https://direnv.net/) is installed and enabled (`direnv allow .`).
 
