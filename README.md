@@ -28,7 +28,7 @@ eval "$(direnv hook bash)"
 source ~/.bashrc
 ```
 
-![autoICD](autoICD.jpeg)
+![autoICD](autoICD.png)
 
 <hr/>
 
