@@ -1,4 +1,4 @@
-# Automated ICD Coding via (X-)Transformers
+# Automated ICD Coding via (X-)Transformers using MIMIC-III
 
 
 # A fork of https://github.com/OctoberChang/X-Transformer
